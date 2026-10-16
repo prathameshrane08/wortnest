@@ -18,7 +18,14 @@ python3 -m http.server 8000
 # then open http://localhost:8000
 ```
 
-## iPhone app
+## Install on iPhone (no App Store)
+
+1. Open https://prathameshrane08.github.io/wortnest/ in **Safari**.
+2. Tap **Share**, then **Add to Home Screen**.
+
+WortNest gets its own icon, opens full screen, and works offline after the first launch. The page shows this tip once on iPhone.
+
+## iPhone app (SwiftUI)
 
 The SwiftUI app lives in `ios/WortNest.swiftpm`. Open that folder in Xcode (or Swift Playgrounds on iPad/Mac) and press Run.
 
@@ -42,7 +49,7 @@ curl -s https://kaikki.org/dictionary/German/kaikki.org-dictionary-German.jsonl 
 python3 rescore.py de_50k.txt
 ```
 
-`de_50k.txt` is the German list from [FrequencyWords](https://github.com/hermitdave/FrequencyWords). After changing the JSON files, bump `DATA_VERSION` in `index.html` so browsers skip their cached copy.
+`de_50k.txt` is the German list from [FrequencyWords](https://github.com/hermitdave/FrequencyWords). After changing the JSON files, bump `DATA_VERSION` in both `index.html` and `sw.js`, and bump `VERSION` in `sw.js`, so phones replace their offline copy.
 
 ## Credits
 

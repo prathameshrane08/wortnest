@@ -1,10 +1,23 @@
 <!doctype html>
-<html lang="de">
+<html lang="en" translate="no">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="WortNest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="google" content="notranslate">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#19202a" media="(prefers-color-scheme: dark)">
+<meta name="description" content="German dictionary, der/die/das trainer, verb conjugator and flashcards. Dein Zuhause für Deutsch.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<script>
+  // Offline support: saves the app and its dictionary on the device after the first visit.
+  if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+</script>
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
 <title>WortNest</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -724,6 +737,33 @@ async function boot(){
   if(["dict","dds","verbs","learn"].includes(tab)) show(tab);
 }
 boot();
+</script>
+
+<!-- iPhone Safari never offers to install a web app, so explain the two taps once. -->
+<div id="install-tip" class="install-tip" hidden>
+  <div><b>Install WortNest on your iPhone</b><br>Tap <span class="share" aria-label="Share">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg></span>
+    Share, then <b>Add to Home Screen</b>. It works offline after that.</div>
+  <button type="button" id="install-tip-close" aria-label="Dismiss">×</button>
+</div>
+<style>
+.install-tip{position:fixed;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:40;
+  display:flex;gap:12px;align-items:flex-start;background:var(--fg);color:var(--bg);border-radius:12px;padding:12px 14px;font-size:.92rem;line-height:1.45;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.install-tip .share{display:inline-flex;vertical-align:-3px}
+.install-tip button{margin-left:auto;border:0;background:none;color:inherit;font-size:1.4rem;line-height:1;padding:0 4px}
+@media (max-width:699px){.install-tip{bottom:calc(84px + env(safe-area-inset-bottom,0px))}}
+</style>
+<script>
+(function(){
+  const ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const installed = navigator.standalone === true || matchMedia("(display-mode: standalone)").matches;
+  let dismissed = false;
+  try { dismissed = localStorage.getItem("wk:installTip") === "1"; } catch(e) {}
+  if (!ios || installed || dismissed) return;
+  const tip = document.getElementById("install-tip");
+  tip.hidden = false;
+  document.getElementById("install-tip-close").onclick = () => { tip.hidden = true; try { localStorage.setItem("wk:installTip", "1"); } catch(e) {} };
+})();
 </script>
 
 </html>
