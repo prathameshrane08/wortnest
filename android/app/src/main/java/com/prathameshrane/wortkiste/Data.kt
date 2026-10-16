@@ -91,8 +91,21 @@ class Repository private constructor(
 ) {
     private val byLower = HashMap<String, MutableList<Int>>()
     private val lowerWords = ArrayList<String>(entries.size)
-    private val glossSegments = ArrayList<List<String>>(entries.size)
-    private val firstSegments = ArrayList<List<String>>(entries.size)
+
+    /** Gloss pieces per entry for English search: all glosses, and the first gloss alone. Built on first use. */
+    private val glossIndex: Pair<List<List<String>>, List<List<String>>> by lazy {
+        val all = ArrayList<List<String>>(entries.size)
+        val first = ArrayList<List<String>>(entries.size)
+        for (e in entries) {
+            val perGloss = e.glosses.map { segments(it) }
+            all.add(perGloss.flatten())
+            first.add(perGloss.firstOrNull().orEmpty())
+        }
+        all to first
+    }
+
+    /** Builds the English index ahead of the first search; call off the main thread. */
+    fun warmUp() { glossIndex }
     val quizNouns = ArrayList<Int>()
     val verbList: List<String>
 
@@ -102,9 +115,7 @@ class Repository private constructor(
             val l = e.word.lowercase()
             lowerWords.add(l)
             byLower.getOrPut(l) { mutableListOf() }.add(e.id)
-            glossSegments.add(segments(e.glosses.joinToString("|")))
-            firstSegments.add(segments(e.glosses.firstOrNull() ?: ""))
-            if (e.isNoun && e.gender in setOf("m", "f", "n") && e.score > 0 && e.word.length >= 3 &&
+            if (e.isNoun && (e.gender == "m" || e.gender == "f" || e.gender == "n") && e.score > 0 && e.word.length >= 3 &&
                 e.word[0].isUpperCase() && e.word.all { it.isLetter() } && seenNouns.add(e.word)
             ) quizNouns.add(e.id)
         }
@@ -147,10 +158,11 @@ class Repository private constructor(
         }
 
         private fun JSONArray.strings(): List<String> = List(length()) { optString(it) }
+        private val parens = Regex("\\([^)]*\\)")
 
         /** Lowercase gloss pieces without parentheses, split on , ; and |, with "to"/"a"/"the" removed. */
         private fun segments(s: String): List<String> {
-            val noParens = s.lowercase().replace(Regex("\\([^)]*\\)"), " ")
+            val noParens = if ('(' in s) s.lowercase().replace(parens, " ") else s.lowercase()
             return noParens.split(',', ';', '|').map { seg ->
                 var x = seg.trim()
                 for (p in listOf("to ", "a ", "an ", "the ")) if (x.startsWith(p)) { x = x.removePrefix(p); break }
@@ -200,6 +212,7 @@ class Repository private constructor(
     fun searchEnglish(query: String, limit: Int = 40): List<Entry> {
         val lq = query.trim().lowercase().removePrefix("to ").trim()
         if (lq.length < 2) return emptyList()
+        val (glossSegments, firstSegments) = glossIndex
         val tiers = List(4) { ArrayList<Int>() }
         for (i in glossSegments.indices) {
             var best = 4

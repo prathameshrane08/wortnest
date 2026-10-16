@@ -139,13 +139,17 @@ fun VerbDetailScreen(vm: AppViewModel, repo: Repository, inf: String, nav: Nav) 
                 "Präteritum er" to v.pt.getOrElse(2) { "" },
                 "Partizip II" to (if (Conjugation.mainAux(v) == "sein") "ist " else "hat ") + v.pp,
             )
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                for ((label, value) in parts) {
-                    Column(
-                        Modifier.width(160.dp).background(MaterialTheme.colorScheme.surfaceContainer, RoundedCornerShape(10.dp)).padding(10.dp),
-                    ) {
-                        Text(label.uppercase(), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text(value, fontWeight = FontWeight.Bold)
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                for (pair in parts.chunked(2)) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        for ((label, value) in pair) {
+                            Column(
+                                Modifier.weight(1f).background(MaterialTheme.colorScheme.surfaceContainer, RoundedCornerShape(10.dp)).padding(10.dp),
+                            ) {
+                                Text(label.uppercase(), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(value, fontWeight = FontWeight.Bold)
+                            }
+                        }
                     }
                 }
             }

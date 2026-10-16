@@ -28,6 +28,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -80,6 +81,7 @@ fun WortkisteApp(vm: AppViewModel) {
     }
 
     var tab by rememberSaveable { mutableIntStateOf(0) }
+    val saveable = rememberSaveableStateHolder()   // each tab keeps its scroll position and quiz state
     val stacks = remember { List(tabs.size) { mutableStateListOf<Route>() } }
     val stack = stacks[tab]
     val nav = Nav(push = { stack.add(it) }, pop = { if (stack.isNotEmpty()) stack.removeAt(stack.lastIndex) })
@@ -100,7 +102,14 @@ fun WortkisteApp(vm: AppViewModel) {
         },
     ) { padding ->
         Box(Modifier.padding(padding).fillMaxSize()) {
-            when (val top = stack.lastOrNull()) {
+            saveable.SaveableStateProvider("tab$tab-${stack.size}") { Screen(vm, repo, nav, tab, stack.lastOrNull()) }
+        }
+    }
+}
+
+@Composable
+private fun Screen(vm: AppViewModel, repo: Repository, nav: Nav, tab: Int, top: Route?) {
+            when (top) {
                 null -> when (tab) {
                     0 -> DictionaryScreen(vm, repo, nav)
                     1 -> ArticleScreen(vm, repo)
@@ -111,6 +120,4 @@ fun WortkisteApp(vm: AppViewModel) {
                 is Route.VerbR -> VerbDetailScreen(vm, repo, top.infinitive, nav)
                 Route.Drill -> DrillScreen(repo, nav)
             }
-        }
-    }
 }

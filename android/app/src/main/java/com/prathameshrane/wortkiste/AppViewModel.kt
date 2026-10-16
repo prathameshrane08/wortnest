@@ -43,7 +43,10 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         restore()
         viewModelScope.launch {
             try {
+                val start = System.currentTimeMillis()
                 repo = withContext(Dispatchers.Default) { Repository.load(app) }
+                android.util.Log.i("Wortkiste", "dictionary loaded in ${System.currentTimeMillis() - start} ms")
+                repo?.let { r -> launch(Dispatchers.Default) { r.warmUp() } }
             } catch (e: Exception) {
                 loadError = "The dictionary files could not be read: ${e.message}"
             }
