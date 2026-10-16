@@ -146,7 +146,8 @@ final class Store: ObservableObject {
     }
 
     nonisolated private static func resource(_ name: String) throws -> Data {
-        guard let url = Bundle.module.url(forResource: name, withExtension: "json") else {
+        // App packages copy resources into the main app bundle.
+        guard let url = Bundle.main.url(forResource: name, withExtension: "json") else {
             throw CocoaError(.fileNoSuchFile)
         }
         return try Data(contentsOf: url)
