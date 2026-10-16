@@ -5,9 +5,9 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher"
-        android:label="Wortkiste"
+        android:label="WortNest"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Wortkiste">
+        android:theme="@style/Theme.WortNest">
         <activity
             android:name=".MainActivity"
             android:exported="true"

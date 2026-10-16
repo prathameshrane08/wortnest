@@ -4,17 +4,17 @@ import PackageDescription
 import AppleProductTypes
 
 let package = Package(
-    name: "Wortkiste",
+    name: "WortNest",
     platforms: [
         .iOS("17.0")
     ],
     products: [
         .iOSApplication(
-            name: "Wortkiste",
+            name: "WortNest",
             targets: ["AppModule"],
-            bundleIdentifier: "com.prathameshrane.wortkiste",
-            displayVersion: "1.0",
-            bundleVersion: "1",
+            bundleIdentifier: "com.prathameshrane.wortnest",
+            displayVersion: "1.1",
+            bundleVersion: "2",
             appIcon: .placeholder(icon: .box),
             accentColor: .presetColor(.orange),
             supportedDeviceFamilies: [

@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Wortkiste"
+rootProject.name = "WortNest"
 include(":app")

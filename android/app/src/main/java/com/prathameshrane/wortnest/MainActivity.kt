@@ -1,4 +1,4 @@
-package com.prathameshrane.wortkiste
+package com.prathameshrane.wortnest
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -40,8 +40,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            WortkisteTheme {
-                WortkisteApp(viewModel())
+            WortNestTheme {
+                WortNestApp(viewModel())
             }
         }
     }
@@ -63,7 +63,7 @@ private val tabs = listOf(
 )
 
 @Composable
-fun WortkisteApp(vm: AppViewModel) {
+fun WortNestApp(vm: AppViewModel) {
     val repo = vm.repo
     if (repo == null) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

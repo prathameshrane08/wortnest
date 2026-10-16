@@ -1,4 +1,6 @@
-# Wortkiste
+# WortNest
+
+*Dein Zuhause für Deutsch.*
 
 A German learning toolkit in one place:
 
@@ -18,7 +20,7 @@ python3 -m http.server 8000
 
 ## iPhone app
 
-The SwiftUI app lives in `ios/Wortkiste.swiftpm`. Open that folder in Xcode (or Swift Playgrounds on iPad/Mac) and press Run.
+The SwiftUI app lives in `ios/WortNest.swiftpm`. Open that folder in Xcode (or Swift Playgrounds on iPad/Mac) and press Run.
 
 ## Android app
 

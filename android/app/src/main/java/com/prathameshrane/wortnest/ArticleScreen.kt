@@ -1,4 +1,4 @@
-package com.prathameshrane.wortkiste
+package com.prathameshrane.wortnest
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

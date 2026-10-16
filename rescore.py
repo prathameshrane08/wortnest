@@ -1,6 +1,6 @@
 """Re-rank verbs in dict.json by the median frequency of their own conjugated forms.
 
-Usage: python3 rescore.py freq.txt   (run inside the wortkiste folder, after extract.py)
+Usage: python3 rescore.py freq.txt   (run inside the wortnest folder, after extract.py)
 """
 import json, sys, statistics
 

@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct WortkisteApp: App {
+struct WortNestApp: App {
     @StateObject private var store = Store()
 
     var body: some Scene {

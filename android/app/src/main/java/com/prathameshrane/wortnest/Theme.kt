@@ -1,4 +1,4 @@
-package com.prathameshrane.wortkiste
+package com.prathameshrane.wortnest
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -38,7 +38,7 @@ private val Dark = darkColorScheme(
 )
 
 @Composable
-fun WortkisteTheme(content: @Composable () -> Unit) {
+fun WortNestTheme(content: @Composable () -> Unit) {
     MaterialTheme(colorScheme = if (isSystemInDarkTheme()) Dark else Light, content = content)
 }
 

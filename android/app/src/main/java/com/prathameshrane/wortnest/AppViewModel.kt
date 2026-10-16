@@ -1,4 +1,4 @@
-package com.prathameshrane.wortkiste
+package com.prathameshrane.wortnest
 
 import android.app.Application
 import android.content.Context
@@ -35,7 +35,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     var bestStreak by mutableIntStateOf(0)
         private set
 
-    private val prefs = app.getSharedPreferences("wortkiste", Context.MODE_PRIVATE)
+    private val prefs = app.getSharedPreferences("wortnest", Context.MODE_PRIVATE)
     private var tts: TextToSpeech? = null
     private var ttsReady = false
 
@@ -45,7 +45,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
             try {
                 val start = System.currentTimeMillis()
                 repo = withContext(Dispatchers.Default) { Repository.load(app) }
-                android.util.Log.i("Wortkiste", "dictionary loaded in ${System.currentTimeMillis() - start} ms")
+                android.util.Log.i("WortNest", "dictionary loaded in ${System.currentTimeMillis() - start} ms")
                 repo?.let { r -> launch(Dispatchers.Default) { r.warmUp() } }
             } catch (e: Exception) {
                 loadError = "The dictionary files could not be read: ${e.message}"
