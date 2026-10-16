@@ -4,3 +4,4 @@ wortkiste.html
 ios/**/xcuserdata/
 ios/**/.build/
 .swiftpm/
+*.apk

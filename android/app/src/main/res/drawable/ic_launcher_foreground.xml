@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A word box: three bars in the der / die / das colours inside an open crate -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#00000000" android:strokeColor="#F0A929" android:strokeWidth="4"
+        android:strokeLineJoin="round" android:pathData="M30,44 L30,76 L78,76 L78,44" />
+    <path android:fillColor="#7AA7F5" android:pathData="M37,34 h34 v8 h-34 z" />
+    <path android:fillColor="#F07C80" android:pathData="M37,48 h34 v8 h-34 z" />
+    <path android:fillColor="#5FC694" android:pathData="M37,62 h34 v8 h-34 z" />
+</vector>

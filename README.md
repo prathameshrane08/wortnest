@@ -20,6 +20,18 @@ python3 -m http.server 8000
 
 The SwiftUI app lives in `ios/Wortkiste.swiftpm`. Open that folder in Xcode (or Swift Playgrounds on iPad/Mac) and press Run.
 
+## Android app
+
+The Kotlin / Jetpack Compose app lives in `android/`. Open that folder in Android Studio and press Run, or build it from the terminal (needs JDK 17 and the Android SDK):
+
+```
+cd android
+./gradlew assembleRelease
+# APK: android/app/build/outputs/apk/release/app-release.apk
+```
+
+Copy the APK to your phone and open it to install (allow "install unknown apps" when asked).
+
 ## Rebuilding the data
 
 ```
