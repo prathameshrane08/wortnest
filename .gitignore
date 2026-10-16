@@ -1,0 +1,6 @@
+.DS_Store
+wortkiste.html
+*.new
+ios/**/xcuserdata/
+ios/**/.build/
+.swiftpm/

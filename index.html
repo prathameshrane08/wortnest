@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Wortkiste">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+<title>Wortkiste</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: one reading column, sticky search header, tab bar docked bottom on phones and inline on wide screens.
+   Gender colours follow the classroom convention: der blue, die red, das green. */
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --sunk:#e8ecf0; --fg:#18202b; --muted:#5d6876; --line:#d5dbe2;
+  --accent:#d68a00; --accent-ink:#8a5900; --focus:#1f6feb;
+  --der:#2a64c5; --die:#c8383d; --das:#24895a; --plural:#7a54b8;
+  --der-bg:#e6eefb; --die-bg:#fbe9e9; --das-bg:#e3f4ea; --plural-bg:#efe8f9;
+  --ok:#24895a; --bad:#c8383d;
+  --display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11161d; --surface:#19202a; --sunk:#232c38; --fg:#e6ebf1; --muted:#97a3b2; --line:#2e3846;
+  --accent:#f0a929; --accent-ink:#f6c467; --focus:#6aa6ff;
+  --der:#7aa7f5; --die:#f07c80; --das:#5fc694; --plural:#b596ea;
+  --der-bg:#1c2a42; --die-bg:#3a2024; --das-bg:#18332a; --plural-bg:#2c2440;
+  --ok:#5fc694; --bad:#f07c80; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11161d; --surface:#19202a; --sunk:#232c38; --fg:#e6ebf1; --muted:#97a3b2; --line:#2e3846;
+  --accent:#f0a929; --accent-ink:#f6c467; --focus:#6aa6ff;
+  --der:#7aa7f5; --die:#f07c80; --das:#5fc694; --plural:#b596ea;
+  --der-bg:#1c2a42; --die-bg:#3a2024; --das-bg:#18332a; --plural-bg:#2c2440;
+  --ok:#5fc694; --bad:#f07c80; color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.wrap{max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:800;font-size:1.35rem;letter-spacing:-.02em;display:flex;align-items:baseline;gap:2px;margin-right:auto}
+.brand i{font-style:normal;color:var(--accent)}
+nav.tabs{display:flex;gap:4px}
+nav.tabs button{border:0;background:none;padding:8px 12px;border-radius:8px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:8px}
+nav.tabs button svg{width:20px;height:20px}
+nav.tabs button[aria-selected="true"]{color:var(--fg);background:var(--sunk)}
+@media (max-width:699px){
+  nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:25;background:var(--surface);border-top:1px solid var(--line);
+    justify-content:space-around;padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+  nav.tabs button{flex-direction:column;gap:2px;font-size:.72rem;padding:6px 8px;flex:1}
+  nav.tabs button[aria-selected="true"]{background:none;color:var(--accent-ink)}
+  main{padding-bottom:84px}
+}
+
+main .wrap{padding-block:20px 40px}
+section.view{display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.015em;text-wrap:balance;margin:0}
+h2{font-size:1.5rem;font-weight:800}
+h3{font-size:1.05rem;font-weight:700}
+.eyebrow{font-size:.74rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+
+.search{display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--line);border-radius:var(--r);padding:0 12px}
+.search:focus-within{border-color:var(--focus)}
+.search svg{width:20px;height:20px;color:var(--muted);flex:none}
+.search input{flex:1;min-width:0;border:0;background:none;padding:13px 0;font-size:1.08rem;outline:none}
+.search .clear{border:0;background:none;color:var(--muted);padding:6px;display:flex}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:.9rem}
+.chip:hover{border-color:var(--muted)}
+.uml{display:flex;gap:4px}
+.uml button{border:1px solid var(--line);background:var(--surface);border-radius:6px;width:34px;height:30px;font-weight:700}
+
+.art{display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;border-radius:5px;padding:1px 7px;line-height:1.4;min-width:36px}
+.art.m{color:var(--der);background:var(--der-bg)} .art.f{color:var(--die);background:var(--die-bg)} .art.n{color:var(--das);background:var(--das-bg)} .art.p{color:var(--plural);background:var(--plural-bg)}
+.w-m{color:var(--der)} .w-f{color:var(--die)} .w-n{color:var(--das)}
+.pos{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+
+.results{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.results .group{padding:8px 14px;background:var(--sunk);font-size:.74rem;text-transform:uppercase;letter-spacing:.09em;font-weight:700;color:var(--muted)}
+.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) auto;gap:12px;align-items:start;padding:11px 14px;border-top:1px solid var(--line);text-align:left;background:none;border-left:0;border-right:0;border-bottom:0;width:100%}
+.row:first-child,.group+.row{border-top:0}
+.row:hover{background:var(--sunk)}
+.row .de{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;min-width:0}
+.row .de b{font-weight:700;overflow-wrap:anywhere}
+.row .en{color:var(--muted);min-width:0;overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden}
+.row .en mark{background:none;color:var(--fg);font-weight:700}
+@media (max-width:520px){.row{grid-template-columns:minmax(0,1fr) auto}.row .en{grid-column:1/-1;grid-row:2}}
+.note{padding:12px 14px;color:var(--muted);font-size:.92rem}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.entry-head{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.entry-head .word{font-family:var(--display);font-size:2.1rem;font-weight:800;line-height:1.1;overflow-wrap:anywhere;min-width:0}
+.entry-head .tools{margin-left:auto;display:flex;gap:6px}
+.icon-btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;color:var(--muted)}
+.icon-btn svg{width:20px;height:20px}
+.icon-btn.on{color:var(--accent);border-color:var(--accent)}
+.meta{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:8px;color:var(--muted);font-size:.92rem}
+.senses{margin:14px 0 0;padding-left:1.4em;display:flex;flex-direction:column;gap:4px}
+.btn{border:1.5px solid var(--fg);background:var(--fg);color:var(--bg);border-radius:8px;padding:9px 16px;font-weight:700}
+.btn.ghost{background:none;color:var(--fg);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--muted)}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+
+/* Der Die Das */
+.dd-answer{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.dd-answer .big{font-family:var(--display);font-weight:800;font-size:2.6rem;line-height:1}
+.quiz{text-align:center;display:flex;flex-direction:column;gap:18px;align-items:center;padding-block:28px}
+.quiz .noun{font-family:var(--display);font-weight:800;font-size:clamp(2.2rem,9vw,3.4rem);line-height:1.05;overflow-wrap:anywhere;max-width:100%}
+.quiz .gloss{color:var(--muted);min-height:1.5em;max-width:46ch}
+.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:440px}
+.choices button{border:2px solid transparent;border-radius:12px;padding:16px 0;font-family:var(--display);font-weight:800;font-size:1.4rem}
+.choices .m{background:var(--der-bg);color:var(--der)} .choices .f{background:var(--die-bg);color:var(--die)} .choices .n{background:var(--das-bg);color:var(--das)}
+.choices button:hover{border-color:currentColor}
+.choices button.right{border-color:var(--ok);box-shadow:0 0 0 2px var(--ok)}
+.choices button.wrong{opacity:.45}
+.feedback{min-height:3.2em;font-size:.95rem;max-width:46ch}
+.feedback .ok{color:var(--ok);font-weight:700}.feedback .bad{color:var(--bad);font-weight:700}
+.stats{display:flex;gap:24px;justify-content:center;flex-wrap:wrap}
+.stat{display:flex;flex-direction:column;align-items:center}
+.stat b{font-family:var(--display);font-size:1.5rem;font-variant-numeric:tabular-nums}
+.stat span{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.seg{display:inline-flex;background:var(--sunk);border-radius:9px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:none;padding:6px 12px;border-radius:7px;font-weight:700;font-size:.88rem;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:600px){.rules{grid-template-columns:1fr}}
+.rules .col{border-radius:var(--r);padding:14px 16px}
+.rules .col.m{background:var(--der-bg)}.rules .col.f{background:var(--die-bg)}.rules .col.n{background:var(--das-bg)}
+.rules h3{margin-bottom:6px}
+.rules .col.m h3{color:var(--der)}.rules .col.f h3{color:var(--die)}.rules .col.n h3{color:var(--das)}
+.rules ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px;font-size:.92rem}
+.rules code{font-family:inherit;font-weight:700}
+
+/* Verbs */
+.parts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:16px}
+.parts div{background:var(--surface);padding:10px 12px;min-width:0}
+.parts span{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.parts b{font-size:1.05rem;overflow-wrap:anywhere}
+@media (max-width:520px){.parts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.badge{display:inline-block;font-size:.76rem;font-weight:700;border-radius:5px;padding:2px 8px;background:var(--sunk);color:var(--muted)}
+.badge.strong{background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent-ink)}
+.tables{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.tbl{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;min-width:0}
+.tbl h3{font-size:.95rem;margin-bottom:6px}
+.tbl table{border-collapse:collapse;width:100%}
+.tbl td{padding:2px 0;vertical-align:top;overflow-wrap:anywhere}
+.tbl td.pr{color:var(--muted);width:5.2em;font-size:.92rem;padding-right:8px}
+.irr{color:var(--accent-ink);font-weight:700}
+.end{font-weight:700}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.86rem;color:var(--muted)}
+.drill{display:flex;flex-direction:column;gap:12px}
+.drill .prompt{font-size:1.15rem}
+.drill .prompt b{font-family:var(--display)}
+.drill form{display:flex;gap:8px;flex-wrap:wrap}
+.drill input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg);font-size:1.05rem}
+.drill input:focus{border-color:var(--focus);outline:none}
+
+/* Flashcards */
+.flash{perspective:1000px;width:100%;max-width:460px;margin:0 auto}
+.flash .face{background:var(--surface);border:1px solid var(--line);border-radius:14px;min-height:210px;padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;width:100%;cursor:pointer}
+.flash .face .w{font-family:var(--display);font-weight:800;font-size:2rem;overflow-wrap:anywhere;max-width:100%}
+.boxes{display:flex;gap:6px;justify-content:center}
+.boxes div{display:flex;flex-direction:column;align-items:center;font-size:.74rem;color:var(--muted);gap:2px}
+.boxes b{width:42px;height:34px;border-radius:7px;background:var(--sunk);display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;color:var(--fg)}
+.saved{display:flex;flex-direction:column}
+.empty{text-align:center;padding:28px 16px;color:var(--muted);display:flex;flex-direction:column;gap:10px;align-items:center}
+.loading{display:flex;align-items:center;gap:10px;color:var(--muted)}
+.loading::before{content:"";width:14px;height:14px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--accent);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.loading::before{animation:none}}
+footer{font-size:.8rem;color:var(--muted);padding-block:8px 24px}
+footer a{color:inherit}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">Wort<i>kiste</i></div>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" id="tab-dict" data-view="dict" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 8h6"/></svg>Wörterbuch</button>
+      <button role="tab" id="tab-dds" data-view="dds" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="12" r="3"/><circle cx="12" cy="12" r="3"/><circle cx="18" cy="12" r="3"/></svg>Der Die Das</button>
+      <button role="tab" id="tab-verbs" data-view="verbs" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10M15 10v10"/></svg>Verben</button>
+      <button role="tab" id="tab-learn" data-view="learn" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>Üben</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div id="loading" class="loading">Loading the dictionary…</div>
+
+    <!-- Dictionary -->
+    <section class="view" id="view-dict">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label class="search" for="q">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="German or English: Haus, ging, to run…">
+          <button class="clear" type="button" id="q-clear" aria-label="Clear search" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        </label>
+        <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center">
+          <div class="uml" data-target="q"><button type="button">ä</button><button type="button">ö</button><button type="button">ü</button><button type="button">ß</button></div>
+          <span class="small muted">Searches both directions at once</span>
+        </div>
+      </div>
+      <div id="entry"></div>
+      <div id="dict-results"></div>
+    </section>
+
+    <!-- Der Die Das -->
+    <section class="view" id="view-dds" hidden>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label class="search" for="dq">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="dq" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Which article? Type a noun: Kinderzimmer">
+        </label>
+        <div class="uml" data-target="dq"><button type="button">ä</button><button type="button">ö</button><button type="button">ü</button><button type="button">ß</button></div>
+      </div>
+      <div id="dd-answer"></div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <div><div class="eyebrow">Article quiz</div><h2>der, die oder das?</h2></div>
+          <div class="seg" id="dd-level" role="group" aria-label="Difficulty">
+            <button type="button" data-lv="0" aria-pressed="true">Top 500</button>
+            <button type="button" data-lv="1" aria-pressed="false">500–2,000</button>
+            <button type="button" data-lv="2" aria-pressed="false">2,000+</button>
+            <button type="button" data-lv="3" aria-pressed="false">My mistakes</button>
+          </div>
+        </div>
+        <div class="quiz">
+          <div class="noun" id="dd-noun">…</div>
+          <div class="gloss" id="dd-gloss"></div>
+          <div class="choices">
+            <button type="button" class="m" data-g="m">der</button>
+            <button type="button" class="f" data-g="f">die</button>
+            <button type="button" class="n" data-g="n">das</button>
+          </div>
+          <div class="feedback" id="dd-feedback"><span class="muted">Keys 1, 2, 3 answer. Enter skips ahead.</span></div>
+          <div class="stats">
+            <div class="stat"><b id="dd-streak">0</b><span>Streak</span></div>
+            <div class="stat"><b id="dd-best">0</b><span>Best</span></div>
+            <div class="stat"><b id="dd-acc">–</b><span>Accuracy</span></div>
+            <div class="stat"><b id="dd-miss">0</b><span>To review</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div><div class="eyebrow">Rules of thumb</div><h2>Endings that give the article away</h2></div>
+        <div class="rules">
+          <div class="col m"><h3>der</h3><ul>
+            <li><code>-ling</code> der Frühling</li><li><code>-ismus</code> der Tourismus</li><li><code>-or</code> der Motor</li><li><code>-ig, -ich</code> der Honig, der Teppich</li><li><code>-ist, -ant</code> der Polizist</li><li>days, months, seasons</li><li>weather: der Regen, der Wind</li></ul></div>
+          <div class="col f"><h3>die</h3><ul>
+            <li><code>-ung</code> die Zeitung</li><li><code>-heit, -keit</code> die Freiheit</li><li><code>-schaft</code> die Freundschaft</li><li><code>-ion, -tät</code> die Nation, die Qualität</li><li><code>-ie, -ei, -ik</code> die Bäckerei</li><li><code>-in</code> (people) die Lehrerin</li><li><code>-ur, -enz, -anz</code> die Natur</li></ul></div>
+          <div class="col n"><h3>das</h3><ul>
+            <li><code>-chen, -lein</code> das Mädchen</li><li><code>-ment</code> das Instrument</li><li><code>-um</code> das Museum</li><li><code>-tum</code> das Eigentum</li><li><code>Ge-</code> collectives: das Gebirge</li><li>infinitives as nouns: das Essen</li><li>metals, colours: das Gold, das Blau</li></ul></div>
+        </div>
+        <p class="small muted" style="margin:0">Compound nouns take the article of their last part: das Kind + das Zimmer = <b>das</b> Kinderzimmer.</p>
+      </div>
+    </section>
+
+    <!-- Verbs -->
+    <section class="view" id="view-verbs" hidden>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label class="search" for="vq">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="vq" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Conjugate a verb: gehen, fing an, to bring…">
+        </label>
+        <div class="chips" id="v-common"></div>
+      </div>
+      <div id="v-suggest"></div>
+      <div id="v-out"></div>
+      <div class="card drill">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <div><div class="eyebrow">Conjugation drill</div><h2>Type the right form</h2></div>
+          <div class="seg" id="drill-tense" role="group" aria-label="Tense">
+            <button type="button" data-t="pr" aria-pressed="true">Präsens</button>
+            <button type="button" data-t="pt" aria-pressed="false">Präteritum</button>
+            <button type="button" data-t="pf" aria-pressed="false">Perfekt</button>
+          </div>
+        </div>
+        <div class="prompt" id="drill-prompt">…</div>
+        <form id="drill-form" autocomplete="off">
+          <input id="drill-in" type="text" autocapitalize="off" spellcheck="false" placeholder="Your answer" aria-label="Your answer">
+          <button class="btn" type="submit">Check</button>
+          <button class="btn ghost" type="button" id="drill-skip">Skip</button>
+        </form>
+        <div class="feedback" id="drill-fb"></div>
+      </div>
+    </section>
+
+    <!-- Learn -->
+    <section class="view" id="view-learn" hidden>
+      <div><div class="eyebrow">Your word list</div><h2>Flashcards</h2>
+        <p class="muted" style="margin:6px 0 0">Star any word in the dictionary to add it here. Cards you know move up a box and come back less often.</p></div>
+      <div id="learn-area"></div>
+      <div>
+        <h3 style="margin-bottom:8px">Saved words <span class="muted" id="saved-count"></span></h3>
+        <div id="saved-list"></div>
+      </div>
+    </section>
+
+    <footer>Dictionary data from <a href="https://en.wiktionary.org" target="_blank" rel="noopener">Wiktionary</a> (CC BY-SA), extracted by <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a>. Word frequencies from OpenSubtitles via FrequencyWords.</footer>
+  </div>
+</main>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ART = {m:"der", f:"die", n:"das", p:"die"};
+const POSN = {noun:"noun",verb:"verb",adj:"adjective",adv:"adverb",prep:"preposition",conj:"conjunction",pron:"pronoun",intj:"interjection",num:"number",det:"determiner",particle:"particle",phrase:"phrase",article:"article",postp:"postposition"};
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem("wk:"+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem("wk:"+k, JSON.stringify(v)); }catch(e){} }
+};
+const ICON = {
+  speak:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>',
+  star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>',
+  starOn:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>'
+};
+
+const DATA_VERSION = 2;   // bump when the JSON files change so browsers skip their cached copy
+let ROWS = [], VERBS = {}, FORMS = {}, BYW = new Map(), GL = [], FIRST = [], LOW = [];
+let NOUNS = [];   // indices of quiz-worthy nouns, by frequency
+
+/* ---------- speech ---------- */
+let deVoice = null;
+function pickVoice(){ try{ const vs = speechSynthesis.getVoices(); deVoice = vs.find(v => /^de(-|_)DE/i.test(v.lang)) || vs.find(v => /^de/i.test(v.lang)) || null; }catch(e){} }
+try{ speechSynthesis.onvoiceschanged = pickVoice; pickVoice(); }catch(e){}
+function speak(t){ try{ speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "de-DE"; if(deVoice) u.voice = deVoice; u.rate = .9; speechSynthesis.speak(u); }catch(e){} }
+
+/* ---------- saved words ---------- */
+let saved = store.get("saved", {});   // word|pos -> {box, due}
+const keyOf = r => r[0] + "|" + r[1];
+function toggleSave(r){ const k = keyOf(r); if(saved[k]) delete saved[k]; else saved[k] = {box:1, due:0}; store.set("saved", saved); renderLearn(); }
+
+/* ---------- tabs ---------- */
+function show(view){
+  document.querySelectorAll("nav.tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.view === view));
+  document.querySelectorAll("section.view").forEach(s => s.hidden = s.id !== "view-" + view);
+  store.set("tab", view);
+  if(view === "learn") renderLearn();
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => show(b.dataset.view));
+document.querySelectorAll(".uml").forEach(u => u.addEventListener("click", e => {
+  if(e.target.tagName !== "BUTTON") return;
+  const inp = document.getElementById(u.dataset.target);
+  const s = inp.selectionStart ?? inp.value.length, en = inp.selectionEnd ?? s;
+  inp.value = inp.value.slice(0, s) + e.target.textContent + inp.value.slice(en);
+  inp.focus(); inp.setSelectionRange(s + 1, s + 1); inp.dispatchEvent(new Event("input"));
+}));
+
+/* ---------- dictionary search ---------- */
+function deLabel(r){
+  const g = r[2];
+  let h = "";
+  if(r[1] === "noun" && g) h += `<span class="art ${g}">${ART[g]}</span>`;
+  h += `<b class="${r[1]==="noun" && g ? "w-"+g : ""}">${esc(r[0])}</b>`;
+  if(r[1] === "noun" && r[3]) h += `<span class="small muted">pl. ${esc(r[3])}</span>`;
+  if(r[1] !== "noun") h += `<span class="pos">${POSN[r[1]]||r[1]}</span>`;
+  return h;
+}
+function rowHtml(i, hl){
+  const r = ROWS[i];
+  let en = r[4].slice(0, 3).map(esc).join("; ");
+  if(hl){ const re = new RegExp("\\b(" + hl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")\\b", "gi"); en = en.replace(re, "<mark>$1</mark>"); }
+  return `<button type="button" class="row" data-i="${i}"><span class="de">${deLabel(r)}</span><span class="en">${en}</span><span class="pos">›</span></button>`;
+}
+function searchDE(q){
+  const lq = q.toLowerCase(), exact = [], pre = [], seen = new Set();
+  (BYW.get(lq) || []).forEach(i => { exact.push(i); seen.add(i); });
+  const lemmas = FORMS[lq] || [];
+  const via = [];
+  lemmas.forEach(w => (BYW.get(w.toLowerCase()) || []).forEach(i => { if(!seen.has(i)){ via.push(i); seen.add(i); } }));
+  if(lq.length >= 2) for(let i = 0; i < LOW.length && pre.length < 30; i++) if(!seen.has(i) && LOW[i].startsWith(lq)) pre.push(i);
+  return {exact, via, pre, lemmas};
+}
+function searchEN(q){
+  const lq = q.toLowerCase().replace(/^to /, "").trim();
+  if(lq.length < 2) return [];
+  const e = lq.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const t0 = new RegExp("(^|\\|)(to |a |an |the )?" + e + "(\\||$)");
+  const t1 = new RegExp("(^|\\|)(to |a |an |the )?" + e + "\\b");
+  const t2 = new RegExp("\\b" + e + "\\b");
+  const tiers = [[], [], [], []];
+  for(let i = 0; i < GL.length; i++){
+    const g = GL[i];
+    if(g.indexOf(lq) < 0) continue;
+    if(t0.test(g)) tiers[t0.test(FIRST[i]) ? 0 : 1].push(i); else if(t1.test(g)) tiers[2].push(i); else if(tiers[3].length < 40 && t2.test(g)) tiers[3].push(i);
+  }
+  return tiers.flat().slice(0, 40);
+}
+function runSearch(){
+  const q = $("#q").value.trim();
+  $("#q-clear").hidden = !q;
+  $("#entry").innerHTML = "";
+  if(!q){ $("#dict-results").innerHTML = startHtml(); return; }
+  const de = searchDE(q), en = searchEN(q);
+  let h = "";
+  if(de.exact.length) h += `<div class="group">German</div>` + de.exact.map(i => rowHtml(i)).join("");
+  if(de.via.length) h += `<div class="group">“${esc(q)}” is a form of ${de.lemmas.map(esc).join(", ")}</div>` + de.via.map(i => rowHtml(i)).join("");
+  if(en.length) h += `<div class="group">English → German</div>` + en.map(i => rowHtml(i, q.replace(/^to /i, ""))).join("");
+  if(de.pre.length) h += `<div class="group">German words starting with “${esc(q)}”</div>` + de.pre.slice(0, 15).map(i => rowHtml(i)).join("");
+  if(!h) h = `<div class="note">No match for “${esc(q)}”. Check the spelling, or try the base form (gehen instead of gegangen).</div>`;
+  $("#dict-results").innerHTML = `<div class="results">${h}</div>`;
+  if(de.exact.length || de.via.length) showEntry(de.exact[0] ?? de.via[0]);
+}
+function startHtml(){
+  const ids = [];
+  for(const w of ["Haus","gehen","schön","Zeitung","Mädchen","bringen","Freund","trotzdem"]) { const x = BYW.get(w.toLowerCase()); if(x) ids.push(x[0]); }
+  return `<div class="results"><div class="group">Try one of these</div>${ids.map(i => rowHtml(i)).join("")}</div>`;
+}
+let qT; $("#q").addEventListener("input", () => { clearTimeout(qT); qT = setTimeout(runSearch, 120); });
+$("#q-clear").onclick = () => { $("#q").value = ""; runSearch(); $("#q").focus(); };
+$("#dict-results").addEventListener("click", e => { const b = e.target.closest(".row"); if(b){ showEntry(+b.dataset.i); $("#entry").scrollIntoView({block:"nearest"}); } });
+
+function showEntry(i){
+  const r = ROWS[i], g = r[2], isNoun = r[1] === "noun", k = keyOf(r), on = !!saved[k];
+  const spoken = (isNoun && g ? ART[g] + " " : "") + r[0];
+  let meta = [`<span class="pos">${POSN[r[1]]||r[1]}</span>`];
+  if(isNoun && r[3]) meta.push(`plural: <b>die ${esc(r[3])}</b>`);
+  if(isNoun && g === "p") meta.push("plural only");
+  const v = r[1] === "verb" && VERBS[r[0]];
+  if(v) meta.push(`${esc(v.pr[2])} · ${esc(v.pt[2])} · ${v.a[0] === "sein" ? "ist" : "hat"} ${esc(v.pp)}`);
+  $("#entry").innerHTML = `<div class="card">
+    <div class="entry-head">
+      ${isNoun && g ? `<span class="art ${g}" style="font-size:1.05rem;margin-top:.45rem">${ART[g]}</span>` : ""}
+      <div class="word ${isNoun && g ? "w-"+g : ""}">${esc(r[0])}</div>
+      <div class="tools">
+        <button class="icon-btn" type="button" id="e-speak" aria-label="Pronounce">${ICON.speak}</button>
+        <button class="icon-btn ${on ? "on" : ""}" type="button" id="e-save" aria-label="${on ? "Remove from flashcards" : "Add to flashcards"}">${on ? ICON.starOn : ICON.star}</button>
+      </div>
+    </div>
+    <div class="meta">${meta.join("")}</div>
+    <ol class="senses">${r[4].map(s => `<li>${esc(s)}</li>`).join("")}</ol>
+    ${v ? `<div class="btn-row"><button class="btn" type="button" id="e-conj">Full conjugation</button></div>` : ""}
+  </div>`;
+  $("#e-speak").onclick = () => speak(spoken);
+  $("#e-save").onclick = () => { toggleSave(r); showEntry(i); };
+  if(v) $("#e-conj").onclick = () => { show("verbs"); showVerb(r[0]); };
+}
+
+/* ---------- der die das ---------- */
+function nounLookup(word){
+  const lw = word.toLowerCase().trim();
+  if(!lw) return null;
+  const hit = (BYW.get(lw) || []).find(i => ROWS[i][1] === "noun" && ROWS[i][2]);
+  if(hit !== undefined) return {i: hit, via: null};
+  for(let s = 1; s < lw.length - 2; s++){   // compound: try the longest known tail
+    const tail = lw.slice(s);
+    const t = (BYW.get(tail) || []).find(i => ROWS[i][1] === "noun" && ROWS[i][2] && ROWS[i][2] !== "p");
+    if(t !== undefined) return {i: t, via: word.trim()};
+  }
+  return null;
+}
+function ruleFor(w, g){
+  const l = w.toLowerCase();
+  const R = [["f",["ung","heit","keit","schaft","ion","tät","ik","ie","ei","enz","anz","ur"]],["n",["chen","lein","ment","tum","um"]],["m",["ling","ismus","or","ist","ant","ig","ich"]]];
+  for(const [rg, ends] of R) for(const e of ends) if(l.endsWith(e) && l.length > e.length + 1) return rg === g ? `Words ending in <b>-${e}</b> are usually ${ART[rg]}.` : `Exception: most words ending in -${e} are ${ART[rg]}.`;
+  return "";
+}
+$("#dq").addEventListener("input", () => {
+  const q = $("#dq").value;
+  const out = $("#dd-answer");
+  if(!q.trim()){ out.innerHTML = ""; return; }
+  const res = nounLookup(q);
+  if(!res){ out.innerHTML = `<div class="note card">No noun found for “${esc(q.trim())}”. Nouns are listed in the singular: try Haus, not Häuser.</div>`; return; }
+  const r = ROWS[res.i], g = r[2];
+  const shown = res.via ? res.via.charAt(0).toUpperCase() + res.via.slice(1) : r[0];
+  const rule = ruleFor(shown, g);
+  out.innerHTML = `<div class="card"><div class="dd-answer">
+    <span class="big w-${g}">${ART[g]}</span><span class="big">${esc(shown)}</span>
+    <button class="icon-btn" type="button" id="dd-speak" aria-label="Pronounce" style="margin-left:auto">${ICON.speak}</button></div>
+    <div class="meta">${res.via ? `<span>Compound: takes the article of <b class="w-${g}">${ART[g]} ${esc(r[0])}</b></span>` : ""}${r[3] && !res.via ? `<span>plural: <b>die ${esc(r[3])}</b></span>` : ""}<span>${esc(r[4][0] || "")}</span></div>
+    ${rule ? `<p class="small" style="margin:10px 0 0">${rule}</p>` : ""}</div>`;
+  $("#dd-speak").onclick = () => speak(ART[g] + " " + shown);
+});
+
+const dd = {lv:0, cur:null, done:false, streak:0, best:store.get("ddBest",0), right:0, total:0, miss:store.get("ddMiss",[])};
+function ddPool(){
+  if(dd.lv === 3) return dd.miss.map(w => (BYW.get(w.toLowerCase())||[]).find(i => ROWS[i][1]==="noun")).filter(i => i !== undefined);
+  const [a, b] = [[0,500],[500,2000],[2000,6000]][dd.lv];
+  return NOUNS.slice(a, b);
+}
+function ddNext(){
+  const pool = ddPool();
+  dd.done = false;
+  document.querySelectorAll(".choices button").forEach(b => b.className = b.dataset.g);
+  if(!pool.length){ $("#dd-noun").textContent = "All clear"; $("#dd-gloss").textContent = "No mistakes left to review. Pick another level."; dd.cur = null; return; }
+  let i; do{ i = pool[Math.floor(Math.random() * pool.length)]; } while(pool.length > 1 && i === dd.cur);
+  dd.cur = i;
+  $("#dd-noun").textContent = ROWS[i][0];
+  $("#dd-noun").className = "noun";
+  $("#dd-gloss").textContent = ROWS[i][4][0] || "";
+  $("#dd-feedback").innerHTML = `<span class="muted">Keys 1, 2, 3 answer. Enter skips ahead.</span>`;
+}
+function ddAnswer(g){
+  if(dd.cur === null) return;
+  if(dd.done){ ddNext(); return; }
+  const ci = dd.cur, r = ROWS[ci], ok = r[2] === g;
+  dd.done = true; dd.total++;
+  document.querySelectorAll(".choices button").forEach(b => { if(b.dataset.g === r[2]) b.classList.add("right"); else b.classList.add("wrong"); });
+  $("#dd-noun").className = "noun w-" + r[2];
+  const rule = ruleFor(r[0], r[2]);
+  if(ok){ dd.right++; dd.streak++; if(dd.streak > dd.best){ dd.best = dd.streak; store.set("ddBest", dd.best); } dd.miss = dd.miss.filter(w => w !== r[0]); }
+  else { dd.streak = 0; if(!dd.miss.includes(r[0])) dd.miss.push(r[0]); }
+  store.set("ddMiss", dd.miss);
+  $("#dd-feedback").innerHTML = `<span class="${ok ? "ok" : "bad"}">${ok ? "Richtig!" : "Falsch."}</span> <b>${ART[r[2]]} ${esc(r[0])}</b>${r[3] ? `, die ${esc(r[3])}` : ""}.${rule ? " " + rule : ""}`;
+  speak(ART[r[2]] + " " + r[0]);
+  ddStats();
+  setTimeout(() => { if(dd.done && dd.cur === ci && ok) ddNext(); }, 1100);
+}
+function ddStats(){
+  $("#dd-streak").textContent = dd.streak; $("#dd-best").textContent = dd.best;
+  $("#dd-acc").textContent = dd.total ? Math.round(100 * dd.right / dd.total) + "%" : "–";
+  $("#dd-miss").textContent = dd.miss.length;
+}
+document.querySelectorAll(".choices button").forEach(b => b.onclick = () => ddAnswer(b.dataset.g));
+$("#dd-level").addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; dd.lv = +b.dataset.lv; $("#dd-level").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); ddNext(); });
+document.addEventListener("keydown", e => {
+  if($("#view-dds").hidden || e.target.tagName === "INPUT") return;
+  if(e.key === "1") ddAnswer("m"); else if(e.key === "2") ddAnswer("f"); else if(e.key === "3") ddAnswer("n"); else if(e.key === "Enter" && dd.done) ddNext();
+});
+
+/* ---------- verbs ---------- */
+const PRON = ["ich","du","er/sie/es","wir","ihr","sie/Sie"];
+const AUX = {
+  haben:{pr:["habe","hast","hat","haben","habt","haben"], pt:["hatte","hattest","hatte","hatten","hattet","hatten"], k1:["habe","habest","habe","haben","habet","haben"], k2:["hätte","hättest","hätte","hätten","hättet","hätten"]},
+  sein:{pr:["bin","bist","ist","sind","seid","sind"], pt:["war","warst","war","waren","wart","waren"], k1:["sei","seiest","sei","seien","seiet","seien"], k2:["wäre","wärest","wäre","wären","wäret","wären"]},
+  werden:{pr:["werde","wirst","wird","werden","werdet","werden"], k2:["würde","würdest","würde","würden","würdet","würden"]}
+};
+const PARTICLES = ["zurück","zusammen","weiter","heraus","herein","hinaus","hinein","vorbei","entgegen","nach","fort","fest","frei","hoch","heim","weg","auf","aus","bei","ein","mit","vor","zu","ab","an","um","her","hin","los","dar"];
+function splitSep(v, inf){
+  const f = v.pr[0] || "";
+  const sp = f.lastIndexOf(" ");
+  if(sp > 0){ const p = f.slice(sp + 1); if(inf.startsWith(p) && PARTICLES.includes(p)) return p; }
+  return "";
+}
+function regular(inf, sep){
+  let base = sep ? inf.slice(sep.length) : inf;
+  let stem = base.replace(/(e?n)$/, "");
+  if(/eln$|ern$/.test(base)) stem = base.slice(0, -1);
+  const ins = /([dt]|[^aeioulrh][mn])$/.test(stem) ? "e" : "";
+  const sib = /(s|ß|x|z)$/.test(stem);
+  const pr = [stem+"e", stem+(sib?"t":ins+"st"), stem+ins+"t", base, stem+ins+"t", base];
+  if(/eln$|ern$/.test(base)) pr[0] = base.endsWith("eln") ? base.slice(0,-3)+"le" : stem+"e";
+  const pt = ["te","test","te","ten","tet","ten"].map(e => stem + ins + e);
+  const add = s => sep ? s + " " + sep : s;
+  return {pr: pr.map(add), pt: pt.map(add)};
+}
+function endHtml(form, irregular){
+  // emphasise the personal ending of the conjugated word
+  const parts = form.split(" "), w = parts[0];
+  const m = w.match(/(est|st|et|en|te|ten|test|tet|t|e|n)$/);
+  const core = m && w.length > m[1].length + 1 ? esc(w.slice(0, -m[1].length)) + `<span class="end">${esc(m[1])}</span>` : esc(w);
+  const rest = parts.slice(1).join(" ");
+  const html = core + (rest ? " " + esc(rest) : "");
+  return irregular ? `<span class="irr">${html}</span>` : html;
+}
+function tbl(title, forms, opt = {}){
+  const rows = forms.map((f, k) => f ? `<tr><td class="pr">${opt.pron ? opt.pron[k] : PRON[k]}</td><td>${opt.plain ? esc(f) : endHtml(f, opt.irr && opt.irr[k])}</td></tr>` : "").join("");
+  return `<div class="tbl"><h3>${title}</h3><table>${rows}</table></div>`;
+}
+function verbScore(w){ const x = (BYW.get(w.toLowerCase()) || []).filter(i => ROWS[i][1] === "verb"); return x.length ? Math.max(...x.map(i => ROWS[i][5])) : 0; }
+function findVerb(q){
+  const lq = q.trim().toLowerCase();
+  if(!lq) return [];
+  const out = [];
+  const push = w => { if(VERBS[w] && !out.includes(w)) out.push(w); };
+  Object.keys(VERBS).forEach(w => { if(w.toLowerCase() === lq) push(w); });
+  (FORMS[lq] || []).forEach(push);
+  // separable phrase like "fing an": try "an"+lemma of "fing"
+  const bits = lq.split(/\s+/);
+  if(bits.length === 2) (FORMS[bits[0]] || [bits[0]]).forEach(l => push(bits[1] + l.toLowerCase()));
+  if(!out.length || lq.startsWith("to ")) searchEN(lq).forEach(i => { if(ROWS[i][1] === "verb") push(ROWS[i][0]); });
+  if(lq.length >= 2) VERB_LIST.forEach(w => { if(out.length < 12 && w.toLowerCase().startsWith(lq)) push(w); });
+  return out.slice(0, 12);
+}
+let VERB_LIST = [];
+function showVerb(inf){
+  const v = VERBS[inf]; if(!v) return;
+  $("#vq").value = inf; $("#v-suggest").innerHTML = "";
+  store.set("verb", inf);
+  const sep = splitSep(v, inf);
+  const reg = regular(inf, sep);
+  const irrPr = v.pr.map((f, k) => f && f !== reg.pr[k]);
+  const irrPt = v.pt.map((f, k) => f && f !== reg.pt[k]);
+  const ri = (BYW.get(inf.toLowerCase()) || []).find(i => ROWS[i][1] === "verb");
+  const gloss = ri !== undefined ? ROWS[ri][4] : [];
+  const auxes = v.a.filter(a => a === "haben" || a === "sein");
+  if(!auxes.length) auxes.push("haben");
+  const aux = auxes.includes("sein") && !auxes.includes("haben") ? "sein" : auxes[0];
+  const A = AUX[aux], W = AUX.werden;
+  const pp = v.pp, infAux = aux;
+  const kind = {strong:"Strong (irregular)", weak:"Weak (regular)", mixed:"Mixed", irregular:"Irregular", present:"Modal verb"}[v.t] || "";
+  let k2 = v.k2.some(Boolean) ? v.k2 : W.k2.map(w => w + " " + inf);
+  if(sep) k2 = k2.map(f => f && !f.includes(" ") && f.startsWith(sep) ? f.slice(sep.length) + " " + sep : f);
+  $("#v-out").innerHTML = `<div class="card">
+    <div class="entry-head"><div class="word">${esc(inf)}</div>
+      <div class="tools"><button class="icon-btn" type="button" id="v-speak" aria-label="Pronounce">${ICON.speak}</button>
+      ${ri !== undefined ? `<button class="icon-btn ${saved[keyOf(ROWS[ri])] ? "on" : ""}" type="button" id="v-save" aria-label="Add to flashcards">${saved[keyOf(ROWS[ri])] ? ICON.starOn : ICON.star}</button>` : ""}</div></div>
+    <div class="meta">${kind ? `<span class="badge ${v.t === "weak" ? "" : "strong"}">${esc(kind)}</span>` : ""}<span class="badge">Perfekt with ${esc(auxes.join(" or "))}</span>${sep ? `<span class="badge">Separable: ${esc(sep)}-</span>` : ""}</div>
+    ${gloss.length ? `<p style="margin:10px 0 0">${gloss.slice(0,3).map(esc).join("; ")}</p>` : ""}
+    <div class="parts"><div><span>Infinitiv</span><b>${esc(inf)}</b></div><div><span>Präsens er</span><b>${esc(v.pr[2])}</b></div><div><span>Präteritum er</span><b>${esc(v.pt[2])}</b></div><div><span>Partizip II</span><b>${esc(aux === "sein" ? "ist" : "hat")} ${esc(pp)}</b></div></div>
+  </div>
+  <div class="legend"><span><span class="irr">Orange</span> = differs from the regular pattern</span><span><b>Bold</b> = personal ending</span></div>
+  <div class="tables">
+    ${tbl("Präsens", v.pr, {irr: irrPr})}
+    ${tbl("Präteritum", v.pt, {irr: irrPt})}
+    ${tbl("Perfekt", A.pr.map(a => a + " " + pp), {plain:1})}
+    ${tbl("Plusquamperfekt", A.pt.map(a => a + " " + pp), {plain:1})}
+    ${tbl("Futur I", W.pr.map(w => w + " " + inf), {plain:1})}
+    ${tbl("Futur II", W.pr.map(w => w + " " + pp + " " + infAux), {plain:1})}
+    ${tbl("Konjunktiv I", v.k1, {plain:1})}
+    ${tbl("Konjunktiv II", k2, {plain:1})}
+    ${tbl("Konjunktiv II Perfekt", A.k2.map(a => a + " " + pp), {plain:1})}
+    ${tbl("würde + Infinitiv", W.k2.map(w => w + " " + inf), {plain:1})}
+    ${v.im[0] && v.im[0] !== "-" ? tbl("Imperativ", [v.im[0] + "!", v.im[1] + "!", (v.pr[5] || "").replace(/^(\S+)/, "$1 Sie") + "!"], {plain:1, pron:["du","ihr","Sie"]}) : ""}
+    ${tbl("Partizipien", [v.p1, pp], {plain:1, pron:["Partizip I","Partizip II"]})}
+  </div>`;
+  $("#v-speak").onclick = () => speak(`${inf}, ${v.pt[2]}, ${pp}`);
+  const vs = $("#v-save"); if(vs) vs.onclick = () => { toggleSave(ROWS[ri]); showVerb(inf); };
+}
+let vT; $("#vq").addEventListener("input", () => { clearTimeout(vT); vT = setTimeout(() => {
+  const q = $("#vq").value; const res = findVerb(q);
+  if(!q.trim()){ $("#v-suggest").innerHTML = ""; return; }
+  if(!res.length){ $("#v-suggest").innerHTML = `<div class="note card">No verb found for “${esc(q.trim())}”.</div>`; return; }
+  $("#v-suggest").innerHTML = `<div class="results">${res.map(w => { const i = (BYW.get(w.toLowerCase())||[]).find(i => ROWS[i][1]==="verb"); return i !== undefined ? rowHtml(i) : ""; }).join("")}</div>`;
+}, 140); });
+$("#vq").addEventListener("keydown", e => { if(e.key === "Enter"){ const r = findVerb($("#vq").value); if(r[0]) showVerb(r[0]); } });
+$("#v-suggest").addEventListener("click", e => { const b = e.target.closest(".row"); if(b) showVerb(ROWS[+b.dataset.i][0]); });
+$("#v-common").addEventListener("click", e => { if(e.target.classList.contains("chip")) showVerb(e.target.textContent); });
+
+/* drill */
+const drill = {t:"pr", cur:null, answered:false};
+function drillNext(){
+  const pool = VERB_LIST.slice(0, 150);
+  const inf = pool[Math.floor(Math.random() * pool.length)], v = VERBS[inf], p = Math.floor(Math.random() * 6);
+  let ans;
+  if(drill.t === "pf"){ const aux = v.a.includes("sein") && !v.a.includes("haben") ? "sein" : "haben"; ans = AUX[aux].pr[p] + " " + v.pp; }
+  else ans = v[drill.t][p];
+  if(!ans) return drillNext();
+  drill.cur = {inf, p, ans}; drill.answered = false;
+  const tn = {pr:"Präsens", pt:"Präteritum", pf:"Perfekt"}[drill.t];
+  $("#drill-prompt").innerHTML = `<b>${esc(inf)}</b> · ${tn} · <b>${PRON[p]}</b> <span class="muted small">${esc((ROWS[(BYW.get(inf.toLowerCase())||[])[0]]||[,,,,[""]])[4][0] || "")}</span>`;
+  $("#drill-in").value = ""; $("#drill-fb").innerHTML = "";
+}
+$("#drill-form").addEventListener("submit", e => {
+  e.preventDefault();
+  if(drill.answered){ drillNext(); $("#drill-in").focus(); return; }
+  const given = $("#drill-in").value.trim().toLowerCase().replace(/\s+/g, " ");
+  const ok = given === drill.cur.ans.toLowerCase();
+  drill.answered = true;
+  $("#drill-fb").innerHTML = ok ? `<span class="ok">Richtig!</span> ${PRON[drill.cur.p]} ${esc(drill.cur.ans)}. Press Enter for the next one.` : `<span class="bad">Not quite.</span> ${PRON[drill.cur.p]} <b>${esc(drill.cur.ans)}</b>. Press Enter for the next one.`;
+});
+$("#drill-skip").onclick = drillNext;
+$("#drill-tense").addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; drill.t = b.dataset.t; $("#drill-tense").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); drillNext(); });
+
+/* ---------- flashcards ---------- */
+let fc = {k:null, flipped:false};
+const BOX_DAYS = [0, 0, 1, 3, 7, 21];
+function dueCards(){ const now = Date.now(); return Object.keys(saved).filter(k => saved[k].due <= now); }
+function findRow(k){ const [w, p] = k.split("|"); return (BYW.get(w.toLowerCase()) || []).find(i => ROWS[i][0] === w && ROWS[i][1] === p); }
+function renderLearn(){
+  if(!ROWS.length) return;
+  const keys = Object.keys(saved);
+  $("#saved-count").textContent = keys.length ? `(${keys.length})` : "";
+  const counts = [1,2,3,4,5].map(b => keys.filter(k => saved[k].box === b).length);
+  const due = dueCards();
+  const area = $("#learn-area");
+  if(!keys.length){
+    area.innerHTML = `<div class="card empty"><b style="color:var(--fg)">No saved words yet</b><span>Tap the star on any dictionary entry, or start with 20 everyday nouns.</span><button class="btn" type="button" id="seed">Add 20 common nouns</button></div>`;
+    $("#seed").onclick = () => { NOUNS.slice(0, 20).forEach(i => saved[keyOf(ROWS[i])] = {box:1, due:0}); store.set("saved", saved); renderLearn(); };
+  } else {
+    const boxes = `<div class="boxes">${counts.map((c, b) => `<div><b>${c}</b>Box ${b+1}</div>`).join("")}</div>`;
+    if(!due.length){ area.innerHTML = `<div class="card empty"><b style="color:var(--fg)">All caught up</b><span>No cards are due right now. Come back later or add more words.</span>${boxes}</div>`; }
+    else {
+      if(!fc.k || !due.includes(fc.k)){ fc.k = due[Math.floor(Math.random() * due.length)]; fc.flipped = false; }
+      const i = findRow(fc.k), r = i !== undefined ? ROWS[i] : null;
+      if(!r){ delete saved[fc.k]; store.set("saved", saved); fc.k = null; return renderLearn(); }
+      const g = r[1] === "noun" ? r[2] : "";
+      const front = `<div class="eyebrow">${POSN[r[1]] || r[1]} · ${due.length} due</div><div class="w">${esc(r[0])}</div><div class="muted small">Tap to reveal</div>`;
+      const back = `<div class="eyebrow">${POSN[r[1]] || r[1]}</div><div class="w ${g ? "w-"+g : ""}">${g ? ART[g] + " " : ""}${esc(r[0])}</div>${g && r[3] ? `<div class="muted small">die ${esc(r[3])}</div>` : ""}<div>${r[4].slice(0,2).map(esc).join("; ")}</div>`;
+      area.innerHTML = `<div class="flash"><button type="button" class="face" id="fc-face">${fc.flipped ? back : front}</button></div>
+        <div class="btn-row" style="justify-content:center">${fc.flipped ? `<button class="btn ghost" type="button" id="fc-no">Again</button><button class="btn" type="button" id="fc-yes">I knew it</button>` : ""}</div>${boxes}`;
+      $("#fc-face").onclick = () => { fc.flipped = !fc.flipped; if(fc.flipped) speak((g ? ART[g] + " " : "") + r[0]); renderLearn(); };
+      const grade = ok => { const s = saved[fc.k]; s.box = ok ? Math.min(5, s.box + 1) : 1; s.due = Date.now() + BOX_DAYS[s.box] * 864e5 + (ok ? 0 : 60e3); store.set("saved", saved); fc.k = null; renderLearn(); };
+      if(fc.flipped){ $("#fc-no").onclick = () => grade(false); $("#fc-yes").onclick = () => grade(true); }
+    }
+  }
+  const list = keys.map(findRow).filter(i => i !== undefined);
+  $("#saved-list").innerHTML = list.length ? `<div class="results">${list.map(i => rowHtml(i)).join("")}</div>` : `<p class="muted small" style="margin:0">Nothing saved yet.</p>`;
+}
+$("#saved-list").addEventListener("click", e => { const b = e.target.closest(".row"); if(b){ show("dict"); $("#q").value = ROWS[+b.dataset.i][0]; runSearch(); showEntry(+b.dataset.i); } });
+
+/* ---------- boot ---------- */
+async function boot(){
+  try{
+    const [d, v, f] = await Promise.all(["dict.json","verbs.json","forms.json"].map(u => fetch(u + "?v=" + DATA_VERSION).then(r => { if(!r.ok) throw new Error(u); return r.json(); })));
+    ROWS = d; VERBS = v; FORMS = f;
+  }catch(e){ $("#loading").textContent = "The dictionary files did not load. Reload the page to try again."; return; }
+  const norm = s => s.toLowerCase().replace(/\s*\([^)]*\)\s*/g, " ").replace(/\s*;\s*/g, "|").replace(/\s*,\s*/g, "|").trim();
+  ROWS.forEach((r, i) => { const l = r[0].toLowerCase(); LOW.push(l); GL.push(norm(r[4].join("|"))); FIRST.push(norm(r[4][0] || "")); const a = BYW.get(l); if(a) a.push(i); else BYW.set(l, [i]); });
+  ROWS.forEach((r, i) => { if(r[1] === "noun" && "mfn".includes(r[2] || "x") && r[5] > 0 && /^[A-ZÄÖÜ][a-zäöüß]{2,}$/.test(r[0])) NOUNS.push(i); });
+  const seenN = new Set(); NOUNS = NOUNS.filter(i => { const w = ROWS[i][0]; if(seenN.has(w)) return false; seenN.add(w); return true; });
+  VERB_LIST = Object.keys(VERBS).filter(w => /^[a-zäöü]+$/.test(w)).sort((a, b) => verbScore(b) - verbScore(a));
+  $("#loading").remove();
+  $("#v-common").innerHTML = ["sein","haben","werden","können","gehen","kommen","sehen","geben","nehmen","anfangen","bringen","wissen"].filter(w => VERBS[w]).map(w => `<button type="button" class="chip">${w}</button>`).join("");
+  runSearch();
+  showVerb(store.get("verb", "gehen") in VERBS ? store.get("verb", "gehen") : VERB_LIST[0]);
+  ddNext(); ddStats(); drillNext(); renderLearn();
+  const tab = location.hash.slice(1) || store.get("tab", "dict");
+  if(["dict","dds","verbs","learn"].includes(tab)) show(tab);
+}
+boot();
+</script>
+
+</html>
