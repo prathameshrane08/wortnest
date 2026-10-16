@@ -79,7 +79,27 @@ struct SaveButton: View {
     }
 }
 
+/// Test-only launch options, e.g. `-demoQuery ging`. Compiled out of release builds.
+enum DebugLaunch {
+    static func string(_ key: String) -> String? {
+        #if DEBUG
+        return UserDefaults.standard.string(forKey: key)
+        #else
+        return nil
+        #endif
+    }
+}
+
 extension View {
+    /// A search field that stays visible above the list instead of hiding until you pull down.
+    @ViewBuilder func pinnedSearch(text: Binding<String>, prompt: String) -> some View {
+        #if os(iOS)
+        self.searchable(text: text, placement: .navigationBarDrawer(displayMode: .always), prompt: prompt)
+        #else
+        self.searchable(text: text, prompt: prompt)
+        #endif
+    }
+
     /// German input: no auto-capitalisation or autocorrect on iPhone.
     @ViewBuilder func germanInput() -> some View {
         #if os(iOS)

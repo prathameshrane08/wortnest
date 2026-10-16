@@ -2,13 +2,14 @@ import SwiftUI
 
 struct VerbsView: View {
     @EnvironmentObject var store: Store
-    @State private var query = ""
+    @State private var query = DebugLaunch.string("demoVerbQuery") ?? ""
     @State private var results: [String] = []
+    @State private var path = NavigationPath(DebugLaunch.string("demoVerb").map { [VerbRoute(infinitive: $0)] } ?? [])
 
     private let common = ["sein", "haben", "werden", "können", "gehen", "kommen", "sehen", "geben", "nehmen", "anfangen", "bringen", "wissen"]
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List {
                 if query.trimmingCharacters(in: .whitespaces).isEmpty {
                     Section {
@@ -26,7 +27,7 @@ struct VerbsView: View {
                 }
             }
             .navigationTitle("Verben")
-            .searchable(text: $query, prompt: "gehen, fing an, to bring")
+            .pinnedSearch(text: $query, prompt: "gehen, fing an, to bring")
             .germanInput()
             .task(id: query) {
                 try? await Task.sleep(for: .milliseconds(150))

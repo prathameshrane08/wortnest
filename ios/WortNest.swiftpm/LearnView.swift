@@ -17,6 +17,7 @@ struct LearnView: View {
                 .padding()
             }
             .navigationTitle("Üben")
+            .onAppear { if DebugLaunch.string("demoSeed") != nil && store.saved.isEmpty { store.addCommonNouns() } }
             .appDestinations()
         }
     }
@@ -109,6 +110,7 @@ struct LearnView: View {
                 VStack(spacing: 0) {
                     ForEach(list) { e in
                         EntryRow(entry: e)
+                            .buttonStyle(.plain)   // keep the row's own colours instead of the accent tint
                             .padding(.horizontal, 12).padding(.vertical, 8)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         Divider()

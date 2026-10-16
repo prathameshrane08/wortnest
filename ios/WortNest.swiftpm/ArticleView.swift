@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ArticleView: View {
     @EnvironmentObject var store: Store
-    @State private var lookup = ""
+    @State private var lookup = DebugLaunch.string("demoArticle") ?? ""
 
     var body: some View {
         NavigationStack {
@@ -29,15 +29,14 @@ struct ArticleView: View {
                     let shown = hit.compound ?? e.word
                     let art = Gender.article(e.gender) ?? ""
                     VStack(alignment: .leading, spacing: 8) {
-                        HStack(alignment: .firstTextBaseline) {
-                            Text(art).foregroundStyle(Gender.color(e.gender))
-                            Text(shown)
+                        HStack(alignment: .center) {
+                            (Text(art).foregroundStyle(Gender.color(e.gender)) + Text(" " + shown))
+                                .font(.system(size: 34, weight: .heavy))
+                                .minimumScaleFactor(0.5)
+                                .lineLimit(1)
                             Spacer()
                             SpeakButton(text: "\(art) \(shown)")
                         }
-                        .font(.system(size: 34, weight: .heavy))
-                        .minimumScaleFactor(0.5)
-                        .lineLimit(1)
                         if hit.compound != nil {
                             Text("Compound: takes the article of **\(art) \(e.word)**").font(.subheadline)
                         } else if !e.plural.isEmpty {

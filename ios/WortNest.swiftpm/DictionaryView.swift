@@ -2,7 +2,7 @@ import SwiftUI
 
 struct DictionaryView: View {
     @EnvironmentObject var store: Store
-    @State private var query = ""
+    @State private var query = DebugLaunch.string("demoQuery") ?? ""
     @State private var result = SearchResult()
 
     private let examples = ["Haus", "gehen", "schön", "Zeitung", "Mädchen", "bringen", "Freund", "trotzdem"]
@@ -38,7 +38,7 @@ struct DictionaryView: View {
                 }
             }
             .navigationTitle("Wörterbuch")
-            .searchable(text: $query, prompt: "German or English")
+            .pinnedSearch(text: $query, prompt: "German or English")
             .germanInput()
             .task(id: query) {
                 try? await Task.sleep(for: .milliseconds(150))
