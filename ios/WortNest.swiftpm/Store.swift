@@ -39,11 +39,6 @@ struct Verb: Codable {
 
 struct VerbRoute: Hashable { let infinitive: String }
 
-struct Card: Codable {
-    var box: Int
-    var due: Date
-}
-
 enum Gender {
     static func article(_ g: String) -> String? {
         ["m": "der", "f": "die", "n": "das", "p": "die"][g]
@@ -97,6 +92,7 @@ final class Store: ObservableObject {
 
     private(set) var entries: [Entry] = []
     private(set) var verbs: [String: Verb] = [:]
+    private(set) var examples: [String: [[String]]] = [:]   // "word|pos" -> [[German, English]]
     private(set) var quizNouns: [Int] = []
     private(set) var verbList: [String] = []
     private var forms: [String: [String]] = [:]
@@ -120,6 +116,7 @@ final class Store: ObservableObject {
             let built = try await Task.detached(priority: .userInitiated) { try Store.build() }.value
             entries = built.entries
             verbs = built.verbs
+            examples = built.examples
             forms = built.forms
             byLower = built.byLower
             lowerWords = built.lowerWords
@@ -136,6 +133,7 @@ final class Store: ObservableObject {
     private struct Built {
         var entries: [Entry] = []
         var verbs: [String: Verb] = [:]
+        var examples: [String: [[String]]] = [:]
         var forms: [String: [String]] = [:]
         var byLower: [String: [Int]] = [:]
         var lowerWords: [String] = []
@@ -189,6 +187,7 @@ final class Store: ObservableObject {
         }
         b.verbs = try JSONDecoder().decode([String: Verb].self, from: resource("verbs"))
         b.forms = try JSONDecoder().decode([String: [String]].self, from: resource("forms"))
+        b.examples = (try? JSONDecoder().decode([String: [[String]]].self, from: resource("examples"))) ?? [:]
 
         var seenNouns = Set<String>()
         for e in b.entries {
@@ -326,28 +325,59 @@ final class Store: ObservableObject {
     func isSaved(_ e: Entry) -> Bool { saved[e.key] != nil }
 
     func toggleSaved(_ e: Entry) {
-        if saved[e.key] != nil { saved[e.key] = nil } else { saved[e.key] = Card(box: 1, due: .distantPast) }
+        if saved[e.key] != nil { saved[e.key] = nil } else { saved[e.key] = Card() }
         persistSaved()
     }
 
     func addCommonNouns(_ n: Int = 20) {
         for i in quizNouns.prefix(n) where saved[entries[i].key] == nil {
-            saved[entries[i].key] = Card(box: 1, due: .distantPast)
+            var c = Card()
+            c.added = Date(timeIntervalSinceNow: Double(i) / 1000)   // keep the list order
+            saved[entries[i].key] = c
         }
         persistSaved()
     }
 
-    static let boxDays: [Double] = [0, 0, 1, 3, 7, 21]
-
-    func grade(_ key: String, knew: Bool) {
-        guard var c = saved[key] else { return }
-        c.box = knew ? min(5, c.box + 1) : 1
-        c.due = Date().addingTimeInterval(Store.boxDays[c.box] * 86_400 + (knew ? 0 : 60))
-        saved[key] = c
+    func grade(_ key: String, _ grade: Int) {
+        guard let c = saved[key] else { return }
+        if c.isNew { defaults.set(["day": Store.today, "n": newDoneToday + 1], forKey: "newToday") }
+        saved[key] = Srs.next(c, grade: grade)
         persistSaved()
     }
 
-    var dueKeys: [String] { saved.filter { $0.value.due <= Date() }.map(\.key) }
+    private static var today: String { Date().formatted(date: .numeric, time: .omitted) }
+
+    var newDoneToday: Int {
+        guard let t = defaults.dictionary(forKey: "newToday"), t["day"] as? String == Store.today else { return 0 }
+        return t["n"] as? Int ?? 0
+    }
+
+    var newLeftToday: Int { max(0, Srs.newPerDay - newDoneToday) }
+
+    /// What to study now: due learning and review cards first (oldest first), then today's share of new cards.
+    func studyQueue(now: Date = Date()) -> [String] {
+        let due = saved.filter { !$0.value.isNew && $0.value.due <= now }.sorted { $0.value.due < $1.value.due }.map(\.key)
+        let fresh = saved.filter { $0.value.isNew }.sorted { $0.value.added < $1.value.added }.prefix(newLeftToday).map(\.key)
+        if !due.isEmpty || !fresh.isEmpty { return due + fresh }
+        // Rather than make you wait a few minutes, show a learning card early.
+        return saved.filter { $0.value.isLearning && $0.value.due <= now + Srs.learnAhead }
+            .sorted { $0.value.due < $1.value.due }.prefix(1).map(\.key)
+    }
+
+    struct Counts { var fresh = 0, learning = 0, review = 0, tomorrow = 0, known = 0 }
+
+    func counts(now: Date = Date()) -> Counts {
+        let v = saved.values
+        let cal = Calendar.current
+        let endOfTomorrow = cal.date(byAdding: .day, value: 2, to: cal.startOfDay(for: now)) ?? now
+        return Counts(
+            fresh: min(v.filter(\.isNew).count, newLeftToday),
+            learning: v.filter { $0.isLearning && $0.due <= now + Srs.learnAhead }.count,
+            review: v.filter { !$0.isNew && $0.step < 0 && $0.due <= now }.count,
+            tomorrow: v.filter { !$0.isNew && $0.due > now && $0.due < endOfTomorrow }.count,
+            known: v.filter { $0.step < 0 && $0.ivl >= 21 }.count
+        )
+    }
 
     func savedEntries() -> [Entry] {
         saved.keys.sorted().compactMap { key in

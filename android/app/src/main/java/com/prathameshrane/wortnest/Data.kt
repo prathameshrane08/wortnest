@@ -88,6 +88,8 @@ class Repository private constructor(
     val entries: List<Entry>,
     val verbs: Map<String, Verb>,
     private val forms: Map<String, List<String>>,
+    /** "word|pos" to example sentences, each [German, English]. */
+    val examples: Map<String, List<List<String>>>,
 ) {
     private val byLower = HashMap<String, MutableList<Int>>()
     private val lowerWords = ArrayList<String>(entries.size)
@@ -154,7 +156,15 @@ class Repository private constructor(
             val fj = JSONObject(read("forms.json"))
             val forms = HashMap<String, List<String>>(fj.length())
             for (k in fj.keys()) forms[k] = fj.getJSONArray(k).strings()
-            return Repository(entries, verbs, forms)
+            val examples = HashMap<String, List<List<String>>>()
+            runCatching {
+                val ej = JSONObject(read("examples.json"))
+                for (k in ej.keys()) {
+                    val a = ej.getJSONArray(k)
+                    examples[k] = List(a.length()) { a.getJSONArray(it).strings() }
+                }
+            }
+            return Repository(entries, verbs, forms, examples)
         }
 
         private fun JSONArray.strings(): List<String> = List(length()) { optString(it) }

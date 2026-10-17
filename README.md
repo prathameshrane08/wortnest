@@ -4,14 +4,14 @@
 
 A German learning toolkit in one place:
 
-- **Wörterbuch**: German ⇄ English dictionary (about 40,000 entries). Inflected forms like *ging* or *Häuser* find their base word.
+- **Wörterbuch**: German ⇄ English dictionary (about 40,000 entries) with example sentences. Inflected forms like *ging* or *Häuser* find their base word.
 - **Der Die Das**: instant article lookup (works for compound nouns), an article quiz with three levels and a mistakes round, and the ending rules that predict gender.
 - **Verben**: full conjugation tables for about 8,900 verbs, with irregular forms highlighted, plus a typing drill.
-- **Üben**: flashcards from your starred words with a five-box review schedule.
+- **Üben**: flashcards from your starred words with spaced repetition: rate each card Again, Hard, Good or Easy and it comes back just before you would forget it (20 new words a day).
 
 ## Web app
 
-The site is static: `index.html` plus three data files. Open it at the GitHub Pages address, or run it locally:
+The site is static: `index.html` plus four data files. Open it at the GitHub Pages address, or run it locally:
 
 ```
 python3 -m http.server 8000
@@ -47,9 +47,10 @@ Copy the APK to your phone and open it to install (allow "install unknown apps" 
 curl -s https://kaikki.org/dictionary/German/kaikki.org-dictionary-German.jsonl \
   | python3 extract.py de_50k.txt .
 python3 rescore.py de_50k.txt
+curl -s https://kaikki.org/dictionary/German/kaikki.org-dictionary-German.jsonl | python3 examples.py
 ```
 
-`de_50k.txt` is the German list from [FrequencyWords](https://github.com/hermitdave/FrequencyWords). After changing the JSON files, bump `DATA_VERSION` in both `index.html` and `sw.js`, and bump `VERSION` in `sw.js`, so phones replace their offline copy.
+`de_50k.txt` is the German list from [FrequencyWords](https://github.com/hermitdave/FrequencyWords). Copy the JSON files into `ios/WortNest.swiftpm/Resources` and `android/app/src/main/assets`. After changing them, bump `DATA_VERSION` in both `index.html` and `sw.js`, and bump `VERSION` in `sw.js`, so phones replace their offline copy.
 
 ## Credits
 

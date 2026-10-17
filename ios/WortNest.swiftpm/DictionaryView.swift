@@ -4,11 +4,12 @@ struct DictionaryView: View {
     @EnvironmentObject var store: Store
     @State private var query = DebugLaunch.string("demoQuery") ?? ""
     @State private var result = SearchResult()
+    @State private var path = NavigationPath()
 
     private let examples = ["Haus", "gehen", "schön", "Zeitung", "Mädchen", "bringen", "Freund", "trotzdem"]
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List {
                 if query.trimmingCharacters(in: .whitespaces).isEmpty {
                     Section("Try one of these") {
@@ -46,6 +47,9 @@ struct DictionaryView: View {
                 result = store.search(query)
             }
             .appDestinations()
+            .onAppear {
+                if path.isEmpty, let w = DebugLaunch.string("demoEntry"), let e = store.entries(for: w).first { path.append(e) }
+            }
         }
     }
 }
@@ -90,6 +94,24 @@ struct EntryView: View {
                     }
                 }
                 .card()
+                if let examples = store.examples[entry.key], !examples.isEmpty {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("EXAMPLES").font(.caption.weight(.bold)).foregroundStyle(.secondary)
+                        ForEach(Array(examples.enumerated()), id: \.offset) { _, ex in
+                            if ex.count == 2 {
+                                HStack(alignment: .top, spacing: 10) {
+                                    SpeakButton(text: ex[0])
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(ex[0]).fontWeight(.semibold)
+                                        Text(ex[1]).font(.subheadline).foregroundStyle(.secondary)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .card()
+                }
                 if entry.pos == "verb", store.verbs[entry.word] != nil {
                     NavigationLink(value: VerbRoute(infinitive: entry.word)) {
                         Label("Full conjugation", systemImage: "tablecells")

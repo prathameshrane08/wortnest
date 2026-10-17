@@ -17,8 +17,6 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.util.Locale
 
-data class Card(val box: Int, val due: Long)
-
 class AppViewModel(app: Application) : AndroidViewModel(app) {
     var repo by mutableStateOf<Repository?>(null)
         private set
@@ -69,23 +67,51 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     fun isSaved(e: Entry) = saved.containsKey(e.key)
 
     fun toggleSaved(e: Entry) {
-        if (saved.remove(e.key) == null) saved[e.key] = Card(1, 0)
+        if (saved.remove(e.key) == null) saved[e.key] = Card()
         persistSaved()
     }
 
     fun addCommonNouns(n: Int = 20) {
         val r = repo ?: return
-        for (i in r.quizNouns.take(n)) saved.putIfAbsent(r.entries[i].key, Card(1, 0))
+        val now = System.currentTimeMillis()
+        r.quizNouns.take(n).forEachIndexed { j, i -> saved.putIfAbsent(r.entries[i].key, Card(added = now + j)) }
         persistSaved()
     }
 
-    fun dueKeys(now: Long = System.currentTimeMillis()) = saved.filterValues { it.due <= now }.keys.toList()
+    private val today get() = java.time.LocalDate.now().toString()
+    private fun newDoneToday() = if (prefs.getString("newDay", "") == today) prefs.getInt("newCount", 0) else 0
+    private fun newLeftToday() = maxOf(0, Srs.NEW_PER_DAY - newDoneToday())
 
-    fun grade(key: String, knew: Boolean) {
+    /** What to study now: due learning and review cards first (oldest first), then today's share of new cards. */
+    fun studyQueue(now: Long = System.currentTimeMillis()): List<String> {
+        val due = saved.filter { !it.value.isNew && it.value.due <= now }.entries.sortedBy { it.value.due }.map { it.key }
+        val fresh = saved.filter { it.value.isNew }.entries.sortedBy { it.value.added }.take(newLeftToday()).map { it.key }
+        if (due.isNotEmpty() || fresh.isNotEmpty()) return due + fresh
+        // Rather than make you wait a few minutes, show a learning card early.
+        return saved.filter { it.value.isLearning && it.value.due <= now + Srs.LEARN_AHEAD }.entries
+            .sortedBy { it.value.due }.take(1).map { it.key }
+    }
+
+    data class Counts(val fresh: Int, val learning: Int, val review: Int, val tomorrow: Int, val known: Int)
+
+    fun counts(now: Long = System.currentTimeMillis()): Counts {
+        val v = saved.values
+        val endOfTomorrow = java.time.LocalDate.now().plusDays(2).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
+        return Counts(
+            fresh = minOf(v.count { it.isNew }, newLeftToday()),
+            learning = v.count { it.isLearning && it.due <= now + Srs.LEARN_AHEAD },
+            review = v.count { !it.isNew && it.step < 0 && it.due <= now },
+            tomorrow = v.count { !it.isNew && it.due > now && it.due < endOfTomorrow },
+            known = v.count { it.step < 0 && it.ivl >= 21 },
+        )
+    }
+
+    fun hasNewCards() = saved.values.any { it.isNew }
+
+    fun grade(key: String, grade: Int) {
         val c = saved[key] ?: return
-        val box = if (knew) minOf(5, c.box + 1) else 1
-        val due = System.currentTimeMillis() + (BOX_DAYS[box] * 86_400_000L).toLong() + if (knew) 0 else 60_000
-        saved[key] = Card(box, due)
+        if (c.isNew) prefs.edit().putString("newDay", today).putInt("newCount", newDoneToday() + 1).apply()
+        saved[key] = Srs.next(c, grade)
         persistSaved()
     }
 
@@ -110,7 +136,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
 
     private fun persistSaved() {
         val o = JSONObject()
-        for ((k, c) in saved) o.put(k, JSONObject().put("box", c.box).put("due", c.due))
+        for ((k, c) in saved) o.put(k, c.toJson())
         prefs.edit().putString("saved", o.toString()).apply()
     }
 
@@ -119,8 +145,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
             runCatching {
                 val o = JSONObject(s)
                 for (k in o.keys()) {
-                    val c = o.getJSONObject(k)
-                    saved[k] = Card(c.getInt("box"), c.getLong("due"))
+                    saved[k] = Card.fromJson(o.getJSONObject(k))
                 }
             }
         }
@@ -130,9 +155,5 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
 
     override fun onCleared() {
         tts?.shutdown()
-    }
-
-    companion object {
-        val BOX_DAYS = doubleArrayOf(0.0, 0.0, 1.0, 3.0, 7.0, 21.0)
     }
 }

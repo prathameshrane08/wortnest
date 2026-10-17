@@ -124,6 +124,20 @@ fun EntryScreen(vm: AppViewModel, repo: Repository, entry: Entry, nav: Nav) {
                     }
                 }
             }
+            repo.examples[entry.key]?.takeIf { it.isNotEmpty() }?.let { examples ->
+                CardBox {
+                    Text("EXAMPLES", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    examples.filter { it.size == 2 }.forEach { ex ->
+                        Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.Top) {
+                            SpeakButton(vm, ex[0])
+                            Column(Modifier.weight(1f).padding(top = 4.dp)) {
+                                Text(ex[0], fontWeight = FontWeight.SemiBold)
+                                Text(ex[1], color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
+                            }
+                        }
+                    }
+                }
+            }
             if (verb != null) {
                 Button(onClick = { nav.push(Route.VerbR(entry.word)) }, modifier = Modifier.fillMaxWidth()) {
                     Icon(Icons.Outlined.TableChart, contentDescription = null)

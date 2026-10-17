@@ -13,8 +13,8 @@ let package = Package(
             name: "WortNest",
             targets: ["AppModule"],
             bundleIdentifier: "com.prathameshrane.wortnest",
-            displayVersion: "1.1",
-            bundleVersion: "2",
+            displayVersion: "1.2",
+            bundleVersion: "3",
             appIcon: .placeholder(icon: .box),
             accentColor: .presetColor(.orange),
             supportedDeviceFamilies: [
@@ -37,7 +37,8 @@ let package = Package(
             resources: [
                 .copy("Resources/dict.json"),
                 .copy("Resources/verbs.json"),
-                .copy("Resources/forms.json")
+                .copy("Resources/forms.json"),
+                .copy("Resources/examples.json")
             ]
         )
     ]
