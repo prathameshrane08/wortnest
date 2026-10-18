@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="WortNest">
+<meta name="apple-mobile-web-app-title" content="DE Täglich">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="google" content="notranslate">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#19202a" media="(prefers-color-scheme: dark)">
-<meta name="description" content="German dictionary, der/die/das trainer, verb conjugator and flashcards. Dein Zuhause für Deutsch.">
+<meta name="description" content="German dictionary, der/die/das trainer, verb conjugator and flashcards. Jeden Tag ein bisschen besser.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -19,7 +19,7 @@
   if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
 </script>
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
-<title>WortNest</title>
+<title>Deutsch Täglich</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
 <style>
@@ -59,7 +59,7 @@ button{cursor:pointer}
 
 header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;flex-wrap:wrap}
-.brand{font-family:var(--display);font-weight:800;font-size:1.35rem;letter-spacing:-.02em;display:flex;align-items:baseline;gap:2px;margin-right:auto}
+.brand{font-family:var(--display);font-weight:800;font-size:1.35rem;letter-spacing:-.02em;display:flex;align-items:baseline;gap:5px;margin-right:auto}
 .brand i{font-style:normal;color:var(--accent)}
 nav.tabs{display:flex;gap:4px}
 nav.tabs button{border:0;background:none;padding:8px 12px;border-radius:8px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:8px}
@@ -210,7 +210,7 @@ footer a{color:inherit}
 
 <header class="top">
   <div class="wrap">
-    <div class="brand">Wort<i>Nest</i></div>
+    <div class="brand">Deutsch<i>Täglich</i></div>
     <nav class="tabs" role="tablist" aria-label="Sections">
       <button role="tab" id="tab-dict" data-view="dict" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 8h6"/></svg>Wörterbuch</button>
       <button role="tab" id="tab-dds" data-view="dds" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="12" r="3"/><circle cx="12" cy="12" r="3"/><circle cx="18" cy="12" r="3"/></svg>Der Die Das</button>
@@ -854,7 +854,7 @@ boot();
 
 <!-- iPhone Safari never offers to install a web app, so explain the two taps once. -->
 <div id="install-tip" class="install-tip" hidden>
-  <div><b>Install WortNest on your iPhone</b><br>Tap <span class="share" aria-label="Share">
+  <div><b>Install Deutsch Täglich on your iPhone</b><br>Tap <span class="share" aria-label="Share">
     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg></span>
     Share, then <b>Add to Home Screen</b>. It works offline after that.</div>
   <button type="button" id="install-tip-close" aria-label="Dismiss">×</button>

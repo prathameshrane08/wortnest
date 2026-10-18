@@ -10,11 +10,11 @@ let package = Package(
     ],
     products: [
         .iOSApplication(
-            name: "WortNest",
+            name: "DE Täglich",   // the label under the home-screen icon; the full name is Deutsch Täglich
             targets: ["AppModule"],
             bundleIdentifier: "com.prathameshrane.wortnest",
-            displayVersion: "1.2",
-            bundleVersion: "3",
+            displayVersion: "1.3",
+            bundleVersion: "4",
             appIcon: .placeholder(icon: .box),
             accentColor: .presetColor(.orange),
             supportedDeviceFamilies: [

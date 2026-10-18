@@ -1,6 +1,6 @@
-# WortNest
+# Deutsch Täglich
 
-*Dein Zuhause für Deutsch.*
+*Jeden Tag ein bisschen besser.*
 
 A German learning toolkit in one place:
 
@@ -23,7 +23,7 @@ python3 -m http.server 8000
 1. Open https://prathameshrane08.github.io/wortnest/ in **Safari**.
 2. Tap **Share**, then **Add to Home Screen**.
 
-WortNest gets its own icon, opens full screen, and works offline after the first launch. The page shows this tip once on iPhone.
+Deutsch Täglich gets its own icon, opens full screen, and works offline after the first launch. The page shows this tip once on iPhone.
 
 ## iPhone app (SwiftUI)
 

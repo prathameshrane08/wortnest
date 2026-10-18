@@ -1,7 +1,7 @@
 {
-  "name": "WortNest",
-  "short_name": "WortNest",
-  "description": "German dictionary, der/die/das trainer, verb conjugator and flashcards. Dein Zuhause für Deutsch.",
+  "name": "Deutsch Täglich",
+  "short_name": "DE Täglich",
+  "description": "German dictionary, der/die/das trainer, verb conjugator and flashcards. Jeden Tag ein bisschen besser.",
   "lang": "en",
   "start_url": "./",
   "scope": "./",
