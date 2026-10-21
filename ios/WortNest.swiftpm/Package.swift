@@ -13,8 +13,8 @@ let package = Package(
             name: "DE Täglich",   // the label under the home-screen icon; the full name is Deutsch Täglich
             targets: ["AppModule"],
             bundleIdentifier: "com.prathameshrane.wortnest",
-            displayVersion: "1.3",
-            bundleVersion: "4",
+            displayVersion: "1.4",
+            bundleVersion: "5",
             appIcon: .placeholder(icon: .box),
             accentColor: .presetColor(.orange),
             supportedDeviceFamilies: [
@@ -38,7 +38,8 @@ let package = Package(
                 .copy("Resources/dict.json"),
                 .copy("Resources/verbs.json"),
                 .copy("Resources/forms.json"),
-                .copy("Resources/examples.json")
+                .copy("Resources/examples.json"),
+                .copy("Resources/grammar.json")
             ]
         )
     ]

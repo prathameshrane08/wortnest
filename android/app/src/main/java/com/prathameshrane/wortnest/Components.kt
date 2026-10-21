@@ -158,6 +158,7 @@ fun EntryRow(entry: Entry, onClick: () -> Unit) {
                 Text("pl. ${entry.plural}", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             if (!entry.isNoun) PosLabel(entry.posName)
+            LevelBadge(entry.level)
         }
         Text(
             entry.glosses.take(3).joinToString("; "),

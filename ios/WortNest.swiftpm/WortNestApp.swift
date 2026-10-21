@@ -30,6 +30,9 @@ struct ContentView: View {
                     VerbsView()
                         .tabItem { Label("Verben", systemImage: "tablecells") }
                         .tag(2)
+                    GrammarView()
+                        .tabItem { Label("Grammatik", systemImage: "text.book.closed") }
+                        .tag(4)
                     LearnView()
                         .tabItem { Label("Üben", systemImage: "star") }
                         .tag(3)

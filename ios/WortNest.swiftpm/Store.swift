@@ -12,6 +12,7 @@ struct Entry: Identifiable, Hashable {
     let plural: String
     let glosses: [String]
     let score: Int
+    let level: Int          // 1 = A1, 2 = A2, 3 = B1 (Goethe-Institut word lists), 0 = not on a list
 
     var key: String { word + "|" + pos }
     var isNoun: Bool { pos == "noun" }
@@ -93,6 +94,11 @@ final class Store: ObservableObject {
     private(set) var entries: [Entry] = []
     private(set) var verbs: [String: Verb] = [:]
     private(set) var examples: [String: [[String]]] = [:]   // "word|pos" -> [[German, English]]
+    private(set) var grammar: [GrammarTopic] = []
+    /// By level (index 1-3): article-quiz nouns, drill verbs and flashcard words, most useful first.
+    private(set) var levelNouns: [[Int]] = [[], [], [], []]
+    private(set) var levelVerbs: [[String]] = [[], [], [], []]
+    private(set) var levelWords: [[Int]] = [[], [], [], []]
     private(set) var quizNouns: [Int] = []
     private(set) var verbList: [String] = []
     private var forms: [String: [String]] = [:]
@@ -117,6 +123,10 @@ final class Store: ObservableObject {
             entries = built.entries
             verbs = built.verbs
             examples = built.examples
+            grammar = built.grammar
+            levelNouns = built.levelNouns
+            levelVerbs = built.levelVerbs
+            levelWords = built.levelWords
             forms = built.forms
             byLower = built.byLower
             lowerWords = built.lowerWords
@@ -134,6 +144,10 @@ final class Store: ObservableObject {
         var entries: [Entry] = []
         var verbs: [String: Verb] = [:]
         var examples: [String: [[String]]] = [:]
+        var grammar: [GrammarTopic] = []
+        var levelNouns: [[Int]] = [[], [], [], []]
+        var levelVerbs: [[String]] = [[], [], [], []]
+        var levelWords: [[Int]] = [[], [], [], []]
         var forms: [String: [String]] = [:]
         var byLower: [String: [Int]] = [:]
         var lowerWords: [String] = []
@@ -181,13 +195,16 @@ final class Store: ObservableObject {
                 gender: r[2] as? String ?? "",
                 plural: r[3] as? String ?? "",
                 glosses: r[4] as? [String] ?? [],
-                score: (r[5] as? NSNumber)?.intValue ?? 0
+                score: (r[5] as? NSNumber)?.intValue ?? 0,
+                level: r.count > 6 ? (r[6] as? NSNumber)?.intValue ?? 0 : 0
             )
             b.entries.append(e)
         }
         b.verbs = try JSONDecoder().decode([String: Verb].self, from: resource("verbs"))
         b.forms = try JSONDecoder().decode([String: [String]].self, from: resource("forms"))
         b.examples = (try? JSONDecoder().decode([String: [[String]]].self, from: resource("examples"))) ?? [:]
+        struct GrammarFile: Codable { let topics: [GrammarTopic] }
+        b.grammar = (try? JSONDecoder().decode(GrammarFile.self, from: resource("grammar")))?.topics ?? []
 
         var seenNouns = Set<String>()
         for e in b.entries {
@@ -210,6 +227,33 @@ final class Store: ObservableObject {
         b.verbList = b.verbs.keys
             .filter { $0.allSatisfy { $0.isLetter && $0.isLowercase } }
             .sorted { (verbScore[$0] ?? 0) > (verbScore[$1] ?? 0) }
+
+        // Level lists. Flashcard words: one card per word, mixing parts of speech (the most common noun, verb,
+        // adjective and adverb, then the second of each) and leaving small words like ich or und for last.
+        let small: Set<String> = ["pron", "det", "conj", "prep", "article", "particle", "postp"]
+        var seenKey = Set<String>(), seenWord = Set<String>(), quizWords = Set<String>()
+        var rank = [Int: Int](), perPos = [[String: Int]](repeating: [:], count: 4)
+        for e in b.entries where e.level > 0 && seenKey.insert(e.key).inserted {
+            if !["intj", "phrase", "article", "particle"].contains(e.pos), seenWord.insert(e.word).inserted {
+                perPos[e.level][e.pos, default: 0] += 1
+                rank[e.id] = perPos[e.level][e.pos]!
+                b.levelWords[e.level].append(e.id)
+            }
+            if e.isNoun, ["m", "f", "n"].contains(e.gender), quizWords.insert(e.word).inserted {
+                b.levelNouns[e.level].append(e.id)
+            }
+        }
+        for l in 1...3 {
+            b.levelWords[l].sort { x, y in
+                let sx = small.contains(b.entries[x].pos), sy = small.contains(b.entries[y].pos)
+                if sx != sy { return !sx }
+                if rank[x] != rank[y] { return rank[x]! < rank[y]! }
+                return x < y
+            }
+        }
+        var verbLevel = [String: Int]()
+        for e in b.entries where e.pos == "verb" && e.level > 0 && verbLevel[e.word] == nil { verbLevel[e.word] = e.level }
+        for v in b.verbList { if let l = verbLevel[v] { b.levelVerbs[l].append(v) } }
         return b
     }
 
@@ -329,14 +373,18 @@ final class Store: ObservableObject {
         persistSaved()
     }
 
-    func addCommonNouns(_ n: Int = 20) {
-        for i in quizNouns.prefix(n) where saved[entries[i].key] == nil {
+    /// Adds the next 20 words of a level that aren't saved yet.
+    func addLevel(_ level: Int) {
+        let start = Date()
+        for (n, i) in levelWords[level].filter({ saved[entries[$0].key] == nil }).prefix(20).enumerated() {
             var c = Card()
-            c.added = Date(timeIntervalSinceNow: Double(i) / 1000)   // keep the list order
+            c.added = start.addingTimeInterval(Double(n) / 1000)   // keep the list order
             saved[entries[i].key] = c
         }
         persistSaved()
     }
+
+    func wordsLeft(_ level: Int) -> Int { levelWords[level].filter { saved[entries[$0].key] == nil }.count }
 
     func grade(_ key: String, _ grade: Int) {
         guard let c = saved[key] else { return }

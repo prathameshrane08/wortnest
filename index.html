@@ -64,6 +64,7 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;backgroun
 nav.tabs{display:flex;gap:4px}
 nav.tabs button{border:0;background:none;padding:8px 12px;border-radius:8px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:8px}
 nav.tabs button svg{width:20px;height:20px}
+@media (min-width:700px){nav.tabs button svg{display:none}}   /* five tabs fit beside the name as text */
 nav.tabs button[aria-selected="true"]{color:var(--fg);background:var(--sunk)}
 @media (max-width:699px){
   nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:25;background:var(--surface);border-top:1px solid var(--line);
@@ -199,6 +200,33 @@ h3{font-size:1.05rem;font-weight:700}
 .ex .de{font-weight:600} .ex .en{color:var(--muted);font-size:.92rem}
 .icon-btn.sm{width:32px;height:32px;flex:none} .icon-btn.sm svg{width:16px;height:16px}
 .saved{display:flex;flex-direction:column}
+.lv{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.03em;border-radius:5px;padding:1px 6px;margin-left:6px;vertical-align:1px;background:var(--sunk);color:var(--muted)}
+.lv.l1{background:var(--das-bg);color:var(--das)} .lv.l2{background:var(--der-bg);color:var(--der)} .lv.l3{background:var(--plural-bg);color:var(--plural)}
+.meta .lv{margin-left:0;margin-right:4px}
+.add-lv{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+.add-lv .btn{display:flex;flex-direction:column;align-items:center;padding:6px 14px;line-height:1.2}
+.add-lv .btn span{font-size:.72rem;font-weight:600;color:var(--muted)}
+.add-lv .btn:disabled{opacity:.45}
+.g-level{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.g-level h3{display:flex;align-items:center;gap:8px}
+.g-level h3 .lv{margin-left:0;font-size:.8rem}
+.g-row .de{flex-direction:column;align-items:flex-start;gap:0}
+.g-card{display:flex;flex-direction:column;gap:12px}
+.g-card h2{margin-top:-6px}
+.g-card p{margin:0;line-height:1.6}
+.g-card .eyebrow .lv{margin-left:0;margin-right:4px}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.g-tbl th{text-align:left;font-size:.78rem;color:var(--muted);font-weight:700;padding:6px 10px 6px 0;border-bottom:1px solid var(--line);white-space:nowrap}
+.g-tbl td{padding:6px 12px 6px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.g-tbl{border-collapse:collapse;width:100%;font-size:.95rem}
+.g-tbl td.h{white-space:nowrap;color:var(--muted);font-size:.9rem}
+.g-tbl tr:last-child td{border-bottom:0}
+.g-ex{margin-top:0}
+.g-tip{display:flex;flex-direction:column;gap:2px;border-left:3px solid var(--accent);background:var(--sunk);border-radius:0 8px 8px 0;padding:10px 12px;font-size:.95rem}
+.g-tip b:first-child{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-ink)}
+.g-verbs{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.g-nav{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.back{align-self:flex-start}
 .empty{text-align:center;padding:28px 16px;color:var(--muted);display:flex;flex-direction:column;gap:10px;align-items:center}
 .loading{display:flex;align-items:center;gap:10px;color:var(--muted)}
 .loading::before{content:"";width:14px;height:14px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--accent);animation:spin .8s linear infinite}
@@ -215,6 +243,7 @@ footer a{color:inherit}
       <button role="tab" id="tab-dict" data-view="dict" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 8h6"/></svg>Wörterbuch</button>
       <button role="tab" id="tab-dds" data-view="dds" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="12" r="3"/><circle cx="12" cy="12" r="3"/><circle cx="18" cy="12" r="3"/></svg>Der Die Das</button>
       <button role="tab" id="tab-verbs" data-view="verbs" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10M15 10v10"/></svg>Verben</button>
+      <button role="tab" id="tab-grammar" data-view="grammar" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 3 5v14c4-.5 7 0 9 1.5 2-1.5 5-2 9-1.5V5c-4-.5-7 0-9 1.5z"/><path d="M12 6.5V20"/></svg>Grammatik</button>
       <button role="tab" id="tab-learn" data-view="learn" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>Üben</button>
     </nav>
   </div>
@@ -255,10 +284,11 @@ footer a{color:inherit}
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
           <div><div class="eyebrow">Article quiz</div><h2>der, die oder das?</h2></div>
-          <div class="seg" id="dd-level" role="group" aria-label="Difficulty">
-            <button type="button" data-lv="0" aria-pressed="true">Top 500</button>
-            <button type="button" data-lv="1" aria-pressed="false">500–2,000</button>
-            <button type="button" data-lv="2" aria-pressed="false">2,000+</button>
+          <div class="seg" id="dd-level" role="group" aria-label="Level">
+            <button type="button" data-lv="0" aria-pressed="true">A1</button>
+            <button type="button" data-lv="1" aria-pressed="false">A2</button>
+            <button type="button" data-lv="2" aria-pressed="false">B1</button>
+            <button type="button" data-lv="4" aria-pressed="false">All</button>
             <button type="button" data-lv="3" aria-pressed="false">My mistakes</button>
           </div>
         </div>
@@ -308,6 +338,12 @@ footer a{color:inherit}
       <div class="card drill">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
           <div><div class="eyebrow">Conjugation drill</div><h2>Type the right form</h2></div>
+          <div class="seg" id="drill-level" role="group" aria-label="Level">
+            <button type="button" data-lv="1" aria-pressed="true">A1</button>
+            <button type="button" data-lv="2" aria-pressed="false">A2</button>
+            <button type="button" data-lv="3" aria-pressed="false">B1</button>
+            <button type="button" data-lv="0" aria-pressed="false">All</button>
+          </div>
           <div class="seg" id="drill-tense" role="group" aria-label="Tense">
             <button type="button" data-t="pr" aria-pressed="true">Präsens</button>
             <button type="button" data-t="pt" aria-pressed="false">Präteritum</button>
@@ -324,6 +360,16 @@ footer a{color:inherit}
       </div>
     </section>
 
+    <!-- Grammar -->
+    <section class="view" id="view-grammar" hidden>
+      <div id="g-list">
+        <div><div class="eyebrow">A1 → B1</div><h2>Grammar</h2>
+          <p class="muted" style="margin:6px 0 0">The topics German courses cover from A1 to B1, each with tables, examples and the mistakes learners make most.</p></div>
+        <div id="g-topics"></div>
+      </div>
+      <div id="g-topic" hidden></div>
+    </section>
+
     <!-- Learn -->
     <section class="view" id="view-learn" hidden>
       <div><div class="eyebrow">Your word list</div><h2>Flashcards</h2>
@@ -335,7 +381,7 @@ footer a{color:inherit}
       </div>
     </section>
 
-    <footer>Dictionary data from <a href="https://en.wiktionary.org" target="_blank" rel="noopener">Wiktionary</a> (CC BY-SA), extracted by <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a>. Word frequencies from OpenSubtitles via FrequencyWords.</footer>
+    <footer>Dictionary data from <a href="https://en.wiktionary.org" target="_blank" rel="noopener">Wiktionary</a> (CC BY-SA), extracted by <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a>. Word frequencies from OpenSubtitles via FrequencyWords. Levels from the Goethe-Institut A1, A2 and B1 word lists.</footer>
   </div>
 </main>
 
@@ -344,6 +390,10 @@ footer a{color:inherit}
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ART = {m:"der", f:"die", n:"das", p:"die"};
+const LV = ["", "A1", "A2", "B1"];   // dict.json rows carry the level as a 7th value when the word is on a Goethe-Institut list
+const lvOf = r => r[6] || 0;
+const lvHtml = r => lvOf(r) ? `<span class="lv l${lvOf(r)}" title="Goethe-Institut word list">${LV[lvOf(r)]}</span>` : "";
+const md = t => esc(t).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
 const POSN = {noun:"noun",verb:"verb",adj:"adjective",adv:"adverb",prep:"preposition",conj:"conjunction",pron:"pronoun",intj:"interjection",num:"number",det:"determiner",particle:"particle",phrase:"phrase",article:"article",postp:"postposition"};
 const store = {
   get(k, d){ try{ const v = localStorage.getItem("wk:"+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
@@ -355,9 +405,10 @@ const ICON = {
   starOn:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>'
 };
 
-const DATA_VERSION = 2;   // bump when the JSON files change so browsers skip their cached copy
+const DATA_VERSION = 3;   // bump when the JSON files change so browsers skip their cached copy
 let ROWS = [], VERBS = {}, FORMS = {}, BYW = new Map(), GL = [], FIRST = [], LOW = [];
 let NOUNS = [];   // indices of quiz-worthy nouns, by frequency
+let LEVEL_NOUNS = [[], [], [], []], LEVEL_VERBS = [[], [], [], []], LEVEL_WORDS = [[], [], [], []];   // by level 1-3, most frequent first
 
 /* ---------- speech ---------- */
 let deVoice = null;
@@ -395,7 +446,7 @@ function deLabel(r){
   h += `<b class="${r[1]==="noun" && g ? "w-"+g : ""}">${esc(r[0])}</b>`;
   if(r[1] === "noun" && r[3]) h += `<span class="small muted">pl. ${esc(r[3])}</span>`;
   if(r[1] !== "noun") h += `<span class="pos">${POSN[r[1]]||r[1]}</span>`;
-  return h;
+  return h + lvHtml(r);
 }
 function rowHtml(i, hl){
   const r = ROWS[i];
@@ -464,6 +515,7 @@ function showEntry(i){
   const r = ROWS[i], g = r[2], isNoun = r[1] === "noun", k = keyOf(r), on = !!saved[k];
   const spoken = (isNoun && g ? ART[g] + " " : "") + r[0];
   let meta = [`<span class="pos">${POSN[r[1]]||r[1]}</span>`];
+  if(lvOf(r)) meta.push(`${lvHtml(r)}<span class="small">${LV[lvOf(r)]} word</span>`);
   if(isNoun && r[3]) meta.push(`plural: <b>die ${esc(r[3])}</b>`);
   if(isNoun && g === "p") meta.push("plural only");
   const v = r[1] === "verb" && VERBS[r[0]];
@@ -527,8 +579,8 @@ $("#dq").addEventListener("input", () => {
 const dd = {lv:0, cur:null, done:false, streak:0, best:store.get("ddBest",0), right:0, total:0, miss:store.get("ddMiss",[])};
 function ddPool(){
   if(dd.lv === 3) return dd.miss.map(w => (BYW.get(w.toLowerCase())||[]).find(i => ROWS[i][1]==="noun")).filter(i => i !== undefined);
-  const [a, b] = [[0,500],[500,2000],[2000,6000]][dd.lv];
-  return NOUNS.slice(a, b);
+  if(dd.lv === 4) return NOUNS.slice(0, 6000);
+  return LEVEL_NOUNS[dd.lv + 1];
 }
 function ddNext(){
   const pool = ddPool();
@@ -680,9 +732,9 @@ $("#v-suggest").addEventListener("click", e => { const b = e.target.closest(".ro
 $("#v-common").addEventListener("click", e => { if(e.target.classList.contains("chip")) showVerb(e.target.textContent); });
 
 /* drill */
-const drill = {t:"pr", cur:null, answered:false};
+const drill = {t:"pr", lv:1, cur:null, answered:false};
 function drillNext(){
-  const pool = VERB_LIST.slice(0, 150);
+  const pool = drill.lv ? LEVEL_VERBS[drill.lv] : VERB_LIST.slice(0, 300);
   const inf = pool[Math.floor(Math.random() * pool.length)], v = VERBS[inf], p = Math.floor(Math.random() * 6);
   let ans;
   if(drill.t === "pf"){ const aux = v.a.includes("sein") && !v.a.includes("haben") ? "sein" : "haben"; ans = AUX[aux].pr[p] + " " + v.pp; }
@@ -702,6 +754,7 @@ $("#drill-form").addEventListener("submit", e => {
   $("#drill-fb").innerHTML = ok ? `<span class="ok">Richtig!</span> ${PRON[drill.cur.p]} ${esc(drill.cur.ans)}. Press Enter for the next one.` : `<span class="bad">Not quite.</span> ${PRON[drill.cur.p]} <b>${esc(drill.cur.ans)}</b>. Press Enter for the next one.`;
 });
 $("#drill-skip").onclick = drillNext;
+$("#drill-level").addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; drill.lv = +b.dataset.lv; $("#drill-level").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); drillNext(); });
 $("#drill-tense").addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; drill.t = b.dataset.t; $("#drill-tense").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); drillNext(); });
 
 /* ---------- flashcards ---------- */
@@ -779,6 +832,17 @@ function srsCounts(now = Date.now()){
     known: v.filter(c => c.step < 0 && c.ivl >= 21).length,
   };
 }
+// The next 20 words of a level that aren't saved yet, most frequent first.
+function addLevel(L){
+  LEVEL_WORDS[L].filter(i => !saved[keyOf(ROWS[i])]).slice(0, 20).forEach(i => saved[keyOf(ROWS[i])] = SRS.fresh());
+  store.set("saved", saved); renderLearn();
+}
+function addLevelHtml(){
+  const left = [0, 1, 2, 3].map(L => LEVEL_WORDS[L].filter(i => !saved[keyOf(ROWS[i])]).length);
+  return `<div class="add-lv"><span class="muted small">Add 20 words from</span>${[1, 2, 3].map(L =>
+    `<button type="button" class="btn ghost" data-add="${L}" ${left[L] ? "" : "disabled"}><b>${LV[L]}</b><span>${left[L]} left</span></button>`).join("")}</div>`;
+}
+$("#learn-area").addEventListener("click", e => { const b = e.target.closest("[data-add]"); if(b) addLevel(+b.dataset.add); });
 function findRow(k){ const [w, p] = k.split("|"); return (BYW.get(w.toLowerCase()) || []).find(i => ROWS[i][0] === w && ROWS[i][1] === p); }
 function renderLearn(){
   if(!ROWS.length) return;
@@ -787,10 +851,9 @@ function renderLearn(){
   const area = $("#learn-area"), n = srsCounts();
   const stats = `<div class="srs-stats">
     <div class="s-new"><b>${n.fresh}</b>New</div><div class="s-learn"><b>${n.learning}</b>Learning</div><div class="s-rev"><b>${n.review}</b>To review</div>
-  </div><p class="muted small srs-foot">${n.known} of ${keys.length} words known well · ${n.tomorrow} due by tomorrow</p>`;
+  </div><p class="muted small srs-foot">${n.known} of ${keys.length} words known well · ${n.tomorrow} due by tomorrow</p>${addLevelHtml()}`;
   if(!keys.length){
-    area.innerHTML = `<div class="card empty"><b style="color:var(--fg)">No saved words yet</b><span>Tap the star on any dictionary entry, or start with 20 everyday nouns.</span><button class="btn" type="button" id="seed">Add 20 common nouns</button></div>`;
-    $("#seed").onclick = () => { NOUNS.slice(0, 20).forEach(i => saved[keyOf(ROWS[i])] = SRS.fresh()); store.set("saved", saved); renderLearn(); };
+    area.innerHTML = `<div class="card empty"><b style="color:var(--fg)">No saved words yet</b><span>Tap the star on any dictionary entry, or start with the 20 most useful words of a level.</span>${addLevelHtml()}</div>`;
   } else {
     const q = studyQueue();
     if(!q.length){
@@ -823,6 +886,38 @@ function renderLearn(){
 }
 $("#saved-list").addEventListener("click", e => { const b = e.target.closest(".row"); if(b){ show("dict"); $("#q").value = ROWS[+b.dataset.i][0]; runSearch(); showEntry(+b.dataset.i); } });
 
+/* ---------- grammar ---------- */
+let GRAMMAR = [];
+function renderGrammarList(){
+  $("#g-topics").innerHTML = [1, 2, 3].map(L => `<div class="g-level"><h3><span class="lv l${L}">${LV[L]}</span>${["", "Beginner", "Elementary", "Intermediate"][L]}</h3>
+    <div class="results">${GRAMMAR.filter(t => t.level === L).map(t => `<button type="button" class="row g-row" data-topic="${t.id}">
+      <span class="de"><b>${esc(t.title)}</b><span class="small muted">${esc(t.de)}</span></span><span class="en">${esc(t.summary)}</span><span class="pos">›</span></button>`).join("")}</div></div>`).join("");
+}
+function showTopic(id){
+  const n = GRAMMAR.findIndex(t => t.id === id), t = GRAMMAR[n];
+  if(!t){ $("#g-topic").hidden = true; $("#g-list").hidden = false; store.set("topic", ""); return; }
+  const block = b => {
+    if(b.t === "p") return `<p>${md(b.x)}</p>`;
+    if(b.t === "tip") return `<div class="g-tip"><b>Watch out</b><span>${md(b.x)}</span></div>`;
+    if(b.t === "ex") return `<div class="examples g-ex">${b.x.map((e, k) => `<div class="ex"><button class="icon-btn sm" type="button" data-say="${esc(e[0])}" aria-label="Read the sentence aloud">${ICON.speak}</button><div><div class="de">${md(e[0])}</div><div class="en">${md(e[1])}</div></div></div>`).join("")}</div>`;
+    return `<div class="tbl-wrap"><table class="g-tbl"><thead><tr>${b.head.map(h => `<th>${md(h)}</th>`).join("")}</tr></thead><tbody>${b.rows.map(r => `<tr>${r.map((c, k) => k ? `<td>${md(c)}</td>` : `<td class="h">${md(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  };
+  const prev = GRAMMAR[n - 1], next = GRAMMAR[n + 1];
+  $("#g-topic").innerHTML = `<button type="button" class="btn ghost back" id="g-back">‹ All topics</button>
+    <div class="card g-card"><div class="eyebrow"><span class="lv l${t.level}">${LV[t.level]}</span> ${esc(t.de)}</div><h2>${esc(t.title)}</h2>
+    ${t.blocks.map(block).join("")}
+    ${t.verbs ? `<div class="g-verbs"><div class="eyebrow">Practise in the conjugator</div><div class="chips">${t.verbs.filter(v => VERBS[v]).map(v => `<button type="button" class="chip" data-verb="${esc(v)}">${esc(v)}</button>`).join("")}</div></div>` : ""}</div>
+    <div class="g-nav">${prev ? `<button type="button" class="btn ghost" data-topic="${prev.id}">‹ ${esc(prev.title)}</button>` : "<span></span>"}${next ? `<button type="button" class="btn ghost" data-topic="${next.id}">${esc(next.title)} ›</button>` : ""}</div>`;
+  $("#g-list").hidden = true; $("#g-topic").hidden = false; store.set("topic", id); window.scrollTo(0, 0);
+}
+$("#view-grammar").addEventListener("click", e => {
+  const t = e.target.closest("[data-topic]"), v = e.target.closest("[data-verb]"), say = e.target.closest("[data-say]");
+  if(t) showTopic(t.dataset.topic);
+  else if(e.target.closest("#g-back")) showTopic("");
+  else if(v){ show("verbs"); showVerb(v.dataset.verb); }
+  else if(say) speak(say.dataset.say.replace(/\*\*/g, ""));
+});
+
 /* ---------- boot ---------- */
 async function boot(){
   try{
@@ -834,12 +929,33 @@ async function boot(){
   ROWS.forEach((r, i) => { if(r[1] === "noun" && "mfn".includes(r[2] || "x") && r[5] > 0 && /^[A-ZÄÖÜ][a-zäöüß]{2,}$/.test(r[0])) NOUNS.push(i); });
   const seenN = new Set(); NOUNS = NOUNS.filter(i => { const w = ROWS[i][0]; if(seenN.has(w)) return false; seenN.add(w); return true; });
   VERB_LIST = Object.keys(VERBS).filter(w => /^[a-zäöü]+$/.test(w)).sort((a, b) => verbScore(b) - verbScore(a));
+  // Flashcard candidates: one card per word (its most frequent meaning), nouns, verbs and adjectives
+  // before small words like ich, und or zu, which learners meet everywhere anyway.
+  const seenLv = new Set(), seenWord = new Set(), SMALL = ["pron", "det", "conj", "prep", "article", "particle", "postp"];
+  ROWS.forEach((r, i) => {
+    const L = lvOf(r), k = keyOf(r);
+    if(!L || seenLv.has(k)) return;
+    seenLv.add(k);
+    if(!["intj", "phrase", "article", "particle"].includes(r[1]) && !seenWord.has(r[0])){ seenWord.add(r[0]); LEVEL_WORDS[L].push(i); }
+    if(r[1] === "noun" && "mfn".includes(r[2] || "x") && !LEVEL_NOUNS.some(a => a.some(j => ROWS[j][0] === r[0]))) LEVEL_NOUNS[L].push(i);
+  });
+  // Mix the parts of speech: the most common noun, verb, adjective and adverb, then the second of each, and so on.
+  LEVEL_WORDS.forEach(a => {
+    const rank = new Map(), seen = {};
+    a.forEach(i => { const p = ROWS[i][1]; seen[p] = (seen[p] || 0) + 1; rank.set(i, seen[p]); });
+    a.sort((x, y) => SMALL.includes(ROWS[x][1]) - SMALL.includes(ROWS[y][1]) || rank.get(x) - rank.get(y) || x - y);
+  });
+  VERB_LIST.forEach(w => { const i = findRow(w + "|verb"); if(i !== undefined && lvOf(ROWS[i])) LEVEL_VERBS[lvOf(ROWS[i])].push(w); });
   for(const k in saved) saved[k] = SRS.upgrade(saved[k]);
   $("#loading").remove();
   $("#v-common").innerHTML = ["sein","haben","werden","können","gehen","kommen","sehen","geben","nehmen","anfangen","bringen","wissen"].filter(w => VERBS[w]).map(w => `<button type="button" class="chip">${w}</button>`).join("");
   runSearch();
   showVerb(store.get("verb", "gehen") in VERBS ? store.get("verb", "gehen") : VERB_LIST[0]);
   ddNext(); ddStats(); drillNext(); renderLearn();
+  fetch("grammar.json?v=" + DATA_VERSION).then(r => r.ok ? r.json() : {topics: []}).then(g => {
+    GRAMMAR = g.topics; renderGrammarList();
+    if(store.get("topic", "")) showTopic(store.get("topic", ""));
+  }).catch(() => { $("#g-topics").innerHTML = `<p class="muted">The grammar topics did not load. Reload the page to try again.</p>`; });
   // Example sentences are extra: load them after the app is usable and fill them in when they arrive.
   fetch("examples.json?v=" + DATA_VERSION).then(r => r.ok ? r.json() : {}).then(x => {
     EXAMPLES = x;
@@ -847,7 +963,7 @@ async function boot(){
     if(fc.flipped) renderLearn();
   }).catch(() => {});
   const tab = location.hash.slice(1) || store.get("tab", "dict");
-  if(["dict","dds","verbs","learn"].includes(tab)) show(tab);
+  if(["dict","dds","verbs","grammar","learn"].includes(tab)) show(tab);
 }
 boot();
 </script>

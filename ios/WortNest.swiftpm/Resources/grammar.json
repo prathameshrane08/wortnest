@@ -1,0 +1,192 @@
+{"topics":[
+{"id":"pronomen-sein-haben","level":1,"title":"Pronouns, sein and haben","de":"Personalpronomen","summary":"ich, du, er … and the two verbs you need first.",
+ "blocks":[
+  {"t":"p","x":"German has a polite **Sie** (always capitalised) for strangers, officials and colleagues, and **du / ihr** for friends, family and children. **sein** (to be) and **haben** (to have) are irregular and appear in almost every sentence, so learn them by heart."},
+  {"t":"table","head":["","sein","haben"],"rows":[["ich","bin","habe"],["du","bist","hast"],["er / sie / es","ist","hat"],["wir","sind","haben"],["ihr","seid","habt"],["sie / Sie","sind","haben"]]},
+  {"t":"ex","x":[["Ich bin Lehrerin.","I am a teacher."],["Hast du Zeit?","Do you have time?"],["Sind Sie Herr Müller?","Are you Mr Müller?"],["Wir haben keinen Hunger.","We aren't hungry."]]},
+  {"t":"tip","x":"**sie** can mean she, they or (capitalised) polite you. The verb tells you which: sie **ist** = she is, sie **sind** = they are."}],
+ "verbs":["sein","haben"]},
+
+{"id":"praesens","level":1,"title":"Present tense","de":"Präsens","summary":"Regular endings, and verbs that change their vowel.",
+ "blocks":[
+  {"t":"p","x":"Take the infinitive, drop **-en** and add the ending. The present tense also covers the English future when there is a time word: Morgen **fahre** ich nach Berlin."},
+  {"t":"table","head":["","machen","arbeiten","fahren (a→ä)","sprechen (e→i)"],"rows":[["ich","mache","arbeite","fahre","spreche"],["du","machst","arbeitest","fährst","sprichst"],["er / sie / es","macht","arbeitet","fährt","spricht"],["wir","machen","arbeiten","fahren","sprechen"],["ihr","macht","arbeitet","fahrt","sprecht"],["sie / Sie","machen","arbeiten","fahren","sprechen"]]},
+  {"t":"p","x":"Stems ending in **-t** or **-d** add an **e** before -st and -t (du arbeit**e**st). Many strong verbs change their vowel only for **du** and **er/sie/es**: e→i (geben, nehmen), e→ie (lesen, sehen), a→ä (fahren, schlafen)."},
+  {"t":"ex","x":[["Was machst du heute?","What are you doing today?"],["Er liest gern Krimis.","He likes reading crime novels."],["Sie spricht drei Sprachen.","She speaks three languages."]]}],
+ "verbs":["machen","arbeiten","fahren","sprechen","lesen","nehmen"]},
+
+{"id":"wortstellung","level":1,"title":"Word order and questions","de":"Satzbau: Verb an Position 2","summary":"The verb is always the second element.",
+ "blocks":[
+  {"t":"p","x":"In a statement the conjugated verb is in **position 2**. Position 1 can be the subject, a time or place, or an object. If something other than the subject comes first, the subject moves behind the verb."},
+  {"t":"table","head":["Position 1","Verb","Rest"],"rows":[["Ich","spiele","morgen Fußball."],["Morgen","spiele","ich Fußball."],["Fußball","spiele","ich morgen."]]},
+  {"t":"p","x":"**W-questions** (wer, was, wo, wann, wie, warum, woher, wohin) keep the verb in position 2. **Yes/no questions** start with the verb."},
+  {"t":"ex","x":[["Wo wohnst du?","Where do you live?"],["Wohnst du in Berlin?","Do you live in Berlin?"],["Heute habe ich keine Zeit.","I don't have time today."]]},
+  {"t":"tip","x":"und, aber, oder, denn and sondern do not count as a position: Ich bin müde, **aber** ich **arbeite** noch."}]},
+
+{"id":"artikel-plural","level":1,"title":"Articles, gender and plural","de":"Artikel und Plural","summary":"der, die, das, ein, eine and how plurals are formed.",
+ "blocks":[
+  {"t":"p","x":"Every noun is masculine (**der**), feminine (**die**) or neuter (**das**). Learn each noun together with its article and plural. In the plural the article is always **die**, whatever the gender."},
+  {"t":"table","head":["","masculine","feminine","neuter","plural"],"rows":[["definite","der Tisch","die Lampe","das Buch","die Bücher"],["indefinite","ein Tisch","eine Lampe","ein Buch","– Bücher"],["negative","kein Tisch","keine Lampe","kein Buch","keine Bücher"]]},
+  {"t":"p","x":"Common plural patterns: **-e** (Tisch → Tische), **-(e)n** (Lampe → Lampen, most feminine nouns), **-er** with umlaut (Buch → Bücher), **-s** (Auto → Autos, loan words), and no ending (Lehrer → Lehrer)."},
+  {"t":"tip","x":"Endings often give the gender away: -ung, -heit, -keit are die; -chen is das. The Der Die Das tab lists the rules and quizzes you."}]},
+
+{"id":"akkusativ","level":1,"title":"Accusative","de":"Akkusativ","summary":"The direct object: only der changes, to den.",
+ "blocks":[
+  {"t":"p","x":"The subject is in the nominative, the direct object in the **accusative**. Only the masculine changes: **der → den, ein → einen, kein → keinen**. Feminine, neuter and plural stay the same."},
+  {"t":"table","head":["","masculine","feminine","neuter","plural"],"rows":[["nominative","der / ein","die / eine","das / ein","die / –"],["accusative","**den / einen**","die / eine","das / ein","die / –"]]},
+  {"t":"p","x":"Verbs like haben, brauchen, kaufen, sehen, suchen, essen, trinken and es gibt take the accusative. Pronouns: ich → **mich**, du → **dich**, er → **ihn**, wir → **uns**, ihr → **euch**, sie/Sie → **sie/Sie**."},
+  {"t":"ex","x":[["Ich brauche einen Stift.","I need a pen."],["Siehst du den Bus?","Do you see the bus?"],["Es gibt keinen Kaffee mehr.","There's no more coffee."],["Ich rufe ihn morgen an.","I'll call him tomorrow."]]}],
+ "verbs":["brauchen","kaufen","sehen"]},
+
+{"id":"negation","level":1,"title":"Negation: nicht or kein","de":"Negation","summary":"kein for nouns with ein or no article, nicht for everything else.",
+ "blocks":[
+  {"t":"p","x":"Use **kein** to negate a noun that would have **ein** or no article. It takes the same endings as ein. Use **nicht** for verbs, adjectives, adverbs and nouns with der/die/das or a possessive."},
+  {"t":"ex","x":[["Ich habe keine Zeit.","I don't have (any) time."],["Das ist kein Problem.","That's no problem."],["Ich komme heute nicht.","I'm not coming today."],["Das Essen ist nicht teuer.","The food isn't expensive."],["Das ist nicht mein Handy.","That isn't my phone."]]},
+  {"t":"tip","x":"nicht usually goes to the end of the sentence, but before adjectives, places and the second part of the verb: Ich bin **nicht** müde. Er ist **nicht** gekommen."}]},
+
+{"id":"modalverben","level":1,"title":"Modal verbs","de":"Modalverben","summary":"können, müssen, wollen, dürfen, sollen, möchten.",
+ "blocks":[
+  {"t":"p","x":"The modal verb is conjugated in position 2, and the second verb goes to the **end** in the infinitive. ich and er/sie/es have the same form and no ending."},
+  {"t":"table","head":["","können","müssen","wollen","dürfen","sollen","möchten"],"rows":[["ich","kann","muss","will","darf","soll","möchte"],["du","kannst","musst","willst","darfst","sollst","möchtest"],["er / sie / es","kann","muss","will","darf","soll","möchte"],["wir","können","müssen","wollen","dürfen","sollen","möchten"],["ihr","könnt","müsst","wollt","dürft","sollt","möchtet"],["sie / Sie","können","müssen","wollen","dürfen","sollen","möchten"]]},
+  {"t":"ex","x":[["Ich kann gut schwimmen.","I can swim well."],["Du musst morgen früh aufstehen.","You have to get up early tomorrow."],["Hier darf man nicht rauchen.","You're not allowed to smoke here."],["Ich möchte einen Kaffee bestellen.","I'd like to order a coffee."]]},
+  {"t":"tip","x":"**nicht müssen** means 'don't have to', not 'mustn't': Du musst nicht kommen = you don't have to come. 'Mustn't' is **nicht dürfen**."}],
+ "verbs":["können","müssen","wollen","dürfen","sollen"]},
+
+{"id":"trennbare-verben","level":1,"title":"Separable verbs","de":"Trennbare Verben","summary":"anrufen → Ich rufe dich an.",
+ "blocks":[
+  {"t":"p","x":"Verbs with a stressed prefix such as **an-, auf-, aus-, ein-, mit-, vor-, zu-, fern-** split in the present and past: the main part goes to position 2, the prefix to the **end**. With a modal verb, or at the end of a subordinate clause, they stay together."},
+  {"t":"table","head":["Infinitive","Present","With a modal","Perfect"],"rows":[["anrufen","Ich rufe dich an.","Ich will dich anrufen.","Ich habe dich angerufen."],["aufstehen","Er steht um 7 auf.","Er muss um 7 aufstehen.","Er ist um 7 aufgestanden."],["einkaufen","Wir kaufen ein.","Wir können einkaufen.","Wir haben eingekauft."]]},
+  {"t":"tip","x":"be-, ge-, er-, ver-, zer-, ent-, emp- and miss- never separate: Ich **verstehe** dich. Ich **bekomme** ein Paket."}],
+ "verbs":["anrufen","aufstehen","einkaufen","fernsehen","mitkommen"]},
+
+{"id":"possessiv","level":1,"title":"Possessive articles","de":"Possessivartikel","summary":"mein, dein, sein, ihr, unser, euer, Ihr.",
+ "blocks":[
+  {"t":"p","x":"Possessives take the same endings as **ein / kein**. Choose the word by the owner, and the ending by the noun that follows."},
+  {"t":"table","head":["owner","possessive","example"],"rows":[["ich","mein","mein Bruder, meine Schwester"],["du","dein","dein Auto"],["er / es","sein","sein Vater"],["sie (she)","ihr","ihre Mutter"],["wir","unser","unsere Wohnung"],["ihr","euer","eure Kinder"],["sie (they)","ihr","ihr Haus"],["Sie","Ihr","Ihr Pass, bitte."]]},
+  {"t":"ex","x":[["Das ist meine Freundin Lisa.","This is my friend Lisa."],["Hast du deinen Schlüssel?","Do you have your key?"],["Sie besucht ihren Opa.","She's visiting her grandpa."]]}]},
+
+{"id":"imperativ","level":1,"title":"Imperative","de":"Imperativ","summary":"Giving instructions: Komm! Kommt! Kommen Sie!",
+ "blocks":[
+  {"t":"table","head":["","kommen","nehmen","anrufen","sein"],"rows":[["du","Komm!","Nimm!","Ruf an!","Sei ruhig!"],["ihr","Kommt!","Nehmt!","Ruft an!","Seid ruhig!"],["Sie","Kommen Sie!","Nehmen Sie!","Rufen Sie an!","Seien Sie ruhig!"]]},
+  {"t":"p","x":"The **du** form is the du-present without **-st** and without du (du nimmst → Nimm!). Verbs that change a → ä do not keep the umlaut: du fährst → **Fahr!** Add **bitte** or **doch mal** to sound friendlier."},
+  {"t":"ex","x":[["Mach bitte das Fenster zu!","Please close the window."],["Warten Sie einen Moment!","Wait a moment."],["Fahr doch mal langsamer!","Drive a bit slower."]]}],
+ "verbs":["kommen","nehmen","warten"]},
+
+{"id":"perfekt","level":2,"title":"Perfect tense","de":"Perfekt","summary":"How you talk about the past: haben/sein + participle.",
+ "blocks":[
+  {"t":"p","x":"In speech, the past is almost always the **Perfekt**: **haben** or **sein** in position 2, the **past participle** at the end."},
+  {"t":"table","head":["Type","Infinitive","Participle"],"rows":[["regular","machen","ge**mach**t"],["irregular","schreiben","ge**schrieb**en"],["separable","einkaufen","ein**ge**kauft"],["inseparable","besuchen","besucht (no ge-)"],["-ieren","telefonieren","telefoniert (no ge-)"]]},
+  {"t":"p","x":"Use **sein** with verbs of movement from A to B (gehen, fahren, fliegen, kommen) and change of state (aufstehen, einschlafen, sterben), plus sein, bleiben and passieren. Everything else uses **haben**."},
+  {"t":"ex","x":[["Ich habe gestern Pizza gegessen.","I ate pizza yesterday."],["Wir sind nach Hamburg gefahren.","We drove to Hamburg."],["Was ist passiert?","What happened?"],["Hast du schon eingekauft?","Have you done the shopping yet?"]]}],
+ "verbs":["machen","schreiben","fahren","gehen","bleiben","essen"]},
+
+{"id":"dativ","level":2,"title":"Dative","de":"Dativ","summary":"The indirect object: dem, der, dem, den …n.",
+ "blocks":[
+  {"t":"p","x":"The **dative** marks the person who receives something (the indirect object), and follows certain verbs and prepositions."},
+  {"t":"table","head":["","masculine","feminine","neuter","plural"],"rows":[["nominative","der / ein","die / eine","das / ein","die / –"],["accusative","den / einen","die / eine","das / ein","die / –"],["dative","**dem / einem**","**der / einer**","**dem / einem**","**den / –** + n"]]},
+  {"t":"p","x":"Pronouns: mir, dir, ihm, ihr, ihm, uns, euch, ihnen, **Ihnen**. Verbs with the dative: helfen, danken, gefallen, gehören, schmecken, passen, antworten, gratulieren. In the plural the noun adds **-n**: mit den Kinder**n**."},
+  {"t":"ex","x":[["Ich gebe dem Kind einen Apfel.","I give the child an apple."],["Kannst du mir helfen?","Can you help me?"],["Das Kleid gefällt ihr.","She likes the dress."],["Wie geht es Ihnen?","How are you?"]]}],
+ "verbs":["helfen","geben","gefallen","gehören"]},
+
+{"id":"praepositionen","level":2,"title":"Prepositions and cases","de":"Präpositionen","summary":"Which prepositions take accusative, dative or both.",
+ "blocks":[
+  {"t":"table","head":["Case","Prepositions"],"rows":[["accusative","durch, für, gegen, ohne, um"],["dative","aus, bei, mit, nach, seit, von, zu, gegenüber"],["both (two-way)","an, auf, hinter, in, neben, über, unter, vor, zwischen"]]},
+  {"t":"p","x":"Two-way prepositions take the **accusative for movement to a place** (Wohin?) and the **dative for location** (Wo?). Common contractions: in dem → **im**, an dem → **am**, zu dem → **zum**, zu der → **zur**, in das → **ins**, bei dem → **beim**."},
+  {"t":"ex","x":[["Ich lege das Buch auf den Tisch.","I put the book on the table. (where to → accusative)"],["Das Buch liegt auf dem Tisch.","The book is on the table. (where → dative)"],["Wir gehen ins Kino.","We're going to the cinema."],["Er fährt mit dem Bus zur Arbeit.","He takes the bus to work."],["Das Geschenk ist für dich.","The present is for you."]]}]},
+
+{"id":"praeteritum-modal","level":2,"title":"Past of sein, haben and modals","de":"Präteritum: war, hatte, konnte","summary":"Even in speech these use the simple past.",
+ "blocks":[
+  {"t":"p","x":"For sein, haben and modal verbs Germans use the **Präteritum**, not the Perfekt, also when speaking. ich and er/sie/es have the same form."},
+  {"t":"table","head":["","sein","haben","können","müssen","wollen"],"rows":[["ich","war","hatte","konnte","musste","wollte"],["du","warst","hattest","konntest","musstest","wolltest"],["er / sie / es","war","hatte","konnte","musste","wollte"],["wir","waren","hatten","konnten","mussten","wollten"],["ihr","wart","hattet","konntet","musstet","wolltet"],["sie / Sie","waren","hatten","konnten","mussten","wollten"]]},
+  {"t":"ex","x":[["Gestern war ich krank.","I was ill yesterday."],["Wir hatten keine Zeit.","We didn't have time."],["Ich konnte nicht schlafen.","I couldn't sleep."]]}],
+ "verbs":["sein","haben","können","müssen","wollen"]},
+
+{"id":"nebensaetze","level":2,"title":"Subordinate clauses: weil, dass, wenn","de":"Nebensätze","summary":"The conjugated verb goes to the end.",
+ "blocks":[
+  {"t":"p","x":"After **weil** (because), **dass** (that), **wenn** (if, whenever), **ob** (whether) and question words in indirect questions, the conjugated verb moves to the **end** of the clause. A comma separates the clauses."},
+  {"t":"ex","x":[["Ich bleibe zu Hause, weil ich krank bin.","I'm staying at home because I'm ill."],["Ich glaube, dass er morgen kommt.","I think (that) he's coming tomorrow."],["Wenn es regnet, fahren wir mit dem Bus.","If it rains, we'll take the bus."],["Weißt du, wann der Zug ankommt?","Do you know when the train arrives?"]]},
+  {"t":"p","x":"If the subordinate clause comes first, it counts as position 1, so the main clause **starts with the verb**: Wenn es regnet, **fahren** wir … Separable verbs join up at the end: …, dass er um 7 **aufsteht**."},
+  {"t":"tip","x":"**denn** also means because, but it is not a subordinating word, so the verb stays in position 2: Ich bleibe zu Hause, **denn** ich **bin** krank."}]},
+
+{"id":"komparativ","level":2,"title":"Comparing: comparative and superlative","de":"Komparativ und Superlativ","summary":"schnell, schneller, am schnellsten.",
+ "blocks":[
+  {"t":"table","head":["Base","Comparative","Superlative"],"rows":[["schnell","schneller","am schnellsten"],["alt","älter","am ältesten"],["groß","größer","am größten"],["gut","besser","am besten"],["viel","mehr","am meisten"],["gern","lieber","am liebsten"],["hoch","höher","am höchsten"]]},
+  {"t":"p","x":"Use **als** for 'than' and **so … wie** for 'as … as'. Many short adjectives take an umlaut (alt → älter, jung → jünger)."},
+  {"t":"ex","x":[["Berlin ist größer als München.","Berlin is bigger than Munich."],["Mein Bruder ist so alt wie du.","My brother is as old as you."],["Ich trinke lieber Tee.","I prefer to drink tea."],["Im Sommer ist es hier am schönsten.","It's nicest here in summer."]]}]},
+
+{"id":"reflexiv","level":2,"title":"Reflexive verbs","de":"Reflexive Verben","summary":"sich freuen, sich waschen, sich treffen.",
+ "blocks":[
+  {"t":"p","x":"Reflexive verbs need a pronoun that refers back to the subject. It is the same as the accusative pronoun except for **sich** (er, sie, es, sie, Sie)."},
+  {"t":"table","head":["","sich freuen"],"rows":[["ich","freue mich"],["du","freust dich"],["er / sie / es","freut sich"],["wir","freuen uns"],["ihr","freut euch"],["sie / Sie","freuen sich"]]},
+  {"t":"ex","x":[["Ich freue mich auf den Urlaub.","I'm looking forward to the holiday."],["Wir treffen uns um acht.","We're meeting at eight."],["Er hat sich verletzt.","He hurt himself."],["Interessierst du dich für Musik?","Are you interested in music?"]]},
+  {"t":"tip","x":"With a direct object the pronoun is dative: Ich wasche **mich**, but Ich wasche **mir** die Hände."}],
+ "verbs":["freuen","treffen","waschen"]},
+
+{"id":"adjektivendungen","level":2,"title":"Adjective endings","de":"Adjektivdeklination","summary":"der neue Tisch, ein neuer Tisch, neuer Tisch.",
+ "blocks":[
+  {"t":"p","x":"An adjective after **is** or **bleibt** has no ending (Der Tisch ist neu). Before a noun it needs one. After **der/die/das** the ending is only ever **-e** or **-en**: -e in the nominative singular and in the feminine and neuter accusative, -en everywhere else."},
+  {"t":"table","head":["after der/die/das","masculine","feminine","neuter","plural"],"rows":[["nominative","der neu**e** Tisch","die neu**e** Lampe","das neu**e** Bett","die neu**en** Stühle"],["accusative","den neu**en** Tisch","die neu**e** Lampe","das neu**e** Bett","die neu**en** Stühle"],["dative","dem neu**en** Tisch","der neu**en** Lampe","dem neu**en** Bett","den neu**en** Stühlen"]]},
+  {"t":"table","head":["after ein/kein/mein","masculine","feminine","neuter","plural (keine)"],"rows":[["nominative","ein neu**er** Tisch","eine neu**e** Lampe","ein neu**es** Bett","keine neu**en** Stühle"],["accusative","einen neu**en** Tisch","eine neu**e** Lampe","ein neu**es** Bett","keine neu**en** Stühle"],["dative","einem neu**en** Tisch","einer neu**en** Lampe","einem neu**en** Bett","keinen neu**en** Stühlen"]]},
+  {"t":"tip","x":"Where ein has no ending of its own (ein Tisch, ein Bett), the adjective shows the gender instead: ein neu**er** Tisch, ein neu**es** Bett."}]},
+
+{"id":"praeteritum","level":3,"title":"Simple past","de":"Präteritum","summary":"The written past tense used in stories and news.",
+ "blocks":[
+  {"t":"p","x":"In writing (books, news, reports) the past is usually the **Präteritum**. Regular verbs add **-te**; irregular verbs change their stem and have no ending for ich and er/sie/es."},
+  {"t":"table","head":["","machen","gehen","fahren","bringen"],"rows":[["ich","machte","ging","fuhr","brachte"],["du","machtest","gingst","fuhrst","brachtest"],["er / sie / es","machte","ging","fuhr","brachte"],["wir","machten","gingen","fuhren","brachten"],["ihr","machtet","gingt","fuhrt","brachtet"],["sie / Sie","machten","gingen","fuhren","brachten"]]},
+  {"t":"ex","x":[["Es war einmal ein König.","Once upon a time there was a king."],["Er öffnete die Tür und ging hinaus.","He opened the door and went out."],["Der Zug kam pünktlich an.","The train arrived on time."]]},
+  {"t":"tip","x":"The Verben tab shows the Präteritum for every verb and marks irregular forms in colour."}],
+ "verbs":["machen","gehen","fahren","bringen","kommen","finden"]},
+
+{"id":"relativsaetze","level":3,"title":"Relative clauses","de":"Relativsätze","summary":"Der Mann, der dort steht …",
+ "blocks":[
+  {"t":"p","x":"A relative clause describes a noun. The relative pronoun takes its **gender and number from the noun** and its **case from its role in the relative clause**. The verb goes to the end."},
+  {"t":"table","head":["","masculine","feminine","neuter","plural"],"rows":[["nominative","der","die","das","die"],["accusative","den","die","das","die"],["dative","dem","der","dem","**denen**"],["genitive","dessen","deren","dessen","deren"]]},
+  {"t":"ex","x":[["Der Mann, der dort steht, ist mein Chef.","The man who is standing there is my boss."],["Das ist der Film, den ich gestern gesehen habe.","That's the film (that) I saw yesterday."],["Die Kollegin, mit der ich arbeite, ist nett.","The colleague I work with is nice."],["Die Kinder, denen wir geholfen haben, …","The children we helped …"]]},
+  {"t":"tip","x":"Unlike English, the relative pronoun can never be left out, and a preposition always goes in front of it: mit **der**, für **den**."}]},
+
+{"id":"passiv","level":3,"title":"Passive","de":"Passiv","summary":"werden + participle: Das Haus wird gebaut.",
+ "blocks":[
+  {"t":"p","x":"The passive puts the action in focus rather than who does it. Use **werden** + past participle. The doer, if needed, follows **von** + dative."},
+  {"t":"table","head":["Tense","Example"],"rows":[["Present","Das Auto **wird** repariert."],["Präteritum","Das Auto **wurde** repariert."],["Perfekt","Das Auto **ist** repariert **worden**."],["With a modal","Das Auto **muss** repariert **werden**."]]},
+  {"t":"ex","x":[["Hier wird Deutsch gesprochen.","German is spoken here."],["Die Brücke wurde 1990 gebaut.","The bridge was built in 1990."],["Der Brief wurde von meiner Chefin geschrieben.","The letter was written by my boss."]]},
+  {"t":"tip","x":"In the passive Perfekt the participle of werden is **worden**, not geworden."}],
+ "verbs":["werden","reparieren","bauen"]},
+
+{"id":"konjunktiv2","level":3,"title":"Konjunktiv II: wishes and politeness","de":"Konjunktiv II","summary":"würde, hätte, wäre, könnte.",
+ "blocks":[
+  {"t":"p","x":"The Konjunktiv II expresses wishes, unreal conditions, advice and polite requests. Most verbs use **würde + infinitive**; sein, haben and the modals have their own forms."},
+  {"t":"table","head":["","sein","haben","können","werden"],"rows":[["ich","wäre","hätte","könnte","würde"],["du","wärst","hättest","könntest","würdest"],["er / sie / es","wäre","hätte","könnte","würde"],["wir","wären","hätten","könnten","würden"],["ihr","wärt","hättet","könntet","würdet"],["sie / Sie","wären","hätten","könnten","würden"]]},
+  {"t":"ex","x":[["Könnten Sie mir bitte helfen?","Could you help me, please?"],["Wenn ich Zeit hätte, würde ich mitkommen.","If I had time, I would come along."],["Ich wäre gern am Meer.","I'd love to be at the seaside."],["An deiner Stelle würde ich zum Arzt gehen.","If I were you, I'd see a doctor."]]}],
+ "verbs":["sein","haben","können","werden"]},
+
+{"id":"genitiv","level":3,"title":"Genitive","de":"Genitiv","summary":"des Mannes, der Frau, wegen des Wetters.",
+ "blocks":[
+  {"t":"p","x":"The **genitive** shows possession and follows a few prepositions. Masculine and neuter nouns add **-s** or **-es**. In speech it is often replaced by **von** + dative."},
+  {"t":"table","head":["","masculine","feminine","neuter","plural"],"rows":[["genitive","des Mann**es**","der Frau","des Kind**es**","der Kinder"],["indefinite","eines Mann**es**","einer Frau","eines Kind**es**","–"]]},
+  {"t":"p","x":"Prepositions with the genitive: **wegen** (because of), **trotz** (despite), **während** (during), **statt** (instead of), **innerhalb / außerhalb** (inside / outside)."},
+  {"t":"ex","x":[["Das ist das Auto meines Vaters.","That's my father's car."],["Wegen des Regens bleiben wir zu Hause.","Because of the rain, we're staying at home."],["Während der Woche arbeite ich viel.","I work a lot during the week."],["Annas Bruder wohnt in Wien.","Anna's brother lives in Vienna."]]},
+  {"t":"tip","x":"Names take -s without an apostrophe: **Annas** Bruder, not Anna's."}]},
+
+{"id":"infinitiv-zu","level":3,"title":"Infinitive with zu, um … zu","de":"Infinitiv mit zu","summary":"Ich habe keine Lust, heute zu kochen.",
+ "blocks":[
+  {"t":"p","x":"After many verbs and expressions (versuchen, vergessen, anfangen, aufhören, Lust/Zeit haben, es ist wichtig/schwer) the second verb goes to the end with **zu**. Separable verbs put zu in the middle: an**zu**rufen."},
+  {"t":"ex","x":[["Ich habe vergessen, dich anzurufen.","I forgot to call you."],["Es ist wichtig, genug zu schlafen.","It's important to get enough sleep."],["Hast du Lust, ins Kino zu gehen?","Do you fancy going to the cinema?"]]},
+  {"t":"p","x":"**um … zu** gives the purpose (in order to) when the subject is the same in both parts. With different subjects use **damit**."},
+  {"t":"ex","x":[["Ich lerne Deutsch, um in Deutschland zu arbeiten.","I'm learning German in order to work in Germany."],["Ich spreche langsam, damit du mich verstehst.","I speak slowly so that you understand me."]]},
+  {"t":"tip","x":"Modal verbs never take zu: Ich **kann** schwimmen, not ich kann zu schwimmen."}]},
+
+{"id":"konnektoren","level":3,"title":"Linking words","de":"Konnektoren","summary":"obwohl, trotzdem, deshalb, als, nachdem and pairs.",
+ "blocks":[
+  {"t":"table","head":["Type","Words","Verb position"],"rows":[["subordinating","obwohl, als, nachdem, bevor, während, seit, bis, falls, sodass","end of the clause"],["adverbs","trotzdem, deshalb, deswegen, dann, danach, sonst","position 2 after them"],["coordinating","und, aber, oder, denn, sondern","no effect"]]},
+  {"t":"ex","x":[["Obwohl es regnet, gehen wir spazieren.","Although it's raining, we're going for a walk."],["Es regnet. Trotzdem gehen wir spazieren.","It's raining. We're going for a walk anyway."],["Ich war müde, deshalb bin ich früh ins Bett gegangen.","I was tired, so I went to bed early."],["Als ich ein Kind war, wohnte ich in Köln.","When I was a child, I lived in Cologne."]]},
+  {"t":"p","x":"**als** is for a single event or period in the past; **wenn** is for the present, the future and repeated events (immer wenn). Two-part connectors: **sowohl … als auch** (both … and), **entweder … oder** (either … or), **weder … noch** (neither … nor), **nicht nur … sondern auch** (not only … but also)."},
+  {"t":"ex","x":[["Ich spreche sowohl Englisch als auch Deutsch.","I speak both English and German."],["Wir fahren entweder nach Italien oder nach Spanien.","We're going either to Italy or to Spain."]]}]},
+
+{"id":"futur","level":3,"title":"Future","de":"Futur I","summary":"werden + infinitive, for plans, promises and guesses.",
+ "blocks":[
+  {"t":"p","x":"Most of the time Germans use the present tense with a time word for the future. **werden + infinitive** is used for promises, predictions and guesses about the present."},
+  {"t":"table","head":["","werden"],"rows":[["ich","werde"],["du","wirst"],["er / sie / es","wird"],["wir","werden"],["ihr","werdet"],["sie / Sie","werden"]]},
+  {"t":"ex","x":[["Ich werde dich nie vergessen.","I will never forget you."],["Morgen wird es regnen.","It will rain tomorrow."],["Er wird wohl krank sein.","He's probably ill. (guess)"]]},
+  {"t":"tip","x":"Don't confuse it with English 'want': **ich will** = I want to; **ich werde** = I will."}],
+ "verbs":["werden"]}
+]}

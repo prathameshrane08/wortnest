@@ -166,6 +166,7 @@ struct TenseTable: View {
 struct DrillView: View {
     @EnvironmentObject var store: Store
     @State private var tense = "pr"
+    @State private var level = 1
     @State private var verb = ""
     @State private var person = 0
     @State private var answerText = ""
@@ -181,6 +182,11 @@ struct DrillView: View {
                 Text("Präsens").tag("pr")
                 Text("Präteritum").tag("pt")
                 Text("Perfekt").tag("pf")
+            }
+            .pickerStyle(.segmented)
+            Picker("Level", selection: $level) {
+                ForEach(1...3, id: \.self) { Text(Level.names[$0]).tag($0) }
+                Text("All").tag(0)
             }
             .pickerStyle(.segmented)
 
@@ -225,10 +231,11 @@ struct DrillView: View {
         .navigationTitle("Drill")
         .onAppear { if verb.isEmpty { next() } }
         .onChange(of: tense) { next() }
+        .onChange(of: level) { next() }
     }
 
     private func next() {
-        let pool = Array(store.verbList.prefix(150))
+        let pool = level > 0 ? store.levelVerbs[level] : Array(store.verbList.prefix(300))
         for _ in 0..<20 {
             guard let inf = pool.randomElement(), let v = store.verbs[inf] else { continue }
             let p = Int.random(in: 0..<6)

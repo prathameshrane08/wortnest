@@ -1,8 +1,8 @@
 // Deutsch Täglich offline support.
 // The app shell and dictionary data are saved on first visit, so the app opens without a connection.
 // Bump VERSION whenever any of the files below change; old caches are removed on activate.
-const VERSION = "wortnest-v4";
-const DATA_VERSION = 2;   // must match DATA_VERSION in index.html
+const VERSION = "wortnest-v5";
+const DATA_VERSION = 3;   // must match DATA_VERSION in index.html
 
 const SHELL = [
   "./",
@@ -16,6 +16,7 @@ const SHELL = [
   `verbs.json?v=${DATA_VERSION}`,
   `forms.json?v=${DATA_VERSION}`,
   `examples.json?v=${DATA_VERSION}`,
+  `grammar.json?v=${DATA_VERSION}`,
 ];
 
 self.addEventListener("install", event => {

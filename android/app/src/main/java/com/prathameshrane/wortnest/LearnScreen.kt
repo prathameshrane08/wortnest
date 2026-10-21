@@ -51,8 +51,8 @@ fun LearnScreen(vm: AppViewModel, repo: Repository, nav: Nav) {
             if (vm.saved.isEmpty()) {
                 CardBox {
                     Text("No saved words yet", fontWeight = FontWeight.Bold)
-                    Text("Tap the star on any dictionary entry, or start with 20 everyday nouns.", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Button(onClick = { vm.addCommonNouns() }) { Text("Add 20 common nouns") }
+                    Text("Tap the star on any dictionary entry, or start with the 20 most useful words of a level.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    AddLevelRow(vm)
                 }
             } else {
                 val queue = vm.studyQueue()
@@ -165,6 +165,25 @@ private fun Stats(vm: AppViewModel) {
         }
         Text("${c.known} of ${vm.saved.size} words known well · ${c.tomorrow} due by tomorrow",
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        AddLevelRow(vm)
+    }
+}
+
+@Composable
+private fun AddLevelRow(vm: AppViewModel) {
+    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Text("Add 20 words from", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            for (l in 1..3) {
+                val left = vm.wordsLeft(l)
+                OutlinedButton(onClick = { vm.addLevel(l) }, enabled = left > 0, contentPadding = PaddingValues(horizontal = 14.dp, vertical = 4.dp)) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(LEVEL_NAMES[l], fontWeight = FontWeight.Bold)
+                        Text("$left left", fontSize = 11.sp)
+                    }
+                }
+            }
+        }
     }
 }
 

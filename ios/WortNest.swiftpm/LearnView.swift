@@ -17,7 +17,7 @@ struct LearnView: View {
                 .padding()
             }
             .navigationTitle("Üben")
-            .onAppear { if DebugLaunch.string("demoSeed") != nil && store.saved.isEmpty { store.addCommonNouns() } }
+            .onAppear { if DebugLaunch.string("demoSeed") != nil && store.saved.isEmpty { store.addLevel(1) } }
             .appDestinations()
         }
     }
@@ -26,9 +26,9 @@ struct LearnView: View {
         if store.saved.isEmpty {
             VStack(spacing: 12) {
                 Text("No saved words yet").font(.headline)
-                Text("Tap the star on any dictionary entry, or start with 20 everyday nouns.")
+                Text("Tap the star on any dictionary entry, or start with the 20 most useful words of a level.")
                     .foregroundStyle(.secondary).multilineTextAlignment(.center)
-                Button("Add 20 common nouns") { store.addCommonNouns() }.buttonStyle(.borderedProminent)
+                addLevelRow
             }
             .frame(maxWidth: .infinity)
             .card()
@@ -125,8 +125,29 @@ struct LearnView: View {
             }
             Text("\(c.known) of \(store.saved.count) words known well · \(c.tomorrow) due by tomorrow")
                 .font(.caption).foregroundStyle(.secondary)
+            addLevelRow.padding(.top, 6)
         }
         .frame(maxWidth: .infinity)
+    }
+
+    private var addLevelRow: some View {
+        VStack(spacing: 6) {
+            Text("Add 20 words from").font(.caption).foregroundStyle(.secondary)
+            HStack(spacing: 8) {
+                ForEach(1...3, id: \.self) { l in
+                    let left = store.wordsLeft(l)
+                    Button { store.addLevel(l) } label: {
+                        VStack(spacing: 0) {
+                            Text(Level.names[l]).font(.subheadline.weight(.bold))
+                            Text("\(left) left").font(.caption2).foregroundStyle(.secondary)
+                        }
+                        .frame(minWidth: 64)
+                    }
+                    .buttonStyle(.bordered)
+                    .disabled(left == 0)
+                }
+            }
+        }
     }
 
     private func stat(_ n: Int, _ label: String, _ color: Color) -> some View {

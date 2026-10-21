@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.MenuBook
 import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.StarOutline
@@ -51,6 +52,7 @@ sealed interface Route {
     data class EntryR(val id: Int) : Route
     data class VerbR(val infinitive: String) : Route
     data object Drill : Route
+    data class TopicR(val id: String) : Route
 }
 
 class Nav(val push: (Route) -> Unit, val pop: () -> Unit)
@@ -59,6 +61,7 @@ private val tabs = listOf(
     "Wörterbuch" to Icons.Outlined.Book,
     "Der Die Das" to Icons.Outlined.GridView,
     "Verben" to Icons.Outlined.TableChart,
+    "Grammatik" to Icons.AutoMirrored.Outlined.MenuBook,
     "Üben" to Icons.Outlined.StarOutline,
 )
 
@@ -114,10 +117,12 @@ private fun Screen(vm: AppViewModel, repo: Repository, nav: Nav, tab: Int, top: 
                     0 -> DictionaryScreen(vm, repo, nav)
                     1 -> ArticleScreen(vm, repo)
                     2 -> VerbsScreen(vm, repo, nav)
+                    3 -> GrammarScreen(repo, nav)
                     else -> LearnScreen(vm, repo, nav)
                 }
                 is Route.EntryR -> EntryScreen(vm, repo, repo.entries[top.id], nav)
                 is Route.VerbR -> VerbDetailScreen(vm, repo, top.infinitive, nav)
                 Route.Drill -> DrillScreen(repo, nav)
+                is Route.TopicR -> GrammarTopicScreen(vm, repo, top.id, nav)
             }
 }

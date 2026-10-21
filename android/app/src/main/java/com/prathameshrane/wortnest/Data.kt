@@ -14,6 +14,7 @@ data class Entry(
     val plural: String,
     val glosses: List<String>,
     val score: Int,
+    val level: Int = 0,       // 1 = A1, 2 = A2, 3 = B1 (Goethe-Institut word lists), 0 = not on a list
 ) {
     val key: String get() = "$word|$pos"
     val isNoun: Boolean get() = pos == "noun"
@@ -90,6 +91,7 @@ class Repository private constructor(
     private val forms: Map<String, List<String>>,
     /** "word|pos" to example sentences, each [German, English]. */
     val examples: Map<String, List<List<String>>>,
+    val grammar: List<GrammarTopic>,
 ) {
     private val byLower = HashMap<String, MutableList<Int>>()
     private val lowerWords = ArrayList<String>(entries.size)
@@ -110,6 +112,10 @@ class Repository private constructor(
     fun warmUp() { glossIndex }
     val quizNouns = ArrayList<Int>()
     val verbList: List<String>
+    /** By level (index 1-3): article-quiz nouns, drill verbs and flashcard words, most useful first. */
+    val levelNouns = List(4) { ArrayList<Int>() }
+    val levelVerbs = List(4) { ArrayList<String>() }
+    val levelWords = List(4) { ArrayList<Int>() }
 
     init {
         val seenNouns = HashSet<String>()
@@ -125,6 +131,25 @@ class Repository private constructor(
         for (e in entries) if (e.pos == "verb") verbScore[e.word] = maxOf(verbScore[e.word] ?: 0, e.score)
         verbList = verbs.keys.filter { w -> w.all { it.isLetter() && it.isLowerCase() } }
             .sortedByDescending { verbScore[it] ?: 0 }
+
+        // Flashcard words: one card per word, mixing parts of speech (the most common noun, verb, adjective and
+        // adverb, then the second of each) and leaving small words like ich or und for last.
+        val small = setOf("pron", "det", "conj", "prep", "article", "particle", "postp")
+        val seenKey = HashSet<String>(); val seenWord = HashSet<String>(); val quizWords = HashSet<String>()
+        val rank = HashMap<Int, Int>(); val perPos = List(4) { HashMap<String, Int>() }
+        for (e in entries) {
+            if (e.level == 0 || !seenKey.add(e.key)) continue
+            if (e.pos !in setOf("intj", "phrase", "article", "particle") && seenWord.add(e.word)) {
+                val n = (perPos[e.level][e.pos] ?: 0) + 1
+                perPos[e.level][e.pos] = n; rank[e.id] = n
+                levelWords[e.level].add(e.id)
+            }
+            if (e.isNoun && e.gender in setOf("m", "f", "n") && quizWords.add(e.word)) levelNouns[e.level].add(e.id)
+        }
+        for (l in 1..3) levelWords[l].sortWith(compareBy<Int>({ entries[it].pos in small }, { rank[it] }, { it }))
+        val verbLevel = HashMap<String, Int>()
+        for (e in entries) if (e.pos == "verb" && e.level > 0) verbLevel.putIfAbsent(e.word, e.level)
+        for (v in verbList) verbLevel[v]?.let { levelVerbs[it].add(v) }
     }
 
     companion object {
@@ -138,7 +163,7 @@ class Repository private constructor(
                 entries.add(
                     Entry(
                         id = i, word = r.getString(0), pos = r.getString(1), gender = r.getString(2),
-                        plural = r.getString(3), glosses = r.getJSONArray(4).strings(), score = r.optInt(5),
+                        plural = r.getString(3), glosses = r.getJSONArray(4).strings(), score = r.optInt(5), level = r.optInt(6),
                     )
                 )
             }
@@ -164,7 +189,8 @@ class Repository private constructor(
                     examples[k] = List(a.length()) { a.getJSONArray(it).strings() }
                 }
             }
-            return Repository(entries, verbs, forms, examples)
+            val grammar = runCatching { parseGrammar(read("grammar.json")) }.getOrDefault(emptyList())
+            return Repository(entries, verbs, forms, examples, grammar)
         }
 
         private fun JSONArray.strings(): List<String> = List(length()) { optString(it) }

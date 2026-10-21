@@ -77,7 +77,7 @@ private fun LookupResult(vm: AppViewModel, repo: Repository, query: String) {
     }
 }
 
-private val levels = listOf("Top 500", "500–2k", "2k+", "Mistakes")
+private val levels = listOf("A1", "A2", "B1", "All", "Missed")
 
 @Composable
 private fun QuizCard(vm: AppViewModel, repo: Repository) {
@@ -89,10 +89,11 @@ private fun QuizCard(vm: AppViewModel, repo: Repository) {
     var total by rememberSaveable { mutableIntStateOf(0) }
 
     fun pool(): List<Entry> {
-        if (level == 3) return vm.missedNouns.mapNotNull { w -> repo.entriesFor(w).firstOrNull { it.isNoun } }
-        val (a, b) = listOf(0 to 500, 500 to 2000, 2000 to 6000)[level]
-        val ids = repo.quizNouns
-        return ids.subList(minOf(a, ids.size), minOf(b, ids.size)).map { repo.entries[it] }
+        return when (level) {
+            4 -> vm.missedNouns.mapNotNull { w -> repo.entriesFor(w).firstOrNull { it.isNoun } }
+            3 -> repo.quizNouns.take(6000).map { repo.entries[it] }
+            else -> repo.levelNouns[level + 1].map { repo.entries[it] }
+        }
     }
 
     fun next() {
@@ -125,6 +126,7 @@ private fun QuizCard(vm: AppViewModel, repo: Repository) {
                     selected = level == i,
                     onClick = { if (level != i) { level = i; next() } },
                     shape = SegmentedButtonDefaults.itemShape(i, levels.size),
+                    icon = {},   // no checkmark, so five labels fit
                     label = { Text(label, fontSize = 12.sp, maxLines = 1) },
                 )
             }

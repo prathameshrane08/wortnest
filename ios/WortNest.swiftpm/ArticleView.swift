@@ -67,16 +67,14 @@ struct QuizCard: View {
     @State private var right = 0
     @State private var total = 0
 
-    private let levels = ["Top 500", "500–2,000", "2,000+", "Mistakes"]
+    private let levels = ["A1", "A2", "B1", "All", "Mistakes"]
 
     private var pool: [Entry] {
-        if level == 3 {
-            return store.missedNouns.compactMap { w in store.entries(for: w).first { $0.isNoun } }
+        switch level {
+        case 4: return store.missedNouns.compactMap { w in store.entries(for: w).first { $0.isNoun } }
+        case 3: return store.quizNouns.prefix(6000).map { store.entries[$0] }
+        default: return store.levelNouns[level + 1].map { store.entries[$0] }
         }
-        let ranges = [0..<500, 500..<2000, 2000..<6000]
-        let ids = store.quizNouns
-        let r = ranges[level].clamped(to: 0..<ids.count)
-        return ids[r].map { store.entries[$0] }
     }
 
     var body: some View {
@@ -84,7 +82,7 @@ struct QuizCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("ARTICLE QUIZ").font(.caption.weight(.bold)).kerning(1).foregroundStyle(.secondary)
                 Text("der, die oder das?").font(.title2.weight(.heavy))
-                Picker("Difficulty", selection: $level) {
+                Picker("Level", selection: $level) {
                     ForEach(levels.indices, id: \.self) { Text(levels[$0]).tag($0) }
                 }
                 .pickerStyle(.segmented)

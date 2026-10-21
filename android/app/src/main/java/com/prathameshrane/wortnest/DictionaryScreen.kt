@@ -111,6 +111,10 @@ fun EntryScreen(vm: AppViewModel, repo: Repository, entry: Entry, nav: Nav) {
                 PosLabel(entry.posName)
                 if (entry.isNoun && entry.plural.isNotEmpty()) Text("plural: die ${entry.plural}", fontWeight = FontWeight.Medium)
                 if (entry.gender == "p") Text("plural only", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                if (entry.level > 0) {
+                    LevelBadge(entry.level)
+                    Text("${LEVEL_NAMES[entry.level]} word", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
             }
             if (verb != null) {
                 val aux = if (Conjugation.mainAux(verb) == "sein") "ist" else "hat"

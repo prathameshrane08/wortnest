@@ -80,6 +80,12 @@ struct EntryView: View {
                         Text("plural: **die \(entry.plural)**").font(.subheadline)
                     }
                     if entry.gender == "p" { Text("plural only").font(.subheadline).foregroundStyle(.secondary) }
+                    if entry.level > 0 {
+                        HStack(spacing: 4) {
+                            LevelBadge(level: entry.level)
+                            Text("\(Level.names[entry.level]) word").font(.subheadline).foregroundStyle(.secondary)
+                        }
+                    }
                 }
                 if let v = store.verbs[entry.word], entry.pos == "verb" {
                     Text("\(v.pr[2]) · \(v.pt[2]) · \(Conjugation.mainAux(v) == "sein" ? "ist" : "hat") \(v.pp)")

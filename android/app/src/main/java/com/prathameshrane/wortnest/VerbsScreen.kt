@@ -206,10 +206,12 @@ private fun TenseTable(t: Conjugation.Table) {
 }
 
 private val tenseNames = listOf("pr" to "Präsens", "pt" to "Präteritum", "pf" to "Perfekt")
+private val drillLevels = listOf(1 to "A1", 2 to "A2", 3 to "B1", 0 to "All")
 
 @Composable
 fun DrillScreen(repo: Repository, nav: Nav) {
     var tense by rememberSaveable { mutableStateOf("pr") }
+    var level by rememberSaveable { mutableIntStateOf(1) }
     var verb by rememberSaveable { mutableStateOf("") }
     var person by rememberSaveable { mutableIntStateOf(0) }
     var expected by rememberSaveable { mutableStateOf("") }
@@ -220,7 +222,7 @@ fun DrillScreen(repo: Repository, nav: Nav) {
     val focus = remember { FocusRequester() }
 
     fun next() {
-        val pool = repo.verbList.take(150)
+        val pool = if (level > 0) repo.levelVerbs[level] else repo.verbList.take(300)
         repeat(20) {
             val inf = pool.random()
             val v = repo.verbs.getValue(inf)
@@ -259,6 +261,16 @@ fun DrillScreen(repo: Repository, nav: Nav) {
                         selected = tense == key,
                         onClick = { if (tense != key) { tense = key; next() } },
                         shape = SegmentedButtonDefaults.itemShape(i, tenseNames.size),
+                        label = { Text(label) },
+                    )
+                }
+            }
+            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+                drillLevels.forEachIndexed { i, (lv, label) ->
+                    SegmentedButton(
+                        selected = level == lv,
+                        onClick = { if (level != lv) { level = lv; next() } },
+                        shape = SegmentedButtonDefaults.itemShape(i, drillLevels.size),
                         label = { Text(label) },
                     )
                 }

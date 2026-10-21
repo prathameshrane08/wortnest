@@ -43,6 +43,7 @@ struct EntryRow: View {
                         Text("pl. \(entry.plural)").font(.caption).foregroundStyle(.secondary)
                     }
                     if !entry.isNoun { POSLabel(text: entry.posName) }
+                    LevelBadge(level: entry.level)
                 }
                 Text(entry.glosses.prefix(3).joined(separator: "; "))
                     .font(.subheadline)
@@ -131,6 +132,7 @@ struct AppDestinations: ViewModifier {
         content
             .navigationDestination(for: Entry.self) { EntryView(entry: $0) }
             .navigationDestination(for: VerbRoute.self) { VerbDetailView(infinitive: $0.infinitive) }
+            .navigationDestination(for: GrammarTopic.self) { GrammarTopicView(topic: $0) }
     }
 }
 

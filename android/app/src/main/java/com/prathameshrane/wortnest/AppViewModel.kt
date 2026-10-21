@@ -71,11 +71,18 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         persistSaved()
     }
 
-    fun addCommonNouns(n: Int = 20) {
+    /** Adds the next 20 words of a level that aren't saved yet. */
+    fun addLevel(level: Int) {
         val r = repo ?: return
         val now = System.currentTimeMillis()
-        r.quizNouns.take(n).forEachIndexed { j, i -> saved.putIfAbsent(r.entries[i].key, Card(added = now + j)) }
+        r.levelWords[level].filter { r.entries[it].key !in saved }.take(20)
+            .forEachIndexed { j, i -> saved[r.entries[i].key] = Card(added = now + j) }   // keep the list order
         persistSaved()
+    }
+
+    fun wordsLeft(level: Int): Int {
+        val r = repo ?: return 0
+        return r.levelWords[level].count { r.entries[it].key !in saved }
     }
 
     private val today get() = java.time.LocalDate.now().toString()
