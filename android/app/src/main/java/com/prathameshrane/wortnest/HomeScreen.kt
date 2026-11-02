@@ -132,11 +132,12 @@ fun Greeting(vm: AppViewModel, repo: Repository) {
     }
 }
 
-/** The same A1/A2 noun, verb or adjective for everyone on a given day (the website picks it the same way). */
-fun wordOfDay(repo: Repository): Entry? {
+/** The same noun, verb or adjective for everyone at a level on a given day (the website picks it the same way).
+ *  The pool holds every word up to the level, so B1 learners still meet A1 and A2 words. */
+fun wordOfDay(repo: Repository, level: Int): Entry? {
     val seen = HashSet<String>()
     val pool = repo.entries.filter {
-        (it.level == 1 || it.level == 2) && (it.pos == "verb" || it.pos == "adj" || (it.pos == "noun" && it.gender in setOf("m", "f", "n"))) && seen.add(it.word)
+        it.level in 1..level && (it.pos == "verb" || it.pos == "adj" || (it.pos == "noun" && it.gender in setOf("m", "f", "n"))) && seen.add(it.word)
     }
     if (pool.isEmpty()) return null
     return pool[((LocalDate.now().toEpochDay() * 7919) % pool.size).toInt()]
@@ -146,14 +147,14 @@ fun wordOfDay(repo: Repository): Entry? {
 @Composable
 fun HomeContent(vm: AppViewModel, repo: Repository, nav: Nav, goTab: (Int) -> Unit, openLevel: () -> Unit, onTry: (String) -> Unit) {
     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        wordOfDay(repo)?.let { WordOfDayCard(vm, repo, it, nav) }
+        wordOfDay(repo, vm.level)?.let { WordOfDayCard(vm, repo, it, nav) }
 
         val n = vm.counts()
         val due = n.fresh + n.learning + n.review
         val total = vm.saved.size
         val read = vm.topicsSeen.count { id -> repo.grammar.any { it.id == id } }
         val next = repo.grammar.firstOrNull { it.id !in vm.topicsSeen }
-        val levelWords = repo.levelWords[vm.level]
+        val levelWords = upTo(repo.levelWords, vm.level)
         val inLevel = levelWords.count { vm.saved.containsKey(repo.entries[it].key) }
         fun frac(a: Int, b: Int) = if (b == 0) 0f else (a.toFloat() / b).coerceIn(0f, 1f)
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -165,7 +166,7 @@ fun HomeContent(vm: AppViewModel, repo: Repository, nav: Nav, goTab: (Int) -> Un
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Tile("$read/${repo.grammar.size}", "Grammar topics", next?.let { "next: ${it.title}" } ?: "all read",
                 frac(read, repo.grammar.size), Color(0xFFF59E0B), Modifier.weight(1f)) { goTab(3) }
-            Tile(LEVEL_NAMES[vm.level], "Your level", "$inLevel of ${levelWords.size} words saved",
+            Tile(LEVEL_NAMES[vm.level], "Your level", if (vm.level < 3) "${LEVEL_NAMES[vm.level + 1]} test when you're ready" else "$inLevel of ${levelWords.size} words saved",
                 frac(inLevel, levelWords.size), Color(0xFFEC4899), Modifier.weight(1f), openLevel)
         }
 
@@ -198,16 +199,10 @@ private fun WordOfDayCard(vm: AppViewModel, repo: Repository, e: Entry, nav: Nav
             Text(LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, d. MMMM", Locale.GERMAN)), color = HeroMuted, fontSize = 14.sp)
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                buildAnnotatedString {
-                    if (gendered) withStyle(SpanStyle(fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = genderColorOnDark(e.gender))) {
-                        append(Gender.article(e.gender) + " ")
-                    }
-                    append(e.word)
-                },
-                fontSize = 46.sp, lineHeight = 50.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-1.5).sp, color = HeroText,
-                modifier = Modifier.weight(1f).padding(top = 6.dp),
-            )
+            Column(Modifier.weight(1f).padding(top = 6.dp)) {
+                if (gendered) Text(Gender.article(e.gender)!!, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = genderColorOnDark(e.gender))
+                FitText(e.word, fontSize = 46.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-1.5).sp, color = HeroText)
+            }
             IconButton(
                 onClick = { vm.speak(e.spoken) },
                 colors = IconButtonDefaults.iconButtonColors(containerColor = HeroButton, contentColor = HeroText),
@@ -243,10 +238,10 @@ private fun WordOfDayCard(vm: AppViewModel, repo: Repository, e: Entry, nav: Nav
             Button(onClick = { vm.toggleSaved(e) }, colors = colors, shape = RoundedCornerShape(12.dp), contentPadding = PaddingValues(horizontal = 14.dp)) {
                 Icon(if (on) Icons.Filled.Star else Icons.Outlined.StarOutline, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(6.dp))
-                Text(if (on) "Saved" else "Add to flashcards", maxLines = 1)
+                FitText(if (on) "Saved" else "Add to flashcards")
             }
             Button(onClick = { nav.push(Route.EntryR(e.id)) }, colors = colors, shape = RoundedCornerShape(12.dp), contentPadding = PaddingValues(horizontal = 14.dp)) {
-                Text("Full entry", maxLines = 1)
+                FitText("Full entry")
             }
         }
     }

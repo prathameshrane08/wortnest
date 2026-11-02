@@ -46,8 +46,10 @@ import kotlinx.coroutines.delay
 
 private class TourStep(val title: String, val text: String, val demo: @Composable () -> Unit)
 
+private const val LEVEL_STEP = 1
+
 /** A short walkthrough of the five sections, shown on first launch and from the Tour button.
- *  The last step asks the learner's level, which sets the quizzes and can add the first 20 words. */
+ *  The second step asks the learner's level, which sets the words everywhere and can add the first 20. */
 @Composable
 fun TourDialog(vm: AppViewModel, repo: Repository, start: Int, onClose: (addedWords: Boolean) -> Unit) {
     var step by remember { mutableIntStateOf(start) }
@@ -55,11 +57,7 @@ fun TourDialog(vm: AppViewModel, repo: Repository, start: Int, onClose: (addedWo
     var addWords by remember { mutableStateOf(vm.saved.isEmpty()) }
     val steps = listOf(
         TourStep("Willkommen! A little German every day", "Five tools in one place. This walkthrough shows each one in under a minute.") { SectionsDemo() },
-        TourStep("Look up any word, both ways", "Type German or English. Forms like ging or Häuser find their base word, with the meaning, examples and pronunciation.") { SearchDemo(repo) },
-        TourStep("Blue, red, green", "Every noun shows its article in colour: blue for der, red for die, green for das. The Der Die Das tab quizzes you until the colours stick.") { ColoursDemo() },
-        TourStep("Every verb, every tense", "The Verben tab conjugates about 8,900 verbs. Highlighted forms break the regular pattern, so you know which ones to learn by heart.") { VerbDemo() },
-        TourStep("Flashcards that remember for you", "Star a word to add it to Üben. After each card, tap how well you knew it. Words you know come back less often; words you miss come back soon.") { CardDemo() },
-        TourStep("Where are you starting?", "This sets the level for the quizzes. You can change it any time.") {
+        TourStep("Where are you starting?", "Your level picks the word of the day and the words in quizzes and flashcards. Lower levels are included, so A2 also has the A1 words. A short test moves you up later.") {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(Triple(1, "Beginner", "I'm just starting out"), Triple(2, "Elementary", "I know the basics"), Triple(3, "Intermediate", "I can hold a conversation"))
                     .forEach { (l, name, line) ->
@@ -90,11 +88,18 @@ fun TourDialog(vm: AppViewModel, repo: Repository, start: Int, onClose: (addedWo
                 }
             }
         },
+        TourStep("Look up any word, both ways", "Type German or English. Forms like ging or Häuser find their base word, with the meaning, examples and pronunciation.") { SearchDemo(repo) },
+        TourStep("Blue, red, green", "Every noun shows its article in colour: blue for der, red for die, green for das. The Der Die Das tab quizzes you until the colours stick.") { ColoursDemo() },
+        TourStep("Every verb, every tense", "The Verben tab conjugates about 8,900 verbs. Highlighted forms break the regular pattern, so you know which ones to learn by heart.") { VerbDemo() },
+        TourStep("Practise four ways", "Üben has flashcards for your starred words, plus Choose, Write and Match quizzes, German to English or the other way. Swipe a flashcard right if you knew it.") { CardDemo() },
     )
     val last = step == steps.lastIndex
+    var sawLevel by remember { mutableStateOf(start == LEVEL_STEP) }
+    if (step == LEVEL_STEP) sawLevel = true
+    // Skip and Start learning both keep the level once it has been shown.
     fun finish() {
-        vm.chooseLevel(level)
-        val add = addWords && vm.saved.isEmpty()
+        val add = sawLevel && addWords && vm.saved.isEmpty()
+        if (sawLevel) vm.chooseLevel(level)
         if (add) vm.addLevel(level)
         vm.finishTour()
         onClose(add)
@@ -120,7 +125,7 @@ fun TourDialog(vm: AppViewModel, repo: Repository, start: Int, onClose: (addedWo
                         )
                     }
                 }
-                if (!last) TextButton(onClick = { vm.finishTour(); onClose(false) }) { Text("Skip", color = MaterialTheme.colorScheme.onSurfaceVariant) }
+                if (!last) TextButton(onClick = { finish() }) { Text("Skip", color = MaterialTheme.colorScheme.onSurfaceVariant) }
             }
             Column(
                 Modifier
@@ -144,6 +149,7 @@ fun TourDialog(vm: AppViewModel, repo: Repository, start: Int, onClose: (addedWo
 
 @Composable
 private fun SectionsDemo() {
+    val fit = remember { FitGroup() }
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         TABS.forEach { (label, icon) ->
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.width(60.dp)) {
@@ -152,7 +158,7 @@ private fun SectionsDemo() {
                         .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(14.dp)),
                     contentAlignment = Alignment.Center,
                 ) { Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary) }
-                Text(label, fontSize = 10.sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, textAlign = TextAlign.Center)
+                FitText(label, fontSize = 10.sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant, group = fit)
             }
         }
     }

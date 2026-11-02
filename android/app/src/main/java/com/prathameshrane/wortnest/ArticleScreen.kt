@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -77,11 +79,12 @@ private fun LookupResult(vm: AppViewModel, repo: Repository, query: String) {
     }
 }
 
-private val levels = listOf("A1", "A2", "B1", "All", "Missed")
-
 @Composable
 private fun QuizCard(vm: AppViewModel, repo: Repository) {
-    var level by rememberSaveable { mutableIntStateOf(vm.level - 1) }
+    var missedOnly by rememberSaveable { mutableStateOf(false) }
+    var cards by rememberSaveable { mutableStateOf(false) }   // flashcards instead of the three buttons
+    var flipped by rememberSaveable { mutableStateOf(false) }
+    var known by rememberSaveable { mutableIntStateOf(0) }
     var currentId by rememberSaveable { mutableStateOf<Int?>(null) }
     var chosen by rememberSaveable { mutableStateOf<String?>(null) }
     var streak by rememberSaveable { mutableIntStateOf(0) }
@@ -89,23 +92,20 @@ private fun QuizCard(vm: AppViewModel, repo: Repository) {
     var total by rememberSaveable { mutableIntStateOf(0) }
 
     fun pool(): List<Entry> {
-        return when (level) {
-            4 -> vm.missedNouns.mapNotNull { w -> repo.entriesFor(w).firstOrNull { it.isNoun } }
-            3 -> repo.quizNouns.take(6000).map { repo.entries[it] }
-            else -> repo.levelNouns[level + 1].map { repo.entries[it] }
-        }
+        return if (missedOnly) vm.missedNouns.mapNotNull { w -> repo.entriesFor(w).firstOrNull { it.isNoun } }
+        else upTo(repo.levelNouns, vm.level).map { repo.entries[it] }
     }
 
     fun next() {
         val p = pool()
-        chosen = null
+        chosen = null; flipped = false
         if (p.isEmpty()) { currentId = null; return }
         var pick = p.random()
         if (p.size > 1) while (pick.id == currentId) pick = p.random()
         currentId = pick.id
     }
 
-    LaunchedEffect(Unit) { if (currentId == null) next() }
+    LaunchedEffect(vm.level) { if (currentId == null || (!missedOnly && repo.entries[currentId!!].level > vm.level)) next() }
     val current = currentId?.let { repo.entries[it] }
 
     // After a right answer, move on by itself.
@@ -118,16 +118,16 @@ private fun QuizCard(vm: AppViewModel, repo: Repository) {
 
     CardBox {
         Text("der, die oder das?", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold)
-        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-            levels.forEachIndexed { i, label ->
-                SegmentedButton(
-                    selected = level == i,
-                    onClick = { if (level != i) { level = i; next() } },
-                    shape = SegmentedButtonDefaults.itemShape(i, levels.size),
-                    icon = {},   // no checkmark, so five labels fit
-                    label = { Text(label, fontSize = 12.sp, maxLines = 1) },
-                )
+        Segments(listOf("Quiz", "Flashcards"), if (cards) 1 else 0) { cards = it == 1; next() }
+        Segments(listOf("${levelRange(vm.level)} nouns", "My mistakes"), if (missedOnly) 1 else 0) { missedOnly = it == 1; next() }
+
+        if (cards) {
+            NounCards(vm, current, flipped, known, onFlip = { flipped = !flipped; if (flipped) current?.let { vm.speak(it.spoken) } }) { ok ->
+                current?.let { vm.recordQuiz(it.word, ok, 0) }
+                if (ok) known++
+                next()
             }
+            return@CardBox
         }
 
         Column(
@@ -139,13 +139,11 @@ private fun QuizCard(vm: AppViewModel, repo: Repository) {
                 Text("All clear", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 Text("No mistakes left to review. Pick another level.", color = MaterialTheme.colorScheme.onSurfaceVariant)
             } else {
-                Text(
+                FitText(
                     current.word,
                     fontSize = 40.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = if (chosen == null) MaterialTheme.colorScheme.onSurface else genderColor(current.gender),
-                    textAlign = TextAlign.Center,
-                    lineHeight = 44.sp,
                 )
                 Text(current.glosses.firstOrNull().orEmpty(), color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -198,6 +196,46 @@ private fun QuizCard(vm: AppViewModel, repo: Repository) {
             Stat(if (total == 0) "–" else "${(right * 100 + total / 2) / total}%", "Accuracy")
             Stat("${vm.missedNouns.size}", "To review")
         }
+    }
+}
+
+/** Flashcard mode: see the noun, think of its article, flip, then say (or swipe) whether you knew it. */
+@Composable
+private fun NounCards(vm: AppViewModel, e: Entry?, flipped: Boolean, known: Int, onFlip: () -> Unit, onKnew: (Boolean) -> Unit) {
+    if (e == null) {
+        Text("All clear", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Text("No mistakes left to review.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+        return
+    }
+    Column(Modifier.fillMaxWidth().padding(top = 8.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        SwipeCard(e.id, "Not yet", "Knew it", onFlip, onKnew) {
+            if (flipped) {
+                Text("noun", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(e.article.orEmpty(), fontSize = 22.sp, fontWeight = FontWeight.Bold, color = genderColor(e.gender))
+                FitText(e.word, fontSize = 38.sp, fontWeight = FontWeight.ExtraBold, color = genderColor(e.gender))
+                if (e.plural.isNotEmpty()) Text("die ${e.plural}", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(e.glosses.firstOrNull().orEmpty(), textAlign = TextAlign.Center)
+                Gender.rule(e.word, e.gender)?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center) }
+            } else {
+                Text("der, die or das?", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                FitText(e.word, fontSize = 38.sp, fontWeight = FontWeight.ExtraBold)
+                Text(e.glosses.firstOrNull().orEmpty(), color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                Text("Tap to see the article", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            OutlinedButton(onClick = { onKnew(false) }, modifier = Modifier.weight(1f), contentPadding = PaddingValues(vertical = 14.dp)) {
+                Text("Not yet", color = badColor(), fontWeight = FontWeight.Bold)
+            }
+            Button(onClick = { onKnew(true) }, modifier = Modifier.weight(1f), contentPadding = PaddingValues(vertical = 14.dp)) {
+                Text("Knew it", fontWeight = FontWeight.Bold)
+            }
+        }
+        Text(
+            "Swipe right if you knew it, left if not · $known known · ${vm.missedNouns.size} to review",
+            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth(),
+        )
     }
 }
 

@@ -33,7 +33,8 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     var bestStreak by mutableIntStateOf(0)
         private set
     val topicsSeen = mutableStateListOf<String>()   // grammar topics opened at least once
-    /** The learner's level (1 A1, 2 A2, 3 B1), chosen in the walkthrough; the quizzes start there. */
+    /** The learner's level (1 A1, 2 A2, 3 B1), chosen in the walkthrough or earned with the level test.
+     *  The word of the day, quizzes and flashcards use this level's words and the ones below it. */
     var level by mutableIntStateOf(1)
         private set
     /** Dark colours, switched with the sun/moon button; white by default. */
@@ -41,6 +42,15 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         private set
     /** False until the first-launch walkthrough has been finished or skipped. */
     var toured by mutableStateOf(true)
+        private set
+    /** How Üben practises: cards, mc (choose), type (write) or match; de (German first) or en; level or saved words. */
+    var practiceMode by mutableStateOf("cards")
+        private set
+    var practiceDir by mutableStateOf("de")
+        private set
+    var practiceSrc by mutableStateOf("level")
+        private set
+    var matchBest by mutableStateOf(0f)
         private set
 
     private val prefs = app.getSharedPreferences("wortnest", Context.MODE_PRIVATE)
@@ -156,6 +166,19 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         prefs.edit().putInt("level", l).apply()
     }
 
+    fun setPractice(mode: String = practiceMode, dir: String = practiceDir, src: String = practiceSrc) {
+        practiceMode = mode; practiceDir = dir; practiceSrc = src
+        prefs.edit().putString("mode", mode).putString("dir", dir).putString("src", src).apply()
+    }
+
+    /** Stores a Match time; true when it beats the best one. */
+    fun recordMatch(seconds: Float): Boolean {
+        if (matchBest > 0f && seconds >= matchBest) return false
+        matchBest = Math.round(seconds * 10) / 10f
+        prefs.edit().putFloat("matchBest", matchBest).apply()
+        return true
+    }
+
     fun toggleDark() {
         dark = !dark
         prefs.edit().putBoolean("dark", dark).apply()
@@ -192,6 +215,10 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         level = prefs.getInt("level", 1)
         toured = prefs.getBoolean("toured", false)
         dark = prefs.getBoolean("dark", false)
+        practiceMode = prefs.getString("mode", "cards") ?: "cards"
+        practiceDir = prefs.getString("dir", "de") ?: "de"
+        practiceSrc = prefs.getString("src", "level") ?: "level"
+        matchBest = prefs.getFloat("matchBest", 0f)
         prefs.getString("topicsSeen", null)?.split("\n")?.filter { it.isNotEmpty() }?.let { topicsSeen.addAll(it) }
     }
 

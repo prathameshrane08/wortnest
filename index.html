@@ -306,6 +306,98 @@ section.view{display:flex;flex-direction:column;gap:22px}
 .add-lv .btn span{font-size:.72rem;font-weight:500;color:var(--muted)}
 .add-lv .btn:disabled{opacity:.45}
 
+/* ---------- swipe cards ---------- */
+.flash .face{touch-action:pan-y;user-select:none;-webkit-user-select:none;transition:transform .17s ease-out,opacity .17s,border-color .15s}
+.flash .face[data-lean="r"]{border-color:var(--ok)} .flash .face[data-lean="l"]{border-color:var(--bad)}
+.flash .face[data-lean]:not([data-lean=""])::after{position:absolute;top:16px;font-weight:800;font-size:.85rem;border-radius:8px;padding:3px 10px;color:#fff}
+.flash .face[data-lean="r"]::after{content:attr(data-r);right:16px;background:var(--ok)}
+.flash .face[data-lean="l"]::after{content:attr(data-l);left:16px;background:var(--bad)}
+.flash .face .w.en{font-size:clamp(1.4rem,6vw,1.8rem);letter-spacing:-.02em;line-height:1.25}
+.flash .face .w small{font-size:.55em;vertical-align:.2em}
+.swipe-hint{text-align:center;margin:10px 0 0}
+@media (hover:hover){.swipe-hint{display:none}}
+.knew{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:460px;margin:0 auto;width:100%}
+.knew .btn{padding:14px}
+.knew .no{color:var(--die)}
+.dd-src{margin-top:14px}
+.dd-cards{padding-top:20px}
+.dd-cards .face .tap{margin-top:6px}
+
+/* ---------- Üben ---------- */
+.learn-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.lv-pill{flex:none;display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px 5px 6px;font-weight:600;font-size:.86rem;color:var(--ink)}
+.lv-pill .lv{margin:0}
+.lv-pill:hover{border-color:var(--accent)}
+@media (max-width:520px){.learn-head{flex-direction:column}}
+.modes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.modes button{display:flex;flex-direction:column;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:12px 2px;font-weight:600;font-size:.85rem;letter-spacing:-.01em;color:var(--muted);min-width:0}
+.modes button svg{width:22px;height:22px}
+@media (max-width:420px){.modes{gap:6px}.modes button{font-size:.76rem}}
+.modes button:hover{border-color:var(--accent)}
+.modes button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+.learn-opts{display:flex;justify-content:space-between;align-items:center;gap:8px 12px;flex-wrap:wrap;margin-top:-8px}
+.dir{display:inline-flex;align-items:center;gap:8px;border:0;background:none;color:var(--accent-ink);font-weight:600;font-size:.92rem;padding:6px 2px}
+.dir svg{width:17px;height:17px}
+.seg button:disabled{opacity:.45;cursor:default}
+.qwrap{display:flex;flex-direction:column;gap:14px;max-width:520px;width:100%;margin:0 auto}
+.qtop{display:flex;align-items:center;gap:12px;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.qbar{flex:1;height:6px;border-radius:4px;background:var(--sunk);overflow:hidden}
+.qbar i{display:block;height:100%;background:var(--accent);border-radius:4px;transition:width .25s}
+.qcard{text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;padding:26px 20px}
+.qword{font-weight:800;font-size:clamp(2rem,9vw,2.6rem);line-height:1.1;letter-spacing:-.035em;overflow-wrap:anywhere;max-width:100%}
+.qword.en{font-size:clamp(1.4rem,6vw,1.75rem);letter-spacing:-.02em;line-height:1.25}
+.mc{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:14px;padding:13px 14px;font-weight:600;font-size:1rem;color:var(--ink);min-width:0}
+.opt span{min-width:0;overflow-wrap:anywhere}
+.opt kbd{flex:none;font-family:inherit;font-size:.75rem;font-weight:700;color:var(--faint);border:1px solid var(--line);border-radius:6px;width:22px;height:22px;display:grid;place-items:center}
+@media (hover:none){.opt kbd{display:none}}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--das-bg)} .opt.right kbd{border-color:var(--ok);color:var(--ok)}
+.opt.wrong{border-color:var(--bad);background:var(--die-bg)}
+.opt.dim{opacity:.5}
+.q-form{display:flex;gap:8px}
+.q-form input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--sunk);font-size:1.05rem}
+.q-form input:focus{border-color:var(--accent);background:var(--surface);outline:none}
+.link-btn{align-self:center;border:0;background:none;color:var(--muted);font-weight:600;font-size:.9rem;text-decoration:underline;text-underline-offset:3px}
+.q-fb{text-align:center;margin:0 auto;min-height:1.6em}
+.btn-row.center{justify-content:center;margin-top:0}
+.result{text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
+.result p{margin:0;color:var(--muted)}
+.score{font-size:1.2rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.score b{font-size:3.2rem;font-weight:800;color:var(--ink);letter-spacing:-.04em}
+.missed{list-style:none;margin:0;padding:0;width:100%;max-width:420px;text-align:left;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.missed li{display:flex;justify-content:space-between;gap:12px;padding:9px 14px;border-top:1px solid var(--line)}
+.missed li:first-child{border-top:0}
+.missed span{color:var(--muted);text-align:right;min-width:0}
+.match-top{display:flex;justify-content:space-between;align-items:baseline}
+.match-top b{font-size:1.5rem;font-weight:800;font-variant-numeric:tabular-nums}
+.match{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media (min-width:600px){.match{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.mt{min-height:86px;border:1.5px solid var(--line);background:var(--surface);border-radius:14px;padding:8px 6px;font-weight:500;font-size:.88rem;line-height:1.3;color:var(--ink);min-width:0;overflow-wrap:break-word;hyphens:auto;transition:opacity .25s,transform .25s,border-color .15s}
+.mt.de{font-weight:700;font-size:1rem}
+.mt:hover{border-color:var(--accent)}
+.mt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.mt.gone{opacity:0;transform:scale(.9);pointer-events:none}
+.mt.no{border-color:var(--bad);background:var(--die-bg);animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@media (prefers-reduced-motion:reduce){.mt.no{animation:none}.flash .face{transition:none}}
+
+/* ---------- level ---------- */
+.lvl-head{font-weight:700}
+.lvl-now{display:flex;gap:14px;align-items:center}
+.lvl-now .lv{margin:0;font-size:1.3rem;padding:10px 12px;border-radius:12px}
+.lvl-now h2{font-size:1.35rem}
+.lvl-now p{margin:2px 0 0;font-size:.92rem}
+.lvl-test{background:var(--accent-soft);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.lvl-test p{margin:0 0 6px;color:var(--ink);font-size:.95rem}
+.lvl-pick{display:flex;flex-direction:column;gap:8px}
+.lvl-pick h3{font-size:.95rem;color:var(--muted);font-weight:600}
+#lvl-body{display:flex;flex-direction:column;gap:16px}
+.lvl-q{background:var(--soft);border:1px solid var(--line);border-radius:20px}
+#lvl .choices{max-width:none}
+#lvl .result h2{font-size:1.4rem}
+
 /* ---------- grammar ---------- */
 .g-level{display:flex;flex-direction:column;gap:10px;margin-top:22px}
 .g-level h3{display:flex;align-items:center;gap:8px;font-size:1.1rem}
@@ -435,15 +527,17 @@ footer button{display:block;margin-top:8px;border:0;background:none;padding:0;co
       <div class="card">
         <div class="card-head">
           <h2>der, die oder das?</h2>
-          <div class="seg" id="dd-level" role="group" aria-label="Level">
-            <button type="button" data-lv="0" aria-pressed="true">A1</button>
-            <button type="button" data-lv="1" aria-pressed="false">A2</button>
-            <button type="button" data-lv="2" aria-pressed="false">B1</button>
-            <button type="button" data-lv="4" aria-pressed="false">All</button>
-            <button type="button" data-lv="3" aria-pressed="false">My mistakes</button>
+          <div class="seg" id="dd-mode" role="group" aria-label="How to practise">
+            <button type="button" data-m="quiz" aria-pressed="true">Quiz</button>
+            <button type="button" data-m="cards" aria-pressed="false">Flashcards</button>
           </div>
         </div>
-        <div class="quiz">
+        <div class="seg dd-src" id="dd-level" role="group" aria-label="Which nouns">
+          <button type="button" data-lv="0" aria-pressed="true" id="dd-lv-name">A1 nouns</button>
+          <button type="button" data-lv="3" aria-pressed="false">My mistakes</button>
+        </div>
+        <div class="dd-cards" id="dd-cards" hidden></div>
+        <div class="quiz" id="dd-quiz">
           <div class="noun" id="dd-noun">…</div>
           <div class="gloss" id="dd-gloss"></div>
           <div class="choices">
@@ -489,12 +583,6 @@ footer button{display:block;margin-top:8px;border:0;background:none;padding:0;co
       <div class="card drill">
         <div class="card-head">
           <h2>Type the right form</h2>
-          <div class="seg" id="drill-level" role="group" aria-label="Level">
-            <button type="button" data-lv="1" aria-pressed="true">A1</button>
-            <button type="button" data-lv="2" aria-pressed="false">A2</button>
-            <button type="button" data-lv="3" aria-pressed="false">B1</button>
-            <button type="button" data-lv="0" aria-pressed="false">All</button>
-          </div>
           <div class="seg" id="drill-tense" role="group" aria-label="Tense">
             <button type="button" data-t="pr" aria-pressed="true">Präsens</button>
             <button type="button" data-t="pt" aria-pressed="false">Präteritum</button>
@@ -523,10 +611,23 @@ footer button{display:block;margin-top:8px;border:0;background:none;padding:0;co
 
     <!-- Learn -->
     <section class="view" id="view-learn" hidden>
-      <div class="view-head"><h2>Flashcards</h2>
-        <p class="muted">Star any word in the dictionary to add it here. Words you know come back less and less often; words you miss come back soon.</p></div>
+      <div class="view-head learn-head"><div><h2>Üben</h2><p class="muted" id="learn-sub"></p></div>
+        <button type="button" class="lv-pill" id="learn-level"></button></div>
+      <div class="modes" id="learn-mode" role="group" aria-label="How to practise">
+        <button type="button" data-m="cards" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="14" height="14" rx="2.5"/><path d="M7 3h11.5A2.5 2.5 0 0 1 21 5.5V17"/></svg>Flashcards</button>
+        <button type="button" data-m="mc" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="5" rx="2"/><rect x="3" y="10" width="18" height="5" rx="2"/><path d="M3 19.5h18"/></svg>Choose</button>
+        <button type="button" data-m="type" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M14.5 4.5l3 3L8 17H5v-3z"/></svg>Write</button>
+        <button type="button" data-m="match" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>Match</button>
+      </div>
+      <div class="learn-opts">
+        <button type="button" class="dir" id="learn-dir"></button>
+        <div class="seg" id="learn-src" role="group" aria-label="Which words">
+          <button type="button" data-src="level" aria-pressed="true" id="src-level">A1 words</button>
+          <button type="button" data-src="saved" aria-pressed="false" id="src-saved">My saved words</button>
+        </div>
+      </div>
       <div id="learn-area"></div>
-      <div>
+      <div id="saved-wrap">
         <h3 style="margin-bottom:8px">Saved words <span class="muted" id="saved-count"></span></h3>
         <div id="saved-list"></div>
       </div>
@@ -545,6 +646,14 @@ footer button{display:block;margin-top:8px;border:0;background:none;padding:0;co
   </div>
 </div>
 
+<!-- Your level: the move-up test, or set it by hand. -->
+<div class="tour" id="lvl" role="dialog" aria-modal="true" aria-labelledby="lvl-title" hidden>
+  <div class="tour-card" tabindex="-1">
+    <div class="tour-top"><b class="lvl-head">Your level</b><button type="button" class="tour-skip" id="lvl-close">Close</button></div>
+    <div id="lvl-body"></div>
+  </div>
+</div>
+
 <script>
 "use strict";
 const $ = s => document.querySelector(s);
@@ -553,6 +662,19 @@ const ART = {m:"der", f:"die", n:"das", p:"die"};
 const LV = ["", "A1", "A2", "B1"];   // dict.json rows carry the level as a 7th value when the word is on a Goethe-Institut list
 const lvOf = r => r[6] || 0;
 const lvHtml = r => lvOf(r) ? `<span class="lv l${lvOf(r)}" title="Goethe-Institut word list">${LV[lvOf(r)]}</span>` : "";
+// Your level counts down as well as up: an A2 learner practises A1 and A2 words.
+const myLevel = () => store.get("level", 1);
+const upTo = (A, L) => A.slice(1, L + 1).flat();
+const lvRange = L => L > 1 ? "A1–" + LV[L] : "A1";
+const shuffle = a => { for(let k = a.length - 1; k > 0; k--){ const j = Math.floor(Math.random() * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; } return a; };
+const deWord = r => (r[1] === "noun" && ART[r[2]] ? ART[r[2]] + " " : "") + r[0];
+// The first meaning without its notes in brackets, short enough for a button.
+function shortGloss(r){
+  const g = (r[4][0] || "").replace(/\([^)]*\)/g, "").split(";")[0].replace(/\s+/g, " ").replace(/\s+,/g, ",").trim() || r[4][0] || "";
+  return g.length > 44 ? g.slice(0, 42).replace(/[ ,]+\S*$/, "") + "…" : g;
+}
+// For the small Match tiles: only the first meaning when the gloss is long.
+const tileGloss = r => { const g = shortGloss(r); return g.length > 22 ? g.split(", ")[0] : g; };
 const md = t => esc(t).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
 const POSN = {noun:"noun",verb:"verb",adj:"adjective",adv:"adverb",prep:"preposition",conj:"conjunction",pron:"pronoun",intj:"interjection",num:"number",det:"determiner",particle:"particle",phrase:"phrase",article:"article",postp:"postposition"};
 const store = {
@@ -591,13 +713,14 @@ function show(view){
   window.scrollTo(0, 0);
 }
 document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => show(b.dataset.view));
-document.querySelectorAll(".uml").forEach(u => u.addEventListener("click", e => {
-  if(e.target.tagName !== "BUTTON") return;
+document.addEventListener("click", e => {
+  const u = e.target.closest(".uml");
+  if(!u || e.target.tagName !== "BUTTON") return;
   const inp = document.getElementById(u.dataset.target);
   const s = inp.selectionStart ?? inp.value.length, en = inp.selectionEnd ?? s;
   inp.value = inp.value.slice(0, s) + e.target.textContent + inp.value.slice(en);
   inp.focus(); inp.setSelectionRange(s + 1, s + 1); inp.dispatchEvent(new Event("input"));
-}));
+});
 
 /* ---------- dictionary search ---------- */
 function deLabel(r){
@@ -655,10 +778,11 @@ function runSearch(){
   $("#dict-results").innerHTML = `<div class="results">${h}</div>`;
   if(de.exact.length || de.via.length) showEntry(de.exact[0] ?? de.via[0]);
 }
-// The same A1/A2 noun, verb or adjective for everyone on a given day (the apps pick it the same way).
-function wordOfDay(){
+// The same noun, verb or adjective for everyone at a level on a given day (the apps pick it the same way).
+// The pool holds every word up to your level, so B1 learners still meet A1 and A2 words.
+function wordOfDay(L = myLevel()){
   const seen = new Set(), pool = [];
-  ROWS.forEach((r, i) => { if((r[6] === 1 || r[6] === 2) && (r[1] === "verb" || r[1] === "adj" || (r[1] === "noun" && "mfn".includes(r[2] || "x"))) && !seen.has(r[0])){ seen.add(r[0]); pool.push(i); } });
+  ROWS.forEach((r, i) => { if(r[6] >= 1 && r[6] <= L && (r[1] === "verb" || r[1] === "adj" || (r[1] === "noun" && "mfn".includes(r[2] || "x"))) && !seen.has(r[0])){ seen.add(r[0]); pool.push(i); } });
   const day = Math.floor((Date.now() - new Date().getTimezoneOffset() * 6e4) / 864e5);
   return pool.length ? pool[(day * 7919) % pool.length] : undefined;
 }
@@ -681,14 +805,14 @@ function startHtml(){
   }
   const n = srsCounts(), due = n.fresh + n.learning + n.review, total = Object.keys(saved).length;
   const seen = store.get("topicsSeen", []), read = seen.filter(id => GRAMMAR.some(t => t.id === id)).length, nextTopic = GRAMMAR.find(t => !seen.includes(t.id));
-  const L = store.get("level", 1), inLevel = LEVEL_WORDS[L].filter(i => saved[keyOf(ROWS[i])]).length;
+  const L = myLevel(), lw = upTo(LEVEL_WORDS, L), inLevel = lw.filter(i => saved[keyOf(ROWS[i])]).length;
   const pct = (a, b) => b ? Math.min(100, Math.round(100 * a / b)) : 0;
   const tile = (go, num, title, line, p, color) => `<button type="button" class="tile" data-go="${go}"><b class="n">${num}</b><h3>${title}</h3><span>${line}</span><div class="bar" style="--bar:${color}"><i style="width:${p}%"></i></div></button>`;
   const tiles = `<div class="today">
     ${tile("learn", due, "Cards due", total ? `${n.known} of ${total} known well` : "tap to start", pct(n.known, total), "var(--accent)")}
     ${tile("dds", dd.miss.length, "Nouns to review", `best streak ${dd.best}`, pct(dd.best, 50), "var(--das)")}
     ${tile("grammar", `${read}/${GRAMMAR.length || 26}`, "Grammar topics", nextTopic ? `next: ${esc(nextTopic.title)}` : "all read", pct(read, GRAMMAR.length || 26), "#f59e0b")}
-    ${tile("level", LV[L], "Your level", `${inLevel} of ${LEVEL_WORDS[L].length} words saved`, pct(inLevel, LEVEL_WORDS[L].length), "#ec4899")}
+    ${tile("level", LV[L], "Your level", L < 3 ? `${LV[L + 1]} test when you're ready` : `${inLevel} of ${lw.length} words saved`, pct(inLevel, lw.length), "#ec4899")}
   </div>`;
   const todo = (due ? 1 : 0) + (dd.miss.length ? 1 : 0) + (nextTopic ? 1 : 0), h = new Date().getHours();
   $("#greet").innerHTML = `<h1>${h < 11 ? "Guten Morgen" : h < 18 ? "Guten Tag" : "Guten Abend"} 👋</h1><p>${todo ? `${todo} thing${todo > 1 ? "s" : ""} to do today` : "All caught up for today"}</p>`;
@@ -703,7 +827,7 @@ $("#dict-results").addEventListener("click", e => {
   if(!b) return;
   const d = b.dataset;
   if(b.classList.contains("row")){ showEntry(+d.i); $("#entry").scrollIntoView({block:"nearest"}); }
-  else if(d.go === "level") openTour(TOUR.length - 1);
+  else if(d.go === "level") openLevel();
   else if(d.go) show(d.go);
   else if(d.try){ $("#q").value = d.try; runSearch(); }
   else if(d.wsay) speak(d.wsay);
@@ -785,19 +909,19 @@ $("#dq").addEventListener("input", () => {
   $("#dd-speak").onclick = () => speak(ART[g] + " " + shown);
 });
 
-const dd = {lv:0, cur:null, done:false, streak:0, best:store.get("ddBest",0), right:0, total:0, miss:store.get("ddMiss",[])};
+const dd = {lv:0, mode:"quiz", flipped:false, known:0, cur:null, done:false, streak:0, best:store.get("ddBest",0), right:0, total:0, miss:store.get("ddMiss",[])};
 function ddPool(){
   if(dd.lv === 3) return dd.miss.map(w => (BYW.get(w.toLowerCase())||[]).find(i => ROWS[i][1]==="noun")).filter(i => i !== undefined);
-  if(dd.lv === 4) return NOUNS.slice(0, 6000);
-  return LEVEL_NOUNS[dd.lv + 1];
+  return upTo(LEVEL_NOUNS, myLevel());
 }
 function ddNext(){
   const pool = ddPool();
-  dd.done = false;
-  document.querySelectorAll(".choices button").forEach(b => b.className = b.dataset.g);
-  if(!pool.length){ $("#dd-noun").textContent = "All clear"; $("#dd-gloss").textContent = "No mistakes left to review. Pick another level."; dd.cur = null; return; }
+  dd.done = false; dd.flipped = false;
+  document.querySelectorAll("#dd-quiz .choices button").forEach(b => b.className = b.dataset.g);
+  if(!pool.length){ $("#dd-noun").textContent = "All clear"; $("#dd-gloss").textContent = "No mistakes left to review. Pick another level."; dd.cur = null; return ddCard(); }
   let i; do{ i = pool[Math.floor(Math.random() * pool.length)]; } while(pool.length > 1 && i === dd.cur);
   dd.cur = i;
+  if(dd.mode === "cards") return ddCard();
   $("#dd-noun").textContent = ROWS[i][0];
   $("#dd-noun").className = "noun";
   $("#dd-gloss").textContent = ROWS[i][4][0] || "";
@@ -808,7 +932,7 @@ function ddAnswer(g){
   if(dd.done){ ddNext(); return; }
   const ci = dd.cur, r = ROWS[ci], ok = r[2] === g;
   dd.done = true; dd.total++;
-  document.querySelectorAll(".choices button").forEach(b => { if(b.dataset.g === r[2]) b.classList.add("right"); else b.classList.add("wrong"); });
+  document.querySelectorAll("#dd-quiz .choices button").forEach(b => { if(b.dataset.g === r[2]) b.classList.add("right"); else b.classList.add("wrong"); });
   $("#dd-noun").className = "noun w-" + r[2];
   const rule = ruleFor(r[0], r[2]);
   if(ok){ dd.right++; dd.streak++; if(dd.streak > dd.best){ dd.best = dd.streak; store.set("ddBest", dd.best); } dd.miss = dd.miss.filter(w => w !== r[0]); }
@@ -824,12 +948,65 @@ function ddStats(){
   $("#dd-acc").textContent = dd.total ? Math.round(100 * dd.right / dd.total) + "%" : "–";
   $("#dd-miss").textContent = dd.miss.length;
 }
-document.querySelectorAll(".choices button").forEach(b => b.onclick = () => ddAnswer(b.dataset.g));
+// Flashcard mode: see the noun, think of its article, flip, then say whether you knew it.
+function ddCard(){
+  const box = $("#dd-cards");
+  if(dd.mode !== "cards") return;
+  if(dd.cur === null){ box.innerHTML = `<div class="empty"><b style="color:var(--fg)">All clear</b><span>No mistakes left to review.</span></div>`; return; }
+  const r = ROWS[dd.cur], g = r[2], rule = ruleFor(r[0], g);
+  const face = dd.flipped
+    ? `<div class="eyebrow">noun</div><div class="w w-${g}"><small>${ART[g]}</small> ${esc(r[0])}</div>${r[3] ? `<div class="muted small">die ${esc(r[3])}</div>` : ""}<div>${esc(r[4][0] || "")}</div>${rule ? `<div class="muted small">${rule}</div>` : ""}`
+    : `<div class="eyebrow">der, die or das?</div><div class="w">${esc(r[0])}</div><div class="muted small">${esc(r[4][0] || "")}</div><div class="muted small tap">Tap to see the article</div>`;
+  box.innerHTML = `<div class="flash"><button type="button" class="face" id="ddc-face" data-l="Not yet" data-r="Knew it">${face}</button></div>
+    <div class="knew"><button type="button" class="btn ghost no" data-k="0">Not yet</button><button type="button" class="btn" data-k="1">Knew it</button></div>
+    <p class="muted small swipe-hint">Swipe right if you knew it, left if not.</p>
+    <p class="muted small srs-foot">${dd.known} known this session · ${dd.miss.length} to review</p>`;
+  $("#ddc-face").onclick = () => { dd.flipped = !dd.flipped; if(dd.flipped) speak(ART[g] + " " + r[0]); ddCard(); };
+  swipeable($("#ddc-face"), d => ddKnew(d > 0));
+}
+function ddKnew(ok){
+  if(dd.cur === null) return;
+  const w = ROWS[dd.cur][0];
+  if(ok){ dd.known++; dd.miss = dd.miss.filter(x => x !== w); } else if(!dd.miss.includes(w)) dd.miss.push(w);
+  store.set("ddMiss", dd.miss); ddStats(); ddNext();
+}
+$("#dd-cards").addEventListener("click", e => { const b = e.target.closest("[data-k]"); if(b) ddKnew(b.dataset.k === "1"); });
+document.querySelectorAll("#dd-quiz .choices button").forEach(b => b.onclick = () => ddAnswer(b.dataset.g));
 $("#dd-level").addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; dd.lv = +b.dataset.lv; $("#dd-level").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); ddNext(); });
+$("#dd-mode").addEventListener("click", e => {
+  const b = e.target.closest("button"); if(!b) return;
+  dd.mode = b.dataset.m; $("#dd-mode").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  $("#dd-quiz").hidden = dd.mode !== "quiz"; $("#dd-cards").hidden = dd.mode !== "cards"; ddNext();
+});
 document.addEventListener("keydown", e => {
-  if($("#view-dds").hidden || !$("#tour").hidden || e.target.tagName === "INPUT") return;
+  if($("#view-dds").hidden || !$("#tour").hidden || !$("#lvl").hidden || e.target.tagName === "INPUT") return;
+  if(dd.mode === "cards"){
+    if(e.key === " " || e.key === "Enter"){ e.preventDefault(); $("#ddc-face") && $("#ddc-face").click(); }
+    else if(e.key === "1" || e.key === "ArrowLeft") ddKnew(false); else if(e.key === "2" || e.key === "ArrowRight") ddKnew(true);
+    return;
+  }
   if(e.key === "1") ddAnswer("m"); else if(e.key === "2") ddAnswer("f"); else if(e.key === "3") ddAnswer("n"); else if(e.key === "Enter" && dd.done) ddNext();
 });
+
+// Drag a card sideways: past the threshold it flies off and onSwipe gets +1 (right) or -1 (left). A tap still clicks.
+function swipeable(el, onSwipe){
+  let x0 = null, dx = 0, moved = false;
+  el.addEventListener("pointerdown", e => { if(e.button) return; x0 = e.clientX; dx = 0; moved = false; });
+  el.addEventListener("pointermove", e => {
+    if(x0 === null) return;
+    dx = e.clientX - x0;
+    if(!moved && Math.abs(dx) > 10){ moved = true; try{ el.setPointerCapture(e.pointerId); }catch(_){} }
+    if(moved){ el.style.transition = "none"; el.style.transform = `translateX(${dx}px) rotate(${dx / 24}deg)`; el.dataset.lean = dx > 50 ? "r" : dx < -50 ? "l" : ""; }
+  });
+  const end = () => {
+    if(x0 === null) return;
+    x0 = null; el.style.transition = "";
+    if(moved && Math.abs(dx) > 90){ el.style.transform = `translateX(${Math.sign(dx) * 130}%) rotate(${Math.sign(dx) * 14}deg)`; el.style.opacity = "0"; setTimeout(() => onSwipe(Math.sign(dx)), 170); }
+    else { el.style.transform = ""; el.dataset.lean = ""; }
+  };
+  el.addEventListener("pointerup", end); el.addEventListener("pointercancel", end);
+  el.addEventListener("click", e => { if(moved){ e.stopImmediatePropagation(); e.preventDefault(); moved = false; } }, true);
+}
 
 /* ---------- verbs ---------- */
 const PRON = ["ich","du","er/sie/es","wir","ihr","sie/Sie"];
@@ -941,9 +1118,10 @@ $("#v-suggest").addEventListener("click", e => { const b = e.target.closest(".ro
 $("#v-common").addEventListener("click", e => { if(e.target.classList.contains("chip")) showVerb(e.target.textContent); });
 
 /* drill */
-const drill = {t:"pr", lv:1, cur:null, answered:false};
+const drill = {t:"pr", cur:null, answered:false};
 function drillNext(){
-  const pool = drill.lv ? LEVEL_VERBS[drill.lv] : VERB_LIST.slice(0, 300);
+  let pool = upTo(LEVEL_VERBS, myLevel());
+  if(!pool.length) pool = VERB_LIST.slice(0, 300);
   const inf = pool[Math.floor(Math.random() * pool.length)], v = VERBS[inf], p = Math.floor(Math.random() * 6);
   let ans;
   if(drill.t === "pf"){ const aux = v.a.includes("sein") && !v.a.includes("haben") ? "sein" : "haben"; ans = AUX[aux].pr[p] + " " + v.pp; }
@@ -963,7 +1141,6 @@ $("#drill-form").addEventListener("submit", e => {
   $("#drill-fb").innerHTML = ok ? `<span class="ok">Richtig!</span> ${PRON[drill.cur.p]} ${esc(drill.cur.ans)}. Press Enter for the next one.` : `<span class="bad">Not quite.</span> ${PRON[drill.cur.p]} <b>${esc(drill.cur.ans)}</b>. Press Enter for the next one.`;
 });
 $("#drill-skip").onclick = drillNext;
-$("#drill-level").addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; drill.lv = +b.dataset.lv; $("#drill-level").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); drillNext(); });
 $("#drill-tense").addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; drill.t = b.dataset.t; $("#drill-tense").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); drillNext(); });
 
 /* ---------- flashcards ---------- */
@@ -1041,51 +1218,271 @@ function addLevel(L){
 }
 function addLevelHtml(){
   const left = [0, 1, 2, 3].map(L => LEVEL_WORDS[L].filter(i => !saved[keyOf(ROWS[i])]).length);
-  return `<div class="add-lv"><span class="muted small">Add 20 words from</span>${[1, 2, 3].map(L =>
+  return `<div class="add-lv"><span class="muted small">Add 20 words from</span>${[1, 2, 3].filter(L => L <= myLevel()).map(L =>
     `<button type="button" class="btn ghost" data-add="${L}" ${left[L] ? "" : "disabled"}><b>${LV[L]}</b><span>${left[L]} left</span></button>`).join("")}</div>`;
 }
-$("#learn-area").addEventListener("click", e => { const b = e.target.closest("[data-add]"); if(b) addLevel(+b.dataset.add); });
 function findRow(k){ const [w, p] = k.split("|"); return (BYW.get(w.toLowerCase()) || []).find(i => ROWS[i][0] === w && ROWS[i][1] === p); }
+
+/* Üben has four ways to practise, like Quizlet: flashcards (spaced repetition on your saved words),
+   choose from four, write the answer, and a timed matching game. The last three use your level's
+   words or your saved words, German to English or the other way round. */
+const qz = {mode: store.get("mode", "cards"), dir: store.get("dir", "de"), src: store.get("src", "level"), round: null};
+const LEARN_SUB = {
+  cards: "Star words in the dictionary to add them here. Words you know come back less often; words you miss come back soon.",
+  mc: "Pick the right answer out of four. Ten questions a round.",
+  type: "Write the answer yourself. Ten questions a round.",
+  match: "Tap a German word, then its meaning. Clear the board as fast as you can.",
+};
 function renderLearn(){
   if(!ROWS.length) return;
-  const keys = Object.keys(saved);
+  const keys = Object.keys(saved), L = myLevel();
   $("#saved-count").textContent = keys.length ? `(${keys.length})` : "";
-  const area = $("#learn-area"), n = srsCounts();
+  $("#learn-mode").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.m === qz.mode));
+  $("#learn-sub").textContent = LEARN_SUB[qz.mode];
+  $("#learn-level").innerHTML = `<span class="lv l${L}">${LV[L]}</span>${L < 3 ? `Take the ${LV[L + 1]} test` : "Your level"}`;
+  $("#learn-dir").innerHTML = `${qz.dir === "de" ? "German → English" : "English → German"}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg>`;
+  $("#learn-dir").hidden = qz.mode === "match";
+  $("#learn-src").hidden = qz.mode === "cards";
+  if(keys.length < 4 && qz.src === "saved"){ qz.src = "level"; qz.round = null; }
+  $("#src-saved").disabled = keys.length < 4;
+  $("#src-saved").title = keys.length < 4 ? "Save at least 4 words first" : "";
+  $("#src-level").textContent = lvRange(L) + " words";
+  $("#learn-src").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.src === qz.src));
+  $("#saved-wrap").hidden = qz.mode !== "cards";
+  if(qz.mode === "cards") renderCards(); else renderQuiz();
+  const list = keys.map(findRow).filter(i => i !== undefined);
+  $("#saved-list").innerHTML = list.length ? `<div class="results">${list.map(i => rowHtml(i)).join("")}</div>` : `<p class="muted small" style="margin:0">Nothing saved yet.</p>`;
+}
+function renderCards(){
+  const keys = Object.keys(saved), area = $("#learn-area"), n = srsCounts();
   const stats = `<div class="srs-stats">
     <div class="s-new"><b>${n.fresh}</b>New</div><div class="s-learn"><b>${n.learning}</b>Learning</div><div class="s-rev"><b>${n.review}</b>To review</div>
   </div><p class="muted small srs-foot">${n.known} of ${keys.length} words known well · ${n.tomorrow} due by tomorrow</p>${addLevelHtml()}`;
   if(!keys.length){
     area.innerHTML = `<div class="card empty"><b style="color:var(--fg)">No saved words yet</b><span>Tap the star on any dictionary entry, or start with the 20 most useful words of a level.</span>${addLevelHtml()}</div>`;
-  } else {
-    const q = studyQueue();
-    if(!q.length){
-      const more = keys.some(k => saved[k].reps === 0);
-      area.innerHTML = `<div class="card empty"><b style="color:var(--fg)">All done for now</b><span>${more ? `You've had today's ${SRS.NEW_PER_DAY} new words. More arrive tomorrow.` : "No cards are due. Come back later, or star more words."}</span>${stats}</div>`;
-    } else {
-      if(!fc.k || !q.includes(fc.k)){ fc.k = q[0]; fc.flipped = false; }
-      const i = findRow(fc.k), r = i !== undefined ? ROWS[i] : null;
-      if(!r){ delete saved[fc.k]; store.set("saved", saved); fc.k = null; return renderLearn(); }
-      const c = saved[fc.k], g = r[1] === "noun" ? r[2] : "";
-      const tag = c.reps === 0 ? `<span class="tag t-new">new</span>` : c.step >= 0 ? `<span class="tag t-learn">learning</span>` : "";
-      const ex = (EXAMPLES[fc.k] || [])[0];
-      const front = `<div class="eyebrow">${POSN[r[1]] || r[1]} ${tag}</div><div class="w">${esc(r[0])}</div><div class="muted small">Tap to reveal</div>`;
-      const back = `<div class="eyebrow">${POSN[r[1]] || r[1]}</div><div class="w ${g ? "w-"+g : ""}">${g ? ART[g] + " " : ""}${esc(r[0])}</div>${g && r[3] ? `<div class="muted small">die ${esc(r[3])}</div>` : ""}<div>${r[4].slice(0,2).map(esc).join("; ")}</div>${ex ? `<div class="fc-ex"><i>${esc(ex[0])}</i><span>${esc(ex[1])}</span></div>` : ""}`;
-      const names = ["Again", "Hard", "Good", "Easy"];
-      area.innerHTML = `<div class="flash"><button type="button" class="face" id="fc-face">${fc.flipped ? back : front}</button></div>
-        ${fc.flipped ? `<div class="grades">${names.map((nm, gi) => `<button type="button" class="grade g${gi}" data-g="${gi}"><b>${nm}</b></button>`).join("")}</div>`
-                     : `<div class="btn-row" style="justify-content:center"><button class="btn" type="button" id="fc-show">Show answer</button></div>`}${stats}`;
-      const flip = () => { fc.flipped = !fc.flipped; if(fc.flipped) speak((g ? ART[g] + " " : "") + r[0]); renderLearn(); };
-      $("#fc-face").onclick = flip;
-      if(!fc.flipped) $("#fc-show").onclick = flip;
-      else area.querySelectorAll(".grade").forEach(b => b.onclick = () => {
-        if(c.reps === 0) store.set("newToday", {day: today(), n: newDone() + 1});
-        saved[fc.k] = SRS.next(c, +b.dataset.g); store.set("saved", saved); fc.k = null; renderLearn();
-      });
-    }
+    return;
   }
-  const list = keys.map(findRow).filter(i => i !== undefined);
-  $("#saved-list").innerHTML = list.length ? `<div class="results">${list.map(i => rowHtml(i)).join("")}</div>` : `<p class="muted small" style="margin:0">Nothing saved yet.</p>`;
+  const q = studyQueue();
+  if(!q.length){
+    const more = keys.some(k => saved[k].reps === 0);
+    area.innerHTML = `<div class="card empty"><b style="color:var(--fg)">All done for now</b><span>${more ? `You've had today's ${SRS.NEW_PER_DAY} new words. More arrive tomorrow.` : "No cards are due. Try Choose, Write or Match meanwhile, or star more words."}</span>${stats}</div>`;
+    return;
+  }
+  if(!fc.k || !q.includes(fc.k)){ fc.k = q[0]; fc.flipped = false; }
+  const i = findRow(fc.k), r = i !== undefined ? ROWS[i] : null;
+  if(!r){ delete saved[fc.k]; store.set("saved", saved); fc.k = null; return renderCards(); }
+  const c = saved[fc.k], g = r[1] === "noun" ? r[2] : "";
+  const tag = c.reps === 0 ? `<span class="tag t-new">new</span>` : c.step >= 0 ? `<span class="tag t-learn">learning</span>` : "";
+  const ex = (EXAMPLES[fc.k] || [])[0];
+  const front = qz.dir === "de"
+    ? `<div class="eyebrow">${POSN[r[1]] || r[1]} ${tag}</div><div class="w">${esc(r[0])}</div><div class="muted small">Tap to reveal</div>`
+    : `<div class="eyebrow">${POSN[r[1]] || r[1]} ${tag}</div><div class="w en">${r[4].slice(0, 2).map(esc).join("; ")}</div><div class="muted small">Say it in German, then tap</div>`;
+  const back = `<div class="eyebrow">${POSN[r[1]] || r[1]}</div><div class="w ${g ? "w-"+g : ""}">${g ? ART[g] + " " : ""}${esc(r[0])}</div>${g && r[3] ? `<div class="muted small">die ${esc(r[3])}</div>` : ""}<div>${r[4].slice(0,2).map(esc).join("; ")}</div>${ex ? `<div class="fc-ex"><i>${esc(ex[0])}</i><span>${esc(ex[1])}</span></div>` : ""}`;
+  const names = ["Again", "Hard", "Good", "Easy"];
+  area.innerHTML = `<div class="flash"><button type="button" class="face" id="fc-face" data-l="Again" data-r="Good">${fc.flipped ? back : front}</button></div>
+    ${fc.flipped ? `<div class="grades">${names.map((nm, gi) => `<button type="button" class="grade g${gi}" data-g="${gi}"><b>${nm}</b></button>`).join("")}</div>`
+                 : `<div class="btn-row" style="justify-content:center"><button class="btn" type="button" id="fc-show">Show answer</button></div>`}
+    <p class="muted small swipe-hint">Swipe right for Good, left for Again.</p>${stats}`;
+  const flip = () => { fc.flipped = !fc.flipped; if(fc.flipped) speak((g ? ART[g] + " " : "") + r[0]); renderLearn(); };
+  const grade = gi => {
+    if(c.reps === 0) store.set("newToday", {day: today(), n: newDone() + 1});
+    saved[fc.k] = SRS.next(c, gi); store.set("saved", saved); fc.k = null; renderLearn();
+  };
+  $("#fc-face").onclick = flip;
+  swipeable($("#fc-face"), d => grade(d > 0 ? 2 : 0));
+  if(!fc.flipped) $("#fc-show").onclick = flip;
+  else area.querySelectorAll(".grade").forEach(b => b.onclick = () => grade(+b.dataset.g));
 }
+
+/* ---------- quizzes ---------- */
+function quizPool(src = qz.src){
+  if(src === "saved"){ const s = Object.keys(saved).map(findRow).filter(i => i !== undefined && ROWS[i][4].length); if(s.length >= 4) return s; }
+  return upTo(LEVEL_WORDS, myLevel()).filter(i => ROWS[i][4].length);
+}
+// n random words with no repeated word or meaning, so every question has one right answer.
+function pickUnique(pool, n){
+  const out = [], words = new Set(), glosses = new Set();
+  for(const i of shuffle(pool.slice())){
+    const w = ROWS[i][0].toLowerCase(), g = shortGloss(ROWS[i]).toLowerCase();
+    if(words.has(w) || glosses.has(g)) continue;
+    words.add(w); glosses.add(g); out.push(i);
+    if(out.length === n) break;
+  }
+  return out;
+}
+// The right answer plus three others, the same part of speech where possible.
+function options(i, pool, showEN){
+  const r = ROWS[i], key = j => (showEN ? shortGloss(ROWS[j]) : ROWS[j][0]).toLowerCase();
+  if(pool.length < 12) pool = pool.concat(upTo(LEVEL_WORDS, 3));
+  const same = [], other = [];
+  for(const j of shuffle(pool.slice(0, 4000))) if(j !== i) (ROWS[j][1] === r[1] ? same : other).push(j);
+  const out = [i], seen = new Set([key(i)]);
+  for(const j of same.concat(other)){ if(out.length === 4) break; const k = key(j); if(seen.has(k)) continue; seen.add(k); out.push(j); }
+  return shuffle(out);
+}
+function newRound(){
+  const pool = quizPool();
+  if(qz.mode === "match"){
+    const picks = pickUnique(pool, 6);
+    qz.round = {kind: "match", tiles: shuffle(picks.flatMap(i => [{i, de: true}, {i, de: false}])), sel: null, left: picks.length, t0: 0, pen: 0, time: 0};
+  } else qz.round = {kind: qz.mode, dir: qz.dir, pool, items: pickUnique(pool, 10), n: 0, right: 0, missed: [], answered: false, opts: null, pick: null, note: ""};
+}
+
+// Answer checking for Write. German: ignore case, allow a missing umlaut or one typo, but a wrong article is wrong.
+const fold = s => s.toLowerCase().replace(/[.!?;:"]/g, "").replace(/\s+/g, " ").trim();
+const deFold = s => fold(s).replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss");
+const enFold = s => fold(s.replace(/\([^)]*\)/g, " ")).replace(/,/g, "").replace(/^(to|a|an|the) /, "").trim();
+function lev(a, b){
+  if(Math.abs(a.length - b.length) > 1) return 2;
+  let prev = Array.from({length: b.length + 1}, (_, k) => k);
+  for(let x = 1; x <= a.length; x++){
+    const cur = [x];
+    for(let y = 1; y <= b.length; y++) cur[y] = Math.min(prev[y] + 1, cur[y - 1] + 1, prev[y - 1] + (a[x - 1] === b[y - 1] ? 0 : 1));
+    prev = cur;
+  }
+  return prev[b.length];
+}
+function checkDE(given, r){
+  let g = fold(given), art = "";
+  const m = g.match(/^(der|die|das) (.+)$/);
+  if(m && r[1] === "noun"){ art = m[1]; g = m[2]; }
+  const w = fold(r[0]);
+  const exact = g === w, close = !exact && (deFold(g) === deFold(w) || (w.length >= 5 && lev(g, w) <= 1));
+  if(!exact && !close) return {ok: false};
+  if(art && ART[r[2]] && art !== ART[r[2]]) return {ok: false, note: `Right word, wrong article: it's ${ART[r[2]]} ${r[0]}.`};
+  return {ok: true, note: close ? `Watch the spelling: ${r[0]}.` : ""};
+}
+function checkEN(given, r){
+  const g = enFold(given);
+  if(!g) return {ok: false};
+  const answers = new Set();
+  (BYW.get(r[0].toLowerCase()) || []).filter(j => ROWS[j][0] === r[0]).forEach(j => ROWS[j][4].forEach(sense =>
+    sense.replace(/\([^)]*\)/g, " ").split(/[;,]/).forEach(p => { const a = enFold(p); if(a) answers.add(a); })));
+  if(answers.has(g)) return {ok: true, note: ""};
+  for(const a of answers) if(a.length >= 5 && lev(a, g) <= 1) return {ok: true, note: `Watch the spelling: ${a}.`};
+  return {ok: false};
+}
+
+function qProgress(R){
+  return `<div class="qtop"><div class="qbar"><i style="width:${Math.round(100 * R.n / R.items.length)}%"></i></div><span>${R.n + 1} / ${R.items.length}</span></div>`;
+}
+function renderQuiz(){
+  const area = $("#learn-area");
+  if(!qz.round || qz.round.kind !== qz.mode || (qz.round.dir && qz.round.dir !== qz.dir)) newRound();
+  const R = qz.round;
+  if(R.kind === "match") return renderMatch();
+  if(!R.items.length){ area.innerHTML = `<div class="card empty"><b style="color:var(--fg)">No words to practise</b><span>Star a few words in the dictionary first.</span></div>`; return; }
+  if(R.n >= R.items.length) return renderResult();
+  const i = R.items[R.n], r = ROWS[i], de = R.dir === "de", g = r[1] === "noun" ? r[2] : "";
+  const prompt = de
+    ? `<div class="eyebrow">${R.kind === "mc" ? "Pick the meaning" : "Write the meaning in English"}</div><div class="qword ${g ? "w-" + g : ""}">${esc(deWord(r))}</div><button class="icon-btn sm" type="button" id="q-say" aria-label="Pronounce">${ICON.speak}</button>`
+    : `<div class="eyebrow">${R.kind === "mc" ? "Pick the German" : "Write it in German"} · ${POSN[r[1]] || r[1]}</div><div class="qword en">${esc(shortGloss(r))}</div>`;
+  let body = "";
+  if(R.kind === "mc"){
+    if(!R.opts) R.opts = options(i, R.pool, de);
+    body = `<div class="mc">${R.opts.map((j, k) => {
+      const st = !R.answered ? "" : j === i ? "right" : j === R.pick ? "wrong" : "dim";
+      const rj = ROWS[j], gj = rj[1] === "noun" ? rj[2] : "";
+      return `<button type="button" class="opt ${st}" data-o="${j}" ${R.answered ? "disabled" : ""}><kbd>${k + 1}</kbd><span class="${!de && gj ? "w-" + gj : ""}">${esc(de ? shortGloss(rj) : deWord(rj))}</span></button>`;
+    }).join("")}</div>`;
+  } else {
+    body = `<form class="q-form" id="q-form" autocomplete="off"><input id="q-in" type="text" autocapitalize="off" spellcheck="false" placeholder="${de ? "Meaning in English" : "German word" + (g ? ", with der, die or das if you know it" : "")}" aria-label="Your answer" ${R.answered ? "readonly" : ""}>
+      <button class="btn" type="submit">${R.answered ? "Next" : "Check"}</button></form>
+      ${!de && !R.answered ? `<div class="uml" data-target="q-in"><button type="button">ä</button><button type="button">ö</button><button type="button">ü</button><button type="button">ß</button></div>` : ""}
+      ${R.answered ? "" : `<button type="button" class="link-btn" id="q-dunno">I don't know</button>`}`;
+  }
+  const full = `<b class="${g ? "w-" + g : ""}">${esc(deWord(r))}</b> · ${esc(r[4].slice(0, 2).map(x => x.replace(/\s*\([^)]*\)/g, "")).join("; "))}`;
+  const fb = !R.answered ? "" : R.pick === i ? `<span class="ok">Richtig!</span> ${full}${R.note ? `<div class="small muted">${esc(R.note)}</div>` : ""}` : `<span class="bad">${R.note ? esc(R.note) : "Not quite."}</span> ${full}`;
+  area.innerHTML = `<div class="qwrap">${qProgress(R)}<div class="card qcard">${prompt}</div>${body}<div class="feedback q-fb">${fb}</div>
+    ${R.answered && R.kind === "mc" ? `<div class="btn-row center"><button type="button" class="btn" id="q-next">Next</button></div>` : ""}</div>`;
+  const inp = $("#q-in");
+  if(inp && !R.answered){ inp.value = R.typed || ""; if(matchMedia("(hover:hover)").matches) inp.focus(); }
+  if(inp && R.answered){ inp.value = R.typed || ""; }
+  if(R.answered && R.kind === "type") $("#q-form .btn").focus();
+}
+function qAnswer(pick, note = ""){
+  const R = qz.round, i = R.items[R.n];
+  if(R.answered) return;
+  R.answered = true; R.pick = pick; R.note = note;
+  if(pick === i) R.right++; else R.missed.push(i);
+  speak(deWord(ROWS[i]));
+  renderQuiz();
+  if(pick === i && R.kind === "mc"){ const n = R.n; setTimeout(() => { if(qz.round === R && R.n === n && R.answered && !$("#view-learn").hidden) qNext(); }, 1000); }
+}
+function qNext(){ const R = qz.round; R.n++; R.answered = false; R.opts = null; R.pick = null; R.note = ""; R.typed = ""; renderQuiz(); }
+function renderResult(){
+  const R = qz.round, n = R.items.length, unsaved = R.missed.filter(i => !saved[keyOf(ROWS[i])]);
+  const msg = R.right === n ? "Perfect round." : R.right >= n * .8 ? "Very good." : R.right >= n / 2 ? "Good start. The missed words are below." : "These need more practice. Add them to your flashcards.";
+  $("#learn-area").innerHTML = `<div class="card result"><div class="score"><b>${R.right}</b> / ${n}</div><p>${msg}</p>
+    ${R.missed.length ? `<ul class="missed">${R.missed.map(i => { const r = ROWS[i], g = r[1] === "noun" ? r[2] : ""; return `<li><b class="${g ? "w-" + g : ""}">${esc(deWord(r))}</b><span>${esc(shortGloss(r))}</span></li>`; }).join("")}</ul>` : ""}
+    <div class="btn-row center"><button type="button" class="btn" id="q-again">New round</button>${unsaved.length ? `<button type="button" class="btn ghost" id="q-save">Add ${unsaved.length === 1 ? "it" : "these " + unsaved.length} to flashcards</button>` : ""}</div></div>`;
+}
+
+/* match */
+function renderMatch(){
+  const R = qz.round, best = store.get("matchBest", 0);
+  if(R.tiles.length < 4){ $("#learn-area").innerHTML = `<div class="card empty"><b style="color:var(--fg)">Not enough words</b><span>Star a few more words first.</span></div>`; return; }
+  if(!R.left){
+    $("#learn-area").innerHTML = `<div class="card result"><div class="score"><b>${R.time.toFixed(1)}</b> s</div>
+      <p>${R.time <= best || !best ? "New best time!" : `Your best is ${best.toFixed(1)} s.`}${R.pen ? ` Includes ${R.pen} s for wrong pairs.` : ""}</p>
+      <div class="btn-row center"><button type="button" class="btn" id="q-again">Play again</button></div></div>`;
+    return;
+  }
+  $("#learn-area").innerHTML = `<div class="match-top"><b id="m-time">${R.t0 ? ((Date.now() - R.t0) / 1000 + R.pen).toFixed(1) : "0.0"} s</b><span class="muted small">${best ? `Best ${best.toFixed(1)} s · ` : ""}wrong pair +1 s</span></div>
+    <div class="match">${R.tiles.map((t, k) => { const r = ROWS[t.i], g = t.de && r[1] === "noun" ? r[2] : "";
+      return `<button type="button" class="mt ${t.gone ? "gone" : ""} ${R.sel === k ? "sel" : ""} ${t.de ? "de" : ""}" data-t="${k}" ${t.gone ? "disabled" : ""}><span class="${g ? "w-" + g : ""}">${esc(t.de ? deWord(r) : tileGloss(r))}</span></button>`; }).join("")}</div>`;
+}
+function matchTap(k){
+  const R = qz.round, t = R.tiles[k];
+  if(t.gone) return;
+  if(!R.t0){ R.t0 = Date.now(); const tick = setInterval(() => { const el = $("#m-time"); if(qz.round !== R || !R.left || !el){ clearInterval(tick); return; } el.textContent = ((Date.now() - R.t0) / 1000 + R.pen).toFixed(1) + " s"; }, 100); }
+  if(R.sel === null || R.sel === k){ R.sel = R.sel === k ? null : k; return renderMatch(); }
+  const o = R.tiles[R.sel];
+  if(o.i === t.i && o.de !== t.de){
+    o.gone = t.gone = true; R.sel = null; R.left--;
+    if(!R.left){ R.time = (Date.now() - R.t0) / 1000 + R.pen; const best = store.get("matchBest", 0); if(!best || R.time < best) store.set("matchBest", Math.round(R.time * 10) / 10); }
+    renderMatch();
+  } else {
+    R.pen++; const a = R.sel; R.sel = null; renderMatch();
+    [a, k].forEach(x => { const b = $(`.mt[data-t="${x}"]`); if(b) b.classList.add("no"); });
+  }
+}
+
+$("#learn-area").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if(!b) return;
+  const R = qz.round;
+  if(b.dataset.add) addLevel(+b.dataset.add);
+  else if(b.dataset.o !== undefined) qAnswer(+b.dataset.o);
+  else if(b.dataset.t !== undefined) matchTap(+b.dataset.t);
+  else if(b.id === "q-next") qNext();
+  else if(b.id === "q-say") speak(deWord(ROWS[R.items[R.n]]));
+  else if(b.id === "q-dunno"){ R.typed = ""; qAnswer(-1, "The answer:"); }
+  else if(b.id === "q-again"){ qz.round = null; renderLearn(); }
+  else if(b.id === "q-save"){ R.missed.forEach(i => { const k = keyOf(ROWS[i]); if(!saved[k]) saved[k] = SRS.fresh(); }); store.set("saved", saved); renderLearn(); renderResult(); }
+});
+$("#learn-area").addEventListener("submit", e => {
+  e.preventDefault();
+  const R = qz.round;
+  if(R.answered){ qNext(); return; }
+  const given = $("#q-in").value;
+  if(!given.trim()) return;
+  R.typed = given;
+  const i = R.items[R.n], res = R.dir === "de" ? checkEN(given, ROWS[i]) : checkDE(given, ROWS[i]);
+  qAnswer(res.ok ? i : -1, res.note || "");
+});
+$("#learn-mode").addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; qz.mode = b.dataset.m; store.set("mode", qz.mode); renderLearn(); });
+$("#learn-dir").onclick = () => { qz.dir = qz.dir === "de" ? "en" : "de"; store.set("dir", qz.dir); fc.flipped = false; renderLearn(); };
+$("#learn-src").addEventListener("click", e => { const b = e.target.closest("button"); if(!b || b.disabled) return; qz.src = b.dataset.src; store.set("src", qz.src); qz.round = null; renderLearn(); });
+$("#learn-level").onclick = () => openLevel();
+document.addEventListener("keydown", e => {
+  if($("#view-learn").hidden || !$("#tour").hidden || !$("#lvl").hidden || e.target.tagName === "INPUT") return;
+  const R = qz.round;
+  if(qz.mode === "mc" && R && R.kind === "mc" && R.n < R.items.length){
+    if(/^[1-4]$/.test(e.key) && !R.answered && R.opts) qAnswer(R.opts[+e.key - 1]);
+    else if(e.key === "Enter" && R.answered){ e.preventDefault(); qNext(); }
+  }
+});
 $("#saved-list").addEventListener("click", e => { const b = e.target.closest(".row"); if(b){ show("dict"); $("#q").value = ROWS[+b.dataset.i][0]; runSearch(); showEntry(+b.dataset.i); } });
 
 /* ---------- grammar ---------- */
@@ -1130,12 +1527,101 @@ function setTheme(t){
 if(store.get("theme", "light") === "dark") setTheme("dark");
 $("#theme-toggle").onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
 
+/* ---------- your level and the move-up test ---------- */
+const TEST_N = 12, TEST_PASS = 10;
+const lt = {view: "home", items: [], n: 0, right: 0, pick: null, L: 0, back: null};
+function openLevel(){ lt.view = "home"; lt.back = document.activeElement; $("#lvl").hidden = false; renderLevel(); $("#lvl .tour-card").focus(); }
+function closeLevel(){ $("#lvl").hidden = true; if(lt.back && lt.back.focus) lt.back.focus(); }
+// Twelve words from the next level: meaning, German word, and for nouns the article.
+function startTest(){
+  const L = myLevel() + 1, pool = LEVEL_WORDS[L].slice(0, 600).filter(i => ROWS[i][4].length);
+  lt.L = L; lt.n = 0; lt.right = 0; lt.pick = null; lt.view = "test";
+  const nouns = pickUnique(pool.filter(i => ROWS[i][1] === "noun" && "mfn".includes(ROWS[i][2] || "x")), 4);
+  const art = nouns.map(i => ({i, kind: "art", opts: ["m", "f", "n"]}));
+  const words = pickUnique(pool.filter(i => !nouns.includes(i)), TEST_N - art.length).map((i, k) => ({i, kind: k % 2 ? "en" : "de", opts: options(i, pool, !(k % 2))}));
+  lt.items = shuffle(art.concat(words));
+  renderLevel();
+}
+function renderLevel(){
+  const L = myLevel(), body = $("#lvl-body");
+  $(".lvl-head").textContent = lt.view === "home" ? "Your level" : `${LV[lt.L]} test`;
+  if(lt.view === "home"){
+    body.innerHTML = `<div class="lvl-now"><span class="lv l${L}">${LV[L]}</span><div><h2 id="lvl-title">You're at ${LV[L]}</h2><p>The word of the day, quizzes and flashcards use ${lvRange(L)} words.</p></div></div>
+      ${L < 3 ? `<div class="lvl-test"><h3>Ready for ${LV[L + 1]}?</h3><p>${TEST_N} quick questions on ${LV[L + 1]} words. Get ${TEST_PASS} right to move up.</p><button type="button" class="btn" id="lt-start">Take the ${LV[L + 1]} test</button></div>`
+              : `<p class="muted" style="margin:0">B1 is the highest level here. Keep practising with the quizzes and the grammar topics.</p>`}
+      <div class="lvl-pick"><h3>Or choose your level yourself</h3><div class="levels">${[[1, "Beginner"], [2, "Elementary"], [3, "Intermediate"]].map(([k, a]) =>
+        `<button type="button" data-set="${k}" aria-pressed="${k === L}"><span class="lv l${k}">${LV[k]}</span><b>${a}</b><span>${k === 1 ? "A1 words" : "A1 to " + LV[k] + " words"}</span></button>`).join("")}</div></div>`;
+    return;
+  }
+  if(lt.view === "result"){
+    const pass = lt.right >= TEST_PASS;
+    body.innerHTML = `<div class="result"><div class="score"><b>${lt.right}</b> / ${TEST_N}</div>
+      ${pass ? `<h2 id="lvl-title">Welcome to ${LV[lt.L]}! 🎉</h2><p>The word of the day, quizzes and flashcards now include ${LV[lt.L]} words.</p>
+        <div class="btn-row center"><button type="button" class="btn" id="lt-add">Add 20 ${LV[lt.L]} words to flashcards</button><button type="button" class="btn ghost" id="lvl-done">Done</button></div>`
+      : `<h2 id="lvl-title">Not quite yet</h2><p>You need ${TEST_PASS} right to move up. Keep practising and try again whenever you like.</p>
+        <div class="btn-row center"><button type="button" class="btn" id="lt-start">Try again</button><button type="button" class="btn ghost" id="lvl-done">Close</button></div>`}</div>`;
+    return;
+  }
+  const q = lt.items[lt.n], r = ROWS[q.i], g = r[1] === "noun" ? r[2] : "", done = lt.pick !== null;
+  const right = q.kind === "art" ? r[2] : q.i;
+  let prompt, opts;
+  if(q.kind === "art"){
+    prompt = `<div class="eyebrow">der, die or das?</div><div class="qword ${done ? "w-" + g : ""}">${esc(r[0])}</div><div class="muted small">${esc(shortGloss(r))}</div>`;
+    opts = `<div class="choices">${q.opts.map(a => `<button type="button" class="${a} ${done ? (a === right ? "right" : "wrong") : ""}" data-a="${a}" ${done ? "disabled" : ""}>${ART[a]}</button>`).join("")}</div>`;
+  } else {
+    const de = q.kind === "de";
+    prompt = de ? `<div class="eyebrow">Pick the meaning</div><div class="qword ${g ? "w-" + g : ""}">${esc(deWord(r))}</div>`
+                : `<div class="eyebrow">Pick the German · ${POSN[r[1]] || r[1]}</div><div class="qword en">${esc(shortGloss(r))}</div>`;
+    opts = `<div class="mc">${q.opts.map((j, k) => { const st = !done ? "" : j === right ? "right" : j === lt.pick ? "wrong" : "dim";
+      return `<button type="button" class="opt ${st}" data-a="${j}" ${done ? "disabled" : ""}><kbd>${k + 1}</kbd><span>${esc(de ? shortGloss(ROWS[j]) : deWord(ROWS[j]))}</span></button>`; }).join("")}</div>`;
+  }
+  body.innerHTML = `<div class="qwrap"><div class="qtop"><div class="qbar"><i style="width:${Math.round(100 * lt.n / TEST_N)}%"></i></div><span>${lt.n + 1} / ${TEST_N}</span></div>
+    <div class="qcard lvl-q" id="lvl-title">${prompt}</div>${opts}
+    <div class="btn-row center">${done ? `<button type="button" class="btn" id="lt-next">${lt.n + 1 < TEST_N ? "Next" : "See result"}</button>` : ""}</div></div>`;
+  if(done) $("#lt-next").focus();
+}
+function testAnswer(a){
+  const q = lt.items[lt.n];
+  if(lt.pick !== null) return;
+  lt.pick = q.kind === "art" ? a : +a;
+  if(lt.pick === (q.kind === "art" ? ROWS[q.i][2] : q.i)) lt.right++;
+  renderLevel();
+}
+function testNext(){
+  lt.n++; lt.pick = null;
+  if(lt.n < TEST_N) return renderLevel();
+  lt.view = "result";
+  if(lt.right >= TEST_PASS) applyLevel(lt.L);
+  renderLevel();
+}
+$("#lvl").addEventListener("click", e => {
+  if(e.target.id === "lvl"){ closeLevel(); return; }
+  const b = e.target.closest("button");
+  if(!b) return;
+  if(b.id === "lt-start") startTest();
+  else if(b.id === "lt-next") testNext();
+  else if(b.id === "lvl-done") closeLevel();
+  else if(b.id === "lt-add"){ addLevel(lt.L); closeLevel(); show("learn"); }
+  else if(b.dataset.a !== undefined) testAnswer(b.dataset.a);
+  else if(b.dataset.set){ applyLevel(+b.dataset.set); renderLevel(); }
+});
+$("#lvl-close").onclick = closeLevel;
+document.addEventListener("keydown", e => {
+  if($("#lvl").hidden) return;
+  if(e.key === "Escape") closeLevel();
+  else if(lt.view === "test" && lt.pick === null && /^[1-4]$/.test(e.key)){ const q = lt.items[lt.n], a = q.opts[+e.key - 1]; if(a !== undefined) testAnswer(a); }
+});
+
 /* ---------- walkthrough ---------- */
 const TOUR_ICONS = [...document.querySelectorAll("nav.tabs button")].map(b => `<div>${b.querySelector("svg").outerHTML}${b.textContent.trim()}</div>`).join("");
-const tour = {n: 0, level: store.get("level", 1), add: true, timer: null, back: null};
+const tour = {n: 0, level: myLevel(), add: true, sawLevel: false, timer: null, back: null};
 const TOUR = [
   {title: "Willkommen! A little German every day", text: "Five tools in one place. This walkthrough shows each one in under a minute.",
    demo: () => `<div class="demo-icons">${TOUR_ICONS}</div>`},
+  {title: "Where are you starting?", text: "Your level picks the word of the day and the words in quizzes and flashcards. Lower levels are included, so A2 also has the A1 words. A short test moves you up later.", level: true,
+   demo: () => `<div class="levels" id="tour-levels">${[[1, "Beginner", "I'm just starting out"], [2, "Elementary", "I know the basics"], [3, "Intermediate", "I can hold a conversation"]].map(([L, a, b]) =>
+       `<button type="button" data-level="${L}" aria-pressed="${tour.level === L}"><span class="lv l${L}">${LV[L]}</span><b>${a}</b><span>${b}</span></button>`).join("")}</div>
+     ${Object.keys(saved).length ? "" : `<label class="check"><input type="checkbox" id="tour-add" ${tour.add ? "checked" : ""}> Add my first 20 words to the flashcards</label>`}`},
   {title: "Look up any word, both ways", text: "Type German or English. Forms like ging or Häuser find their base word, with the meaning, examples and pronunciation.",
    demo: () => `<div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span id="tour-typed"></span></div><div id="tour-hit"></div>`, play: playSearch},
   {title: "Blue, red, green", text: "Every noun shows its article in colour: blue for der, red for die, green for das. The Der Die Das tab quizzes you until the colours stick.",
@@ -1143,13 +1629,9 @@ const TOUR = [
      <div class="demo-quiz" aria-hidden="true"><span style="background:var(--der)">der</span><span style="background:var(--die)">die</span><span style="background:var(--das)">das</span></div>`},
   {title: "Every verb, every tense", text: "The Verben tab conjugates about 8,900 verbs. Highlighted forms break the regular pattern, so you know which ones to learn by heart.",
    demo: () => `<div class="tbl"><h3>fahren · Präsens</h3><table><tr><td class="pr">ich</td><td>fahr<span class="end">e</span></td></tr><tr><td class="pr">du</td><td><span class="irr">fähr<span class="end">st</span></span></td></tr><tr><td class="pr">er/sie/es</td><td><span class="irr">fähr<span class="end">t</span></span></td></tr><tr><td class="pr">wir</td><td>fahr<span class="end">en</span></td></tr></table></div>`},
-  {title: "Flashcards that remember for you", text: "Star a word to add it to Üben. After each card, tap how well you knew it. Words you know come back less often; words you miss come back soon.",
+  {title: "Practise four ways", text: "Üben has flashcards for your starred words, plus Choose, Write and Match quizzes, German to English or the other way. Swipe a flashcard right if you knew it.",
    demo: () => `<div class="demo-card"><span class="w-n">das Haus</span><div class="small muted" style="font-family:var(--body);font-weight:400">house, home</div></div>
      <div class="demo-grades" aria-hidden="true"><span>Again</span><span>Hard</span><span class="hit">Good</span><span>Easy</span></div>`},
-  {title: "Where are you starting?", text: "This sets the level for the quizzes. You can change it any time.",
-   demo: () => `<div class="levels" id="tour-levels">${[[1, "Beginner", "I'm just starting out"], [2, "Elementary", "I know the basics"], [3, "Intermediate", "I can hold a conversation"]].map(([L, a, b]) =>
-       `<button type="button" data-level="${L}" aria-pressed="${tour.level === L}"><span class="lv l${L}">${LV[L]}</span><b>${a}</b><span>${b}</span></button>`).join("")}</div>
-     ${Object.keys(saved).length ? "" : `<label class="check"><input type="checkbox" id="tour-add" ${tour.add ? "checked" : ""}> Add my first 20 words to the flashcards</label>`}`},
 ];
 function playSearch(){
   const demos = [["ging", "gehen"], ["to run", "laufen"], ["Häuser", "Haus"]];
@@ -1172,26 +1654,35 @@ function renderTour(){
   $("#tour-next").textContent = last ? "Start learning" : "Next";
   $("#tour-skip").hidden = last;
   if(st.play) st.play();
+  if(st.level) tour.sawLevel = true;
 }
 function openTour(at = 0){ tour.n = typeof at === "number" ? at : 0; tour.back = document.activeElement; $("#tour").hidden = false; renderTour(); $("#tour .tour-card").focus(); }
 function closeTour(){
   clearInterval(tour.timer); $("#tour").hidden = true; store.set("toured", true);
   if(tour.back && tour.back.focus) tour.back.focus();
 }
+// Everything that depends on the level redraws when it changes.
 function applyLevel(L){
-  store.set("level", L); dd.lv = L - 1; drill.lv = L;
-  $("#dd-level").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", +x.dataset.lv === L - 1));
-  $("#drill-level").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", +x.dataset.lv === L));
+  const changed = L !== myLevel();
+  store.set("level", L);
+  $("#dd-lv-name").textContent = lvRange(L) + " nouns";
+  if(!changed || !ROWS.length) return;
+  qz.round = null;
+  if(dd.lv !== 3) ddNext();
+  drillNext(); renderLearn(); refreshHome();
+}
+function finishTour(){
+  const adding = tour.sawLevel && tour.add && !Object.keys(saved).length;
+  if(tour.sawLevel) applyLevel(tour.level);
+  if(adding) addLevel(tour.level);
+  closeTour(); if(adding) show("learn"); refreshHome();
 }
 $("#tour-next").onclick = () => {
   if(tour.n < TOUR.length - 1){ tour.n++; renderTour(); return; }
-  applyLevel(tour.level); ddNext(); drillNext();
-  const box = $("#tour-add");
-  if(box && box.checked) addLevel(tour.level);
-  closeTour(); show(box && box.checked ? "learn" : "dict"); refreshHome();
+  finishTour();
 };
 $("#tour-back").onclick = () => { if(tour.n){ tour.n--; renderTour(); } };
-$("#tour-skip").onclick = closeTour;
+$("#tour-skip").onclick = finishTour;
 $("#tour-open").onclick = openTour;
 $("#tour-footer").onclick = openTour;
 $("#tour").addEventListener("click", e => {
@@ -1239,7 +1730,7 @@ async function boot(){
   $("#v-common").innerHTML = ["sein","haben","werden","können","gehen","kommen","sehen","geben","nehmen","anfangen","bringen","wissen"].filter(w => VERBS[w]).map(w => `<button type="button" class="chip">${w}</button>`).join("");
   runSearch();
   showVerb(store.get("verb", "gehen") in VERBS ? store.get("verb", "gehen") : VERB_LIST[0]);
-  if(store.get("level", 0)) applyLevel(store.get("level", 1));
+  applyLevel(myLevel());
   ddNext(); ddStats(); drillNext(); renderLearn();
   fetch("grammar.json?v=" + DATA_VERSION).then(r => r.ok ? r.json() : {topics: []}).then(g => {
     GRAMMAR = g.topics; renderGrammarList(); refreshHome();

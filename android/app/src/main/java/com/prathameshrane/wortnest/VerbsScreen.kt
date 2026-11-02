@@ -122,7 +122,7 @@ fun VerbDetailScreen(vm: AppViewModel, repo: Repository, inf: String, nav: Nav) 
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(inf, fontSize = 34.sp, fontWeight = FontWeight.ExtraBold, modifier = Modifier.weight(1f))
+                FitText(inf, fontSize = 34.sp, fontWeight = FontWeight.ExtraBold, modifier = Modifier.weight(1f))
                 SpeakButton(vm, "$inf, ${v.pt.getOrElse(2) { "" }}, ${v.pp}")
                 if (entry != null) SaveButton(vm, entry)
             }
@@ -206,12 +206,10 @@ private fun TenseTable(t: Conjugation.Table) {
 }
 
 private val tenseNames = listOf("pr" to "Präsens", "pt" to "Präteritum", "pf" to "Perfekt")
-private val drillLevels = listOf(1 to "A1", 2 to "A2", 3 to "B1", 0 to "All")
 
 @Composable
 fun DrillScreen(vm: AppViewModel, repo: Repository, nav: Nav) {
     var tense by rememberSaveable { mutableStateOf("pr") }
-    var level by rememberSaveable { mutableIntStateOf(vm.level) }
     var verb by rememberSaveable { mutableStateOf("") }
     var person by rememberSaveable { mutableIntStateOf(0) }
     var expected by rememberSaveable { mutableStateOf("") }
@@ -222,7 +220,7 @@ fun DrillScreen(vm: AppViewModel, repo: Repository, nav: Nav) {
     val focus = remember { FocusRequester() }
 
     fun next() {
-        val pool = if (level > 0) repo.levelVerbs[level] else repo.verbList.take(300)
+        val pool = upTo(repo.levelVerbs, vm.level).ifEmpty { repo.verbList.take(300) }
         repeat(20) {
             val inf = pool.random()
             val v = repo.verbs.getValue(inf)
@@ -265,18 +263,9 @@ fun DrillScreen(vm: AppViewModel, repo: Repository, nav: Nav) {
                     )
                 }
             }
-            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-                drillLevels.forEachIndexed { i, (lv, label) ->
-                    SegmentedButton(
-                        selected = level == lv,
-                        onClick = { if (level != lv) { level = lv; next() } },
-                        shape = SegmentedButtonDefaults.itemShape(i, drillLevels.size),
-                        label = { Text(label) },
-                    )
-                }
-            }
+            Text("Verbs from ${levelRange(vm.level)}", color = MaterialTheme.colorScheme.onSurfaceVariant)
             CardBox {
-                Text(verb, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold)
+                FitText(verb, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold)
                 repo.verbEntry(verb)?.glosses?.firstOrNull()?.let { Text(it, color = MaterialTheme.colorScheme.onSurfaceVariant) }
                 Text(
                     "${tenseNames.first { it.first == tense }.second} · ${Conjugation.pronouns[person]}",

@@ -33,7 +33,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 @Composable
-fun DictionaryScreen(vm: AppViewModel, repo: Repository, nav: Nav, goTab: (Int) -> Unit, openTour: (Int) -> Unit) {
+fun DictionaryScreen(vm: AppViewModel, repo: Repository, nav: Nav, goTab: (Int) -> Unit, openTour: (Int) -> Unit, openLevel: () -> Unit) {
     var result by remember { mutableStateOf(SearchResult()) }
     val query = vm.dictQuery
     LaunchedEffect(query) {
@@ -49,7 +49,7 @@ fun DictionaryScreen(vm: AppViewModel, repo: Repository, nav: Nav, goTab: (Int) 
         UmlautRow { vm.dictQuery += it }
         LazyColumn(Modifier.fillMaxSize()) {
             if (query.isBlank()) {
-                item { HomeContent(vm, repo, nav, goTab, { openTour(5) }) { vm.dictQuery = it } }
+                item { HomeContent(vm, repo, nav, goTab, openLevel) { vm.dictQuery = it } }
             } else if (result.isEmpty) {
                 item {
                     Text(

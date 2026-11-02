@@ -104,7 +104,10 @@ fun WortNestApp(vm: AppViewModel) {
     BackHandler(enabled = stack.isNotEmpty()) { nav.pop() }
     var tourAt by rememberSaveable { mutableStateOf(if (vm.toured) -1 else 0) }   // step to open the walkthrough at, -1 when closed
     if (tourAt >= 0) TourDialog(vm, repo, tourAt) { added -> tourAt = -1; if (added) { stacks[4].clear(); tab = 4 } }
+    var levelOpen by rememberSaveable { mutableStateOf(false) }
+    if (levelOpen) LevelDialog(vm, repo) { goLearn -> levelOpen = false; if (goLearn) { stacks[4].clear(); tab = 4 } }
 
+    val tabFit = remember { FitGroup() }
     Scaffold(
         bottomBar = {
             NavigationBar(containerColor = MaterialTheme.colorScheme.surface, tonalElevation = 0.dp) {
@@ -113,7 +116,7 @@ fun WortNestApp(vm: AppViewModel) {
                         selected = tab == i,
                         onClick = { if (tab == i) stacks[i].clear() else tab = i },
                         icon = { Icon(icon, contentDescription = null) },
-                        label = { Text(label, maxLines = 1, fontWeight = if (tab == i) FontWeight.SemiBold else FontWeight.Normal) },
+                        label = { FitText(label, fontWeight = if (tab == i) FontWeight.SemiBold else FontWeight.Normal, group = tabFit) },
                         colors = NavigationBarItemDefaults.colors(
                             indicatorColor = MaterialTheme.colorScheme.primary,
                             selectedIconColor = MaterialTheme.colorScheme.onPrimary,
@@ -125,20 +128,20 @@ fun WortNestApp(vm: AppViewModel) {
         },
     ) { padding ->
         Box(Modifier.padding(padding).fillMaxSize()) {
-            saveable.SaveableStateProvider("tab$tab-${stack.size}") { Screen(vm, repo, nav, tab, stack.lastOrNull(), { tab = it }) { tourAt = it } }
+            saveable.SaveableStateProvider("tab$tab-${stack.size}") { Screen(vm, repo, nav, tab, stack.lastOrNull(), { tab = it }, { tourAt = it }) { levelOpen = true } }
         }
     }
 }
 
 @Composable
-private fun Screen(vm: AppViewModel, repo: Repository, nav: Nav, tab: Int, top: Route?, goTab: (Int) -> Unit, openTour: (Int) -> Unit) {
+private fun Screen(vm: AppViewModel, repo: Repository, nav: Nav, tab: Int, top: Route?, goTab: (Int) -> Unit, openTour: (Int) -> Unit, openLevel: () -> Unit) {
             when (top) {
                 null -> when (tab) {
-                    0 -> DictionaryScreen(vm, repo, nav, goTab, openTour)
+                    0 -> DictionaryScreen(vm, repo, nav, goTab, openTour, openLevel)
                     1 -> ArticleScreen(vm, repo)
                     2 -> VerbsScreen(vm, repo, nav)
                     3 -> GrammarScreen(repo, nav)
-                    else -> LearnScreen(vm, repo, nav)
+                    else -> LearnScreen(vm, repo, nav, openLevel)
                 }
                 is Route.EntryR -> EntryScreen(vm, repo, repo.entries[top.id], nav)
                 is Route.VerbR -> VerbDetailScreen(vm, repo, top.infinitive, nav)

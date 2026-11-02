@@ -26,6 +26,9 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -196,6 +199,24 @@ fun SaveButton(vm: AppViewModel, entry: Entry) {
         ) else IconButtonDefaults.filledTonalIconButtonColors(),
     ) {
         Icon(if (on) Icons.Filled.Star else Icons.Outlined.StarOutline, contentDescription = if (on) "Remove from flashcards" else "Add to flashcards")
+    }
+}
+
+/** A row of choices like Quiz | Flashcards; labels shrink to fit with large system fonts. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Segments(labels: List<String>, selected: Int, onSelect: (Int) -> Unit) {
+    val fit = androidx.compose.runtime.remember(labels) { FitGroup() }
+    SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+        labels.forEachIndexed { i, label ->
+            SegmentedButton(
+                selected = selected == i,
+                onClick = { if (selected != i) onSelect(i) },
+                shape = SegmentedButtonDefaults.itemShape(i, labels.size),
+                icon = {},
+                label = { FitText(label, fontSize = 14.sp, group = fit) },
+            )
+        }
     }
 }
 
