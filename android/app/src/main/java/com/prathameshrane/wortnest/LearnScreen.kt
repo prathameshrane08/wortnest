@@ -124,13 +124,10 @@ fun LearnScreen(vm: AppViewModel, repo: Repository, nav: Nav) {
                             for (g in 0..3) {
                                 val onClick = { vm.grade(key, g); currentKey = null; flipped = false }
                                 val label: @Composable () -> Unit = {
-                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                        Text(Srs.GRADE_NAMES[g], fontWeight = FontWeight.Bold, maxLines = 1)
-                                        Text(Srs.label(card, g), fontSize = 11.sp, maxLines = 1)
-                                    }
+                                    Text(Srs.GRADE_NAMES[g], fontWeight = FontWeight.Bold, maxLines = 1)
                                 }
                                 val m = Modifier.weight(1f)
-                                val pad = PaddingValues(horizontal = 4.dp, vertical = 8.dp)
+                                val pad = PaddingValues(horizontal = 4.dp, vertical = 14.dp)
                                 // Good is the button you'll press most, so it stands out.
                                 if (g == 2) Button(onClick = onClick, modifier = m, contentPadding = pad) { label() }
                                 else OutlinedButton(

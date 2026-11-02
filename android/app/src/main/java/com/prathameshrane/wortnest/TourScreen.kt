@@ -241,18 +241,17 @@ private fun CardDemo() {
         Text("house, home", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
     Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-        listOf("Again" to "1 min", "Hard" to "6 min", "Good" to "10 min", "Easy" to "4 days").forEachIndexed { i, (name, wait) ->
+        listOf("Again", "Hard", "Good", "Easy").forEachIndexed { i, name ->
             val hit = i == 2
             Column(
                 Modifier.weight(1f).clip(RoundedCornerShape(11.dp))
                     .background(if (hit) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface)
                     .border(1.dp, if (hit) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline, RoundedCornerShape(11.dp))
-                    .padding(vertical = 5.dp),
+                    .padding(vertical = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 val c = if (hit) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
                 Text(name, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = c)
-                Text(wait, fontSize = 11.sp, color = c.copy(alpha = 0.7f))
             }
         }
     }

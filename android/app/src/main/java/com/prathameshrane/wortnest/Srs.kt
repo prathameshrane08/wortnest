@@ -76,14 +76,4 @@ object Srs {
         return c.copy(reps = c.reps + 1, ivl = ivl, ease = ease, due = now + ivl * day)
     }
 
-    fun label(c: Card, grade: Int, now: Long = System.currentTimeMillis()): String {
-        val m = (next(c, grade, now).due - now) / 60_000.0
-        if (m < 60) return "${max(1, m.roundToInt())} min"
-        if (m < 1440) return "${(m / 60).roundToInt()} h"
-        val d = (m / 1440).roundToInt()
-        if (d < 31) return if (d == 1) "1 day" else "$d days"
-        if (d < 365) return "${(d / 30.0).roundToInt()} mo"
-        val y = (d / 365.0 * 10).roundToInt() / 10.0
-        return if (y == Math.floor(y)) "${y.toInt()} yr" else "$y yr"
-    }
 }
