@@ -2,6 +2,7 @@ package com.prathameshrane.wortnest
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -23,8 +24,10 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -44,8 +47,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            WortNestTheme {
-                WortNestApp(viewModel())
+            val vm: AppViewModel = viewModel()
+            // Status and navigation bar icons follow the app's own theme, not the phone's.
+            LaunchedEffect(vm.dark) {
+                val style = if (vm.dark) SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+                            else SystemBarStyle.light(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT)
+                enableEdgeToEdge(statusBarStyle = style, navigationBarStyle = style)
+            }
+            WortNestTheme(vm.dark) {
+                Surface(color = MaterialTheme.colorScheme.background) { WortNestApp(vm) }
             }
         }
     }

@@ -1,7 +1,7 @@
 // Deutsch Täglich offline support.
 // The app shell and dictionary data are saved on first visit, so the app opens without a connection.
 // Bump VERSION whenever any of the files below change; old caches are removed on activate.
-const VERSION = "wortnest-v7";
+const VERSION = "wortnest-v8";
 const DATA_VERSION = 3;   // must match DATA_VERSION in index.html
 
 const SHELL = [

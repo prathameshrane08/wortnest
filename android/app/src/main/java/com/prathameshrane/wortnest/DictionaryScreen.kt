@@ -43,7 +43,7 @@ fun DictionaryScreen(vm: AppViewModel, repo: Repository, nav: Nav, goTab: (Int) 
     val open = { e: Entry -> nav.push(Route.EntryR(e.id)) }
 
     Column(Modifier.fillMaxSize()) {
-        BrandTitle { openTour(0) }
+        BrandTitle(vm.dark, vm::toggleDark) { openTour(0) }
         if (query.isBlank()) Greeting(vm, repo)
         SearchField(query, { vm.dictQuery = it }, "Haus, ging, to run…")
         UmlautRow { vm.dictQuery += it }

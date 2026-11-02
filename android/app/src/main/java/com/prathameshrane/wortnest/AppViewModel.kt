@@ -36,6 +36,9 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     /** The learner's level (1 A1, 2 A2, 3 B1), chosen in the walkthrough; the quizzes start there. */
     var level by mutableIntStateOf(1)
         private set
+    /** Dark colours, switched with the sun/moon button; white by default. */
+    var dark by mutableStateOf(false)
+        private set
     /** False until the first-launch walkthrough has been finished or skipped. */
     var toured by mutableStateOf(true)
         private set
@@ -153,6 +156,11 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         prefs.edit().putInt("level", l).apply()
     }
 
+    fun toggleDark() {
+        dark = !dark
+        prefs.edit().putBoolean("dark", dark).apply()
+    }
+
     fun finishTour() {
         toured = true
         prefs.edit().putBoolean("toured", true).apply()
@@ -183,6 +191,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         bestStreak = prefs.getInt("best", 0)
         level = prefs.getInt("level", 1)
         toured = prefs.getBoolean("toured", false)
+        dark = prefs.getBoolean("dark", false)
         prefs.getString("topicsSeen", null)?.split("\n")?.filter { it.isNotEmpty() }?.let { topicsSeen.addAll(it) }
     }
 

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" translate="no">
+<html lang="en" translate="no" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -8,8 +8,11 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="google" content="notranslate">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0b1120" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" id="theme-color" content="#ffffff">
+<script>
+  // White unless the learner switched to dark with the sun/moon button; set before the page draws.
+  try { if (localStorage.getItem("wk:theme") === "\"dark\"") { document.documentElement.dataset.theme = "dark"; document.getElementById("theme-color").content = "#0b1120"; } } catch (e) {}
+</script>
 <meta name="description" content="German dictionary, der/die/das trainer, verb conjugator and flashcards. Jeden Tag ein bisschen besser.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -82,6 +85,12 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;backgroun
 .brand svg{width:28px;height:28px;flex:none}
 .tour-btn{border:0;background:var(--accent-soft);color:var(--accent-ink);border-radius:999px;padding:6px 12px;font-weight:600;font-size:.88rem;display:flex;align-items:center;gap:6px}
 .tour-btn svg{width:16px;height:16px}
+.top-actions{display:flex;gap:8px;align-items:center}
+.theme-btn{border:0;background:var(--accent-soft);color:var(--accent-ink);border-radius:50%;width:34px;height:34px;display:grid;place-items:center;padding:0}
+.theme-btn svg{width:18px;height:18px}
+.theme-btn .i-sun{display:none}
+:root[data-theme="dark"] .theme-btn .i-sun{display:block}
+:root[data-theme="dark"] .theme-btn .i-moon{display:none}
 nav.tabs{display:flex;gap:2px}
 nav.tabs button{border:0;background:none;padding:8px 12px;border-radius:10px;font-weight:600;font-size:.95rem;color:var(--muted);display:flex;align-items:center;gap:10px}
 nav.tabs button svg{width:20px;height:20px;flex:none}
@@ -103,7 +112,7 @@ nav.tabs button[aria-selected="true"]{color:var(--accent-ink);background:var(--a
   .brand{margin-right:0;padding-left:8px}
   nav.tabs{flex-direction:column;gap:2px}
   nav.tabs button{padding:10px 12px}
-  .tour-btn{margin-top:auto;align-self:flex-start}
+  .top-actions{margin-top:auto}
   main{margin-left:240px}
   main .wrap{padding-top:40px!important}
 }
@@ -386,7 +395,8 @@ footer button{display:block;margin-top:8px;border:0;background:none;padding:0;co
       <button role="tab" id="tab-grammar" data-view="grammar" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 3 5v14c4-.5 7 0 9 1.5 2-1.5 5-2 9-1.5V5c-4-.5-7 0-9 1.5z"/><path d="M12 6.5V20"/></svg><span class="lbl">Grammatik</span></button>
       <button role="tab" id="tab-learn" data-view="learn" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg><span class="lbl">Üben</span></button>
     </nav>
-    <button type="button" class="tour-btn" id="tour-open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M9.5 9.3a2.6 2.6 0 0 1 5 .9c0 1.7-2.5 2.3-2.5 3.8"/><path d="M12 17.2h.01"/></svg>Tour</button>
+    <div class="top-actions"><button type="button" class="theme-btn" id="theme-toggle" aria-label="Switch to dark mode"><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></button>
+    <button type="button" class="tour-btn" id="tour-open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M9.5 9.3a2.6 2.6 0 0 1 5 .9c0 1.7-2.5 2.3-2.5 3.8"/><path d="M12 17.2h.01"/></svg>Tour</button></div>
   </div>
 </header>
 
@@ -1118,6 +1128,15 @@ $("#view-grammar").addEventListener("click", e => {
   else if(v){ show("verbs"); showVerb(v.dataset.verb); }
   else if(say) speak(say.dataset.say.replace(/\*\*/g, ""));
 });
+
+/* ---------- light and dark ---------- */
+function setTheme(t){
+  document.documentElement.dataset.theme = t; store.set("theme", t);
+  $("#theme-color").content = t === "dark" ? "#0b1120" : "#ffffff";
+  $("#theme-toggle").setAttribute("aria-label", t === "dark" ? "Switch to light mode" : "Switch to dark mode");
+}
+if(store.get("theme", "light") === "dark") setTheme("dark");
+$("#theme-toggle").onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
 
 /* ---------- walkthrough ---------- */
 const TOUR_ICONS = [...document.querySelectorAll("nav.tabs button")].map(b => `<div>${b.querySelector("svg").outerHTML}${b.textContent.trim()}</div>`).join("");

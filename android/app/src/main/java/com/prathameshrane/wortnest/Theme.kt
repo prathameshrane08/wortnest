@@ -1,10 +1,11 @@
 package com.prathameshrane.wortnest
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 // Clean and calm: white space, one indigo accent, slate text. The same palette as the website.
@@ -48,15 +49,20 @@ private val Dark = darkColorScheme(
     outlineVariant = Color(0xFF243049),
 )
 
+/** True when the learner switched to dark with the sun/moon button; the app is white otherwise. */
+val LocalDark = staticCompositionLocalOf { false }
+
 @Composable
-fun WortNestTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colorScheme = if (isSystemInDarkTheme()) Dark else Light, content = content)
+fun WortNestTheme(dark: Boolean, content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalDark provides dark) {
+        MaterialTheme(colorScheme = if (dark) Dark else Light, content = content)
+    }
 }
 
 /** der blue, die rose, das green: the classroom convention. */
 @Composable
 fun genderColor(g: String): Color {
-    val dark = isSystemInDarkTheme()
+    val dark = LocalDark.current
     return when (g) {
         "m" -> if (dark) Color(0xFF60A5FA) else Color(0xFF2563EB)
         "f" -> if (dark) Color(0xFFFB7185) else Color(0xFFE11D48)
@@ -73,14 +79,14 @@ fun genderColorOnDark(g: String): Color = when (g) {
 
 /** Background of the word-of-the-day card. */
 @Composable
-fun heroColor(): Color = if (isSystemInDarkTheme()) Color(0xFF1E1B4B) else Color(0xFF0F172A)
+fun heroColor(): Color = if (LocalDark.current) Color(0xFF1E1B4B) else Color(0xFF0F172A)
 
 /** Forms that break the regular pattern. */
 @Composable
-fun irregularColor(): Color = if (isSystemInDarkTheme()) Color(0xFFFDBA74) else Color(0xFFC2410C)
+fun irregularColor(): Color = if (LocalDark.current) Color(0xFFFDBA74) else Color(0xFFC2410C)
 
 @Composable
-fun okColor(): Color = if (isSystemInDarkTheme()) Color(0xFF34D399) else Color(0xFF059669)
+fun okColor(): Color = if (LocalDark.current) Color(0xFF34D399) else Color(0xFF059669)
 
 @Composable
-fun badColor(): Color = if (isSystemInDarkTheme()) Color(0xFFFB7185) else Color(0xFFE11D48)
+fun badColor(): Color = if (LocalDark.current) Color(0xFFFB7185) else Color(0xFFE11D48)

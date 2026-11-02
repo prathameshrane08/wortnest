@@ -205,7 +205,7 @@ private fun GrammarTable(b: GrammarBlock) {
 }
 
 @Composable
-private fun tipBackground() = if (androidx.compose.foundation.isSystemInDarkTheme()) Color(0xFF2A1F08) else Color(0xFFFFFBEB)
+private fun tipBackground() = if (LocalDark.current) Color(0xFF2A1F08) else Color(0xFFFFFBEB)
 
 @Composable
-private fun tipTitle() = if (androidx.compose.foundation.isSystemInDarkTheme()) Color(0xFFFCD34D) else Color(0xFFB45309)
+private fun tipTitle() = if (LocalDark.current) Color(0xFFFCD34D) else Color(0xFFB45309)

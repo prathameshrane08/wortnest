@@ -24,6 +24,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -62,7 +64,7 @@ private val HeroButton = Color.White.copy(alpha = 0.1f)
 
 /** The app icon in small (a box holding der, die and das), the name and the walkthrough button. */
 @Composable
-fun BrandTitle(onTour: () -> Unit) {
+fun BrandTitle(dark: Boolean, onToggleDark: () -> Unit, onTour: () -> Unit) {
     val box = MaterialTheme.colorScheme.primary
     val bars = listOf(genderColor("m"), genderColor("f"), genderColor("n"))
     Row(
@@ -90,6 +92,13 @@ fun BrandTitle(onTour: () -> Unit) {
             fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.5).sp,
             modifier = Modifier.weight(1f),
         )
+        IconButton(
+            onClick = onToggleDark,
+            colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer),
+            modifier = Modifier.size(34.dp),
+        ) {
+            Icon(if (dark) Icons.Outlined.LightMode else Icons.Outlined.DarkMode, contentDescription = if (dark) "Switch to light mode" else "Switch to dark mode", modifier = Modifier.size(18.dp))
+        }
         Row(
             Modifier
                 .clip(RoundedCornerShape(50))
