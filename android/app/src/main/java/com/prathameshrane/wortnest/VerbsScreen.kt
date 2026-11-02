@@ -146,7 +146,7 @@ fun VerbDetailScreen(vm: AppViewModel, repo: Repository, inf: String, nav: Nav) 
                             Column(
                                 Modifier.weight(1f).background(MaterialTheme.colorScheme.surfaceContainer, RoundedCornerShape(10.dp)).padding(10.dp),
                             ) {
-                                Text(label.uppercase(), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Text(value, fontWeight = FontWeight.Bold)
                             }
                         }

@@ -105,16 +105,16 @@ fun WortNestApp(vm: AppViewModel) {
         },
     ) { padding ->
         Box(Modifier.padding(padding).fillMaxSize()) {
-            saveable.SaveableStateProvider("tab$tab-${stack.size}") { Screen(vm, repo, nav, tab, stack.lastOrNull()) }
+            saveable.SaveableStateProvider("tab$tab-${stack.size}") { Screen(vm, repo, nav, tab, stack.lastOrNull()) { tab = it } }
         }
     }
 }
 
 @Composable
-private fun Screen(vm: AppViewModel, repo: Repository, nav: Nav, tab: Int, top: Route?) {
+private fun Screen(vm: AppViewModel, repo: Repository, nav: Nav, tab: Int, top: Route?, goTab: (Int) -> Unit) {
             when (top) {
                 null -> when (tab) {
-                    0 -> DictionaryScreen(vm, repo, nav)
+                    0 -> DictionaryScreen(vm, repo, nav, goTab)
                     1 -> ArticleScreen(vm, repo)
                     2 -> VerbsScreen(vm, repo, nav)
                     3 -> GrammarScreen(repo, nav)

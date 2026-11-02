@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -119,6 +120,7 @@ fun GrammarTopicScreen(vm: AppViewModel, repo: Repository, id: String, nav: Nav)
     val all = repo.grammar
     val i = all.indexOfFirst { it.id == id }
     val t = all.getOrNull(i) ?: return
+    LaunchedEffect(t.id) { vm.markTopicSeen(t.id) }
     Column(Modifier.fillMaxSize()) {
         BackBar(t.title, nav)
         Column(
@@ -127,7 +129,7 @@ fun GrammarTopicScreen(vm: AppViewModel, repo: Repository, id: String, nav: Nav)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 LevelBadge(t.level)
-                Text(t.de.uppercase(), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(t.de, fontSize = 14.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Text(t.title, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 32.sp)
             t.blocks.forEach { b ->
@@ -136,7 +138,7 @@ fun GrammarTopicScreen(vm: AppViewModel, repo: Repository, id: String, nav: Nav)
                         Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f), RoundedCornerShape(10.dp)).padding(12.dp),
                         verticalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
-                        Text("WATCH OUT", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                        Text("Watch out", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                         Text(rich(b.text))
                     }
                     "ex" -> CardBox {
@@ -156,7 +158,7 @@ fun GrammarTopicScreen(vm: AppViewModel, repo: Repository, id: String, nav: Nav)
             }
             val verbs = t.verbs.filter { it in repo.verbs }
             if (verbs.isNotEmpty()) {
-                Text("PRACTISE IN THE CONJUGATOR", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Practise in the conjugator", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     verbs.forEach { v -> FilledTonalButton(onClick = { nav.push(Route.VerbR(v)) }) { Text(v) } }
                 }

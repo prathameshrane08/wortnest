@@ -87,7 +87,7 @@ fun LearnScreen(vm: AppViewModel, repo: Repository, nav: Nav) {
                         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                            Text(e.posName.uppercase(), fontSize = 11.sp, fontWeight = FontWeight.Bold,
+                            Text(e.posName, fontSize = 13.sp, fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant)
                             if (!flipped && (card.isNew || card.isLearning)) {
                                 Text(

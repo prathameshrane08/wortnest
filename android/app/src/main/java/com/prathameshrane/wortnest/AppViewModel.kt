@@ -32,6 +32,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     val missedNouns = mutableStateListOf<String>()
     var bestStreak by mutableIntStateOf(0)
         private set
+    val topicsSeen = mutableStateListOf<String>()   // grammar topics opened at least once
 
     private val prefs = app.getSharedPreferences("wortnest", Context.MODE_PRIVATE)
     private var tts: TextToSpeech? = null
@@ -141,6 +142,12 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
             .apply()
     }
 
+    fun markTopicSeen(id: String) {
+        if (id in topicsSeen) return
+        topicsSeen.add(id)
+        prefs.edit().putString("topicsSeen", topicsSeen.joinToString("\n")).apply()
+    }
+
     private fun persistSaved() {
         val o = JSONObject()
         for ((k, c) in saved) o.put(k, c.toJson())
@@ -158,6 +165,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         }
         prefs.getString("missed", null)?.split("\n")?.filter { it.isNotEmpty() }?.let { missedNouns.addAll(it) }
         bestStreak = prefs.getInt("best", 0)
+        prefs.getString("topicsSeen", null)?.split("\n")?.filter { it.isNotEmpty() }?.let { topicsSeen.addAll(it) }
     }
 
     override fun onCleared() {

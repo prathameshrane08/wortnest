@@ -32,10 +32,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
-private val examples = listOf("Haus", "gehen", "schön", "Zeitung", "Mädchen", "bringen", "Freund", "trotzdem")
-
 @Composable
-fun DictionaryScreen(vm: AppViewModel, repo: Repository, nav: Nav) {
+fun DictionaryScreen(vm: AppViewModel, repo: Repository, nav: Nav, goTab: (Int) -> Unit) {
     var result by remember { mutableStateOf(SearchResult()) }
     val query = vm.dictQuery
     LaunchedEffect(query) {
@@ -45,13 +43,12 @@ fun DictionaryScreen(vm: AppViewModel, repo: Repository, nav: Nav) {
     val open = { e: Entry -> nav.push(Route.EntryR(e.id)) }
 
     Column(Modifier.fillMaxSize()) {
-        ScreenTitle("Wörterbuch")
-        SearchField(query, { vm.dictQuery = it }, "German or English: Haus, ging, to run")
+        BrandTitle()
+        SearchField(query, { vm.dictQuery = it }, "Haus, ging, to run…")
         UmlautRow { vm.dictQuery += it }
         LazyColumn(Modifier.fillMaxSize()) {
             if (query.isBlank()) {
-                item { SectionHeader("Try one of these") }
-                items(examples.mapNotNull { repo.entriesFor(it).firstOrNull() }) { EntryRow(it) { open(it) } }
+                item { HomeContent(vm, repo, nav, goTab) { vm.dictQuery = it } }
             } else if (result.isEmpty) {
                 item {
                     Text(
@@ -130,7 +127,7 @@ fun EntryScreen(vm: AppViewModel, repo: Repository, entry: Entry, nav: Nav) {
             }
             repo.examples[entry.key]?.takeIf { it.isNotEmpty() }?.let { examples ->
                 CardBox {
-                    Text("EXAMPLES", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("Examples", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     examples.filter { it.size == 2 }.forEach { ex ->
                         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.Top) {
                             SpeakButton(vm, ex[0])

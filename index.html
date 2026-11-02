@@ -61,6 +61,7 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;backgroun
 .top .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;flex-wrap:wrap}
 .brand{font-family:var(--display);font-weight:800;font-size:1.35rem;letter-spacing:-.02em;display:flex;align-items:baseline;gap:5px;margin-right:auto}
 .brand i{font-style:normal;color:var(--accent)}
+.brand svg{width:26px;height:26px;align-self:center;margin-right:3px;flex:none}
 nav.tabs{display:flex;gap:4px}
 nav.tabs button{border:0;background:none;padding:8px 12px;border-radius:8px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:8px}
 nav.tabs button svg{width:20px;height:20px}
@@ -70,7 +71,9 @@ nav.tabs button[aria-selected="true"]{color:var(--fg);background:var(--sunk)}
   nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:25;background:var(--surface);border-top:1px solid var(--line);
     justify-content:space-around;padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
   nav.tabs button{flex-direction:column;gap:2px;font-size:.72rem;padding:6px 8px;flex:1}
-  nav.tabs button[aria-selected="true"]{background:none;color:var(--accent-ink)}
+  nav.tabs button svg{width:56px;height:30px;padding:5px 0;border-radius:15px;transition:background-color .2s}
+  nav.tabs button[aria-selected="true"]{background:none;color:var(--fg)}
+  nav.tabs button[aria-selected="true"] svg{background:color-mix(in srgb,var(--accent) 24%,transparent);color:var(--accent-ink)}
   main{padding-bottom:84px}
 }
 
@@ -79,7 +82,7 @@ section.view{display:flex;flex-direction:column;gap:20px}
 h1,h2,h3{font-family:var(--display);letter-spacing:-.015em;text-wrap:balance;margin:0}
 h2{font-size:1.5rem;font-weight:800}
 h3{font-size:1.05rem;font-weight:700}
-.eyebrow{font-size:.74rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700}
+.eyebrow{font-size:.86rem;color:var(--muted);font-weight:700}
 .muted{color:var(--muted)}
 .small{font-size:.875rem}
 
@@ -97,10 +100,10 @@ h3{font-size:1.05rem;font-weight:700}
 .art{display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;border-radius:5px;padding:1px 7px;line-height:1.4;min-width:36px}
 .art.m{color:var(--der);background:var(--der-bg)} .art.f{color:var(--die);background:var(--die-bg)} .art.n{color:var(--das);background:var(--das-bg)} .art.p{color:var(--plural);background:var(--plural-bg)}
 .w-m{color:var(--der)} .w-f{color:var(--die)} .w-n{color:var(--das)}
-.pos{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.pos{font-size:.88rem;color:var(--muted);font-style:italic}   /* part of speech, set like a printed dictionary */
 
 .results{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.results .group{padding:8px 14px;background:var(--sunk);font-size:.74rem;text-transform:uppercase;letter-spacing:.09em;font-weight:700;color:var(--muted)}
+.results .group{padding:8px 14px;background:var(--sunk);font-size:.84rem;font-weight:700;color:var(--muted)}
 .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) auto;gap:12px;align-items:start;padding:11px 14px;border-top:1px solid var(--line);text-align:left;background:none;border-left:0;border-right:0;border-bottom:0;width:100%}
 .row:first-child,.group+.row{border-top:0}
 .row:hover{background:var(--sunk)}
@@ -137,12 +140,16 @@ h3{font-size:1.05rem;font-weight:700}
 .choices button:hover{border-color:currentColor}
 .choices button.right{border-color:var(--ok);box-shadow:0 0 0 2px var(--ok)}
 .choices button.wrong{opacity:.45}
+.choices button.right{animation:pop .28s ease-out}
+@keyframes pop{50%{transform:scale(1.06)}}
+@media (prefers-reduced-motion:reduce){.choices button.right{animation:none}}
+@media (hover:none){.kbd-hint{display:none}}
 .feedback{min-height:3.2em;font-size:.95rem;max-width:46ch}
 .feedback .ok{color:var(--ok);font-weight:700}.feedback .bad{color:var(--bad);font-weight:700}
 .stats{display:flex;gap:24px;justify-content:center;flex-wrap:wrap}
 .stat{display:flex;flex-direction:column;align-items:center}
 .stat b{font-family:var(--display);font-size:1.5rem;font-variant-numeric:tabular-nums}
-.stat span{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.stat span{font-size:.84rem;color:var(--muted)}
 .seg{display:inline-flex;background:var(--sunk);border-radius:9px;padding:3px;gap:2px;flex-wrap:wrap}
 .seg button{border:0;background:none;padding:6px 12px;border-radius:7px;font-weight:700;font-size:.88rem;color:var(--muted)}
 .seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 2px rgba(0,0,0,.12)}
@@ -158,7 +165,7 @@ h3{font-size:1.05rem;font-weight:700}
 /* Verbs */
 .parts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:16px}
 .parts div{background:var(--surface);padding:10px 12px;min-width:0}
-.parts span{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.parts span{display:block;font-size:.8rem;color:var(--muted)}
 .parts b{font-size:1.05rem;overflow-wrap:anywhere}
 @media (max-width:520px){.parts{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .badge{display:inline-block;font-size:.76rem;font-weight:700;border-radius:5px;padding:2px 8px;background:var(--sunk);color:var(--muted)}
@@ -182,7 +189,9 @@ h3{font-size:1.05rem;font-weight:700}
 /* Flashcards */
 .flash{perspective:1000px;width:100%;max-width:460px;margin:0 auto}
 .flash .face{background:var(--surface);border:1px solid var(--line);border-radius:14px;min-height:210px;padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;width:100%;cursor:pointer}
-.flash .face .w{font-family:var(--display);font-weight:800;font-size:2rem;overflow-wrap:anywhere;max-width:100%}
+.flash .face .w{font-family:var(--display);font-weight:800;font-size:clamp(2rem,9vw,2.6rem);line-height:1.1;overflow-wrap:anywhere;max-width:100%}
+.flash .face{min-height:250px;box-shadow:0 7px 0 -3px var(--sunk),0 7px 0 -2px var(--line),0 14px 0 -6px var(--sunk),0 14px 0 -5px var(--line)}   /* the rest of the deck underneath */
+.flash{margin-bottom:10px}
 .srs-stats{display:flex;gap:8px;justify-content:center;margin-top:18px}
 .srs-stats div{display:flex;flex-direction:column;align-items:center;font-size:.74rem;color:var(--muted);gap:3px;min-width:76px}
 .srs-stats b{width:100%;height:36px;border-radius:7px;background:var(--sunk);display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;font-size:1.05rem}
@@ -223,10 +232,36 @@ h3{font-size:1.05rem;font-weight:700}
 .g-tbl tr:last-child td{border-bottom:0}
 .g-ex{margin-top:0}
 .g-tip{display:flex;flex-direction:column;gap:2px;border-left:3px solid var(--accent);background:var(--sunk);border-radius:0 8px 8px 0;padding:10px 12px;font-size:.95rem}
-.g-tip b:first-child{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-ink)}
+.g-tip b:first-child{color:var(--accent-ink)}
 .g-verbs{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:12px}
 .g-nav{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .back{align-self:flex-start}
+/* Home: the word of the day, then what is waiting in each section today */
+.home{display:flex;flex-direction:column;gap:22px}
+.wotd{--c:var(--accent);position:relative;overflow:hidden;padding:22px 22px 20px;border-top:6px solid var(--c)}
+.wotd.g-m{--c:var(--der)} .wotd.g-f{--c:var(--die)} .wotd.g-n{--c:var(--das)}
+.wotd-top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:.9rem}
+.wotd-top b{color:var(--c);font-family:var(--display)}
+.wotd-word{font-family:var(--display);font-weight:800;font-size:clamp(2.6rem,11vw,4.2rem);line-height:1;letter-spacing:-.03em;margin:14px 0 6px;overflow-wrap:anywhere}
+.wotd-word small{font-size:.5em;color:var(--c);letter-spacing:-.01em;margin-right:.2em;vertical-align:.32em}
+.wotd.g-m .wotd-word,.wotd.g-f .wotd-word,.wotd.g-n .wotd-word{color:var(--c)}
+.wotd .meta{margin-top:0}
+.wotd-mean{font-size:1.12rem;margin:12px 0 0;max-width:52ch}
+.wotd .examples{margin-top:14px}
+.wotd .btn-row{align-items:center}
+.wotd .btn-row{gap:8px}
+.wotd .btn-row .btn{display:inline-flex;align-items:center;gap:8px;height:40px}
+.wotd .btn-row svg{width:18px;height:18px}
+.today{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:600px){.today{grid-template-columns:1fr}}
+.tile{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;align-items:baseline;gap:2px 12px;text-align:left;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;color:var(--fg)}
+.tile:hover{border-color:var(--muted)}
+.tile h3{font-size:1.05rem}
+.tile .n{grid-row:1/3;grid-column:2;align-self:center;font-family:var(--display);font-weight:800;font-size:2rem;line-height:1;font-variant-numeric:tabular-nums}
+.tile .n.zero{color:var(--muted)}
+.tile span{color:var(--muted);font-size:.9rem;min-width:0}
+.try h3{margin-bottom:8px}
 .empty{text-align:center;padding:28px 16px;color:var(--muted);display:flex;flex-direction:column;gap:10px;align-items:center}
 .loading{display:flex;align-items:center;gap:10px;color:var(--muted)}
 .loading::before{content:"";width:14px;height:14px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--accent);animation:spin .8s linear infinite}
@@ -238,7 +273,7 @@ footer a{color:inherit}
 
 <header class="top">
   <div class="wrap">
-    <div class="brand">Deutsch<i>Täglich</i></div>
+    <div class="brand"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 9v15a3 3 0 0 0 3 3h16a3 3 0 0 0 3-3V9" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round"/><rect x="9" y="5" width="14" height="4.4" rx="1.4" fill="var(--der)"/><rect x="9" y="12" width="14" height="4.4" rx="1.4" fill="var(--die)"/><rect x="9" y="19" width="14" height="4.4" rx="1.4" fill="var(--das)"/></svg>Deutsch<i>Täglich</i></div>
     <nav class="tabs" role="tablist" aria-label="Sections">
       <button role="tab" id="tab-dict" data-view="dict" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 8h6"/></svg>Wörterbuch</button>
       <button role="tab" id="tab-dds" data-view="dds" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="12" r="3"/><circle cx="12" cy="12" r="3"/><circle cx="18" cy="12" r="3"/></svg>Der Die Das</button>
@@ -283,7 +318,7 @@ footer a{color:inherit}
 
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
-          <div><div class="eyebrow">Article quiz</div><h2>der, die oder das?</h2></div>
+          <div><h2>der, die oder das?</h2></div>
           <div class="seg" id="dd-level" role="group" aria-label="Level">
             <button type="button" data-lv="0" aria-pressed="true">A1</button>
             <button type="button" data-lv="1" aria-pressed="false">A2</button>
@@ -300,7 +335,7 @@ footer a{color:inherit}
             <button type="button" class="f" data-g="f">die</button>
             <button type="button" class="n" data-g="n">das</button>
           </div>
-          <div class="feedback" id="dd-feedback"><span class="muted">Keys 1, 2, 3 answer. Enter skips ahead.</span></div>
+          <div class="feedback" id="dd-feedback"><span class="muted kbd-hint">Keys 1, 2, 3 answer. Enter skips ahead.</span></div>
           <div class="stats">
             <div class="stat"><b id="dd-streak">0</b><span>Streak</span></div>
             <div class="stat"><b id="dd-best">0</b><span>Best</span></div>
@@ -311,7 +346,7 @@ footer a{color:inherit}
       </div>
 
       <div style="display:flex;flex-direction:column;gap:10px">
-        <div><div class="eyebrow">Rules of thumb</div><h2>Endings that give the article away</h2></div>
+        <div><h2>Endings that give the article away</h2></div>
         <div class="rules">
           <div class="col m"><h3>der</h3><ul>
             <li><code>-ling</code> der Frühling</li><li><code>-ismus</code> der Tourismus</li><li><code>-or</code> der Motor</li><li><code>-ig, -ich</code> der Honig, der Teppich</li><li><code>-ist, -ant</code> der Polizist</li><li>days, months, seasons</li><li>weather: der Regen, der Wind</li></ul></div>
@@ -337,7 +372,7 @@ footer a{color:inherit}
       <div id="v-out"></div>
       <div class="card drill">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
-          <div><div class="eyebrow">Conjugation drill</div><h2>Type the right form</h2></div>
+          <div><h2>Type the right form</h2></div>
           <div class="seg" id="drill-level" role="group" aria-label="Level">
             <button type="button" data-lv="1" aria-pressed="true">A1</button>
             <button type="button" data-lv="2" aria-pressed="false">A2</button>
@@ -363,7 +398,7 @@ footer a{color:inherit}
     <!-- Grammar -->
     <section class="view" id="view-grammar" hidden>
       <div id="g-list">
-        <div><div class="eyebrow">A1 → B1</div><h2>Grammar</h2>
+        <div><h2>Grammar</h2>
           <p class="muted" style="margin:6px 0 0">The topics German courses cover from A1 to B1, each with tables, examples and the mistakes learners make most.</p></div>
         <div id="g-topics"></div>
       </div>
@@ -372,7 +407,7 @@ footer a{color:inherit}
 
     <!-- Learn -->
     <section class="view" id="view-learn" hidden>
-      <div><div class="eyebrow">Your word list</div><h2>Flashcards</h2>
+      <div><h2>Flashcards</h2>
         <p class="muted" style="margin:6px 0 0">Star any word in the dictionary to add it here. Words you know come back less and less often; words you miss come back soon.</p></div>
       <div id="learn-area"></div>
       <div>
@@ -427,6 +462,7 @@ function show(view){
   document.querySelectorAll("section.view").forEach(s => s.hidden = s.id !== "view-" + view);
   store.set("tab", view);
   if(view === "learn") renderLearn();
+  if(view === "dict") refreshHome();
   window.scrollTo(0, 0);
 }
 document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => show(b.dataset.view));
@@ -493,14 +529,56 @@ function runSearch(){
   $("#dict-results").innerHTML = `<div class="results">${h}</div>`;
   if(de.exact.length || de.via.length) showEntry(de.exact[0] ?? de.via[0]);
 }
-function startHtml(){
-  const ids = [];
-  for(const w of ["Haus","gehen","schön","Zeitung","Mädchen","bringen","Freund","trotzdem"]) { const x = BYW.get(w.toLowerCase()); if(x) ids.push(x[0]); }
-  return `<div class="results"><div class="group">Try one of these</div>${ids.map(i => rowHtml(i)).join("")}</div>`;
+// The same A1/A2 noun, verb or adjective for everyone on a given day (the apps pick it the same way).
+function wordOfDay(){
+  const seen = new Set(), pool = [];
+  ROWS.forEach((r, i) => { if((r[6] === 1 || r[6] === 2) && (r[1] === "verb" || r[1] === "adj" || (r[1] === "noun" && "mfn".includes(r[2] || "x"))) && !seen.has(r[0])){ seen.add(r[0]); pool.push(i); } });
+  const day = Math.floor((Date.now() - new Date().getTimezoneOffset() * 6e4) / 864e5);
+  return pool.length ? pool[(day * 7919) % pool.length] : undefined;
 }
+function startHtml(){
+  const i = wordOfDay(), r = ROWS[i];
+  let wotd = "";
+  if(r){
+    const g = r[1] === "noun" ? r[2] : "", on = !!saved[keyOf(r)], ex = (EXAMPLES[keyOf(r)] || [])[0];
+    const date = new Date().toLocaleDateString("de-DE", {weekday:"long", day:"numeric", month:"long"});
+    wotd = `<article class="card wotd ${g ? "g-" + g : ""}">
+      <div class="wotd-top"><b>Wort des Tages</b><span>${esc(date)}</span></div>
+      <div class="wotd-word">${g ? `<small>${ART[g]}</small>` : ""}${esc(r[0])}</div>
+      <div class="meta"><span class="pos">${POSN[r[1]]}</span>${lvHtml(r)}${g && r[3] ? `<span>plural: <b>die ${esc(r[3])}</b></span>` : ""}</div>
+      <p class="wotd-mean">${r[4].slice(0, 2).map(esc).join("; ")}</p>
+      ${ex ? `<div class="examples"><div class="ex"><button class="icon-btn sm" type="button" data-wsay="${esc(ex[0])}" aria-label="Read the sentence aloud">${ICON.speak}</button><div><div class="de">${esc(ex[0])}</div><div class="en">${esc(ex[1])}</div></div></div></div>` : ""}
+      <div class="btn-row">
+        <button class="icon-btn" type="button" data-wsay="${esc((g ? ART[g] + " " : "") + r[0])}" aria-label="Pronounce">${ICON.speak}</button>
+        <button class="btn ghost" type="button" data-wsave="${i}">${on ? ICON.starOn + "Saved" : ICON.star + "Add to flashcards"}</button>
+        <button class="btn ghost" type="button" data-wopen="${i}">Full entry</button>
+      </div></article>`;
+  }
+  const n = srsCounts(), due = n.fresh + n.learning + n.review;
+  const seen = store.get("topicsSeen", []), nextTopic = GRAMMAR.find(t => !seen.includes(t.id));
+  const tile = (go, title, num, line) => `<button type="button" class="tile" data-go="${go}"><h3>${title}</h3><b class="n ${num ? "" : "zero"}">${num}</b><span>${line}</span></button>`;
+  const tiles = `<div class="today">
+    ${tile("learn", "Flashcards", due, due ? "cards ready to study" : Object.keys(saved).length ? "nothing due, well done" : "start with 20 A1 words")}
+    ${tile("dds", "Der, die oder das", dd.miss.length, dd.miss.length ? "nouns you missed to review" : dd.best ? `best streak ${dd.best}` : "guess the article")}
+    ${tile("grammar", "Grammatik", `${seen.filter(id => GRAMMAR.some(t => t.id === id)).length}/${GRAMMAR.length || 26}`, nextTopic ? `next: ${esc(nextTopic.title)}` : "all topics read")}
+  </div>`;
+  const tries = ["Haus","gehen","schön","Zeitung","Mädchen","bringen","Freund","trotzdem"].filter(w => BYW.has(w.toLowerCase()));
+  return `<div class="home">${wotd}${tiles}<div class="try"><h3>Or look something up</h3><div class="chips">${tries.map(w => `<button type="button" class="chip" data-try="${w}">${w}</button>`).join("")}</div></div></div>`;
+}
+function refreshHome(){ if(!$("#q").value.trim() && ROWS.length) $("#dict-results").innerHTML = startHtml(); }
 let qT; $("#q").addEventListener("input", () => { clearTimeout(qT); qT = setTimeout(runSearch, 120); });
 $("#q-clear").onclick = () => { $("#q").value = ""; runSearch(); $("#q").focus(); };
-$("#dict-results").addEventListener("click", e => { const b = e.target.closest(".row"); if(b){ showEntry(+b.dataset.i); $("#entry").scrollIntoView({block:"nearest"}); } });
+$("#dict-results").addEventListener("click", e => {
+  const b = e.target.closest(".row, [data-go], [data-try], [data-wsay], [data-wsave], [data-wopen]");
+  if(!b) return;
+  const d = b.dataset;
+  if(b.classList.contains("row")){ showEntry(+d.i); $("#entry").scrollIntoView({block:"nearest"}); }
+  else if(d.go) show(d.go);
+  else if(d.try){ $("#q").value = d.try; runSearch(); }
+  else if(d.wsay) speak(d.wsay);
+  else if(d.wsave){ toggleSave(ROWS[+d.wsave]); refreshHome(); }
+  else if(d.wopen){ $("#q").value = ROWS[+d.wopen][0]; runSearch(); showEntry(+d.wopen); }
+});
 
 let EXAMPLES = {}, curEntry = null;   // "word|pos" -> [[German, English], ...]
 function exampleHtml(k){
@@ -592,7 +670,7 @@ function ddNext(){
   $("#dd-noun").textContent = ROWS[i][0];
   $("#dd-noun").className = "noun";
   $("#dd-gloss").textContent = ROWS[i][4][0] || "";
-  $("#dd-feedback").innerHTML = `<span class="muted">Keys 1, 2, 3 answer. Enter skips ahead.</span>`;
+  $("#dd-feedback").innerHTML = `<span class="muted kbd-hint">Keys 1, 2, 3 answer. Enter skips ahead.</span>`;
 }
 function ddAnswer(g){
   if(dd.cur === null) return;
@@ -909,6 +987,7 @@ function showTopic(id){
     ${t.verbs ? `<div class="g-verbs"><div class="eyebrow">Practise in the conjugator</div><div class="chips">${t.verbs.filter(v => VERBS[v]).map(v => `<button type="button" class="chip" data-verb="${esc(v)}">${esc(v)}</button>`).join("")}</div></div>` : ""}</div>
     <div class="g-nav">${prev ? `<button type="button" class="btn ghost" data-topic="${prev.id}">‹ ${esc(prev.title)}</button>` : "<span></span>"}${next ? `<button type="button" class="btn ghost" data-topic="${next.id}">${esc(next.title)} ›</button>` : ""}</div>`;
   $("#g-list").hidden = true; $("#g-topic").hidden = false; store.set("topic", id); window.scrollTo(0, 0);
+  const seen = store.get("topicsSeen", []); if(!seen.includes(id)) store.set("topicsSeen", seen.concat(id));
 }
 $("#view-grammar").addEventListener("click", e => {
   const t = e.target.closest("[data-topic]"), v = e.target.closest("[data-verb]"), say = e.target.closest("[data-say]");
@@ -953,13 +1032,14 @@ async function boot(){
   showVerb(store.get("verb", "gehen") in VERBS ? store.get("verb", "gehen") : VERB_LIST[0]);
   ddNext(); ddStats(); drillNext(); renderLearn();
   fetch("grammar.json?v=" + DATA_VERSION).then(r => r.ok ? r.json() : {topics: []}).then(g => {
-    GRAMMAR = g.topics; renderGrammarList();
+    GRAMMAR = g.topics; renderGrammarList(); refreshHome();
     if(store.get("topic", "")) showTopic(store.get("topic", ""));
   }).catch(() => { $("#g-topics").innerHTML = `<p class="muted">The grammar topics did not load. Reload the page to try again.</p>`; });
   // Example sentences are extra: load them after the app is usable and fill them in when they arrive.
   fetch("examples.json?v=" + DATA_VERSION).then(r => r.ok ? r.json() : {}).then(x => {
     EXAMPLES = x;
     if(curEntry !== null && !$("#view-dict").hidden) showEntry(curEntry);
+    refreshHome();
     if(fc.flipped) renderLearn();
   }).catch(() => {});
   const tab = location.hash.slice(1) || store.get("tab", "dict");

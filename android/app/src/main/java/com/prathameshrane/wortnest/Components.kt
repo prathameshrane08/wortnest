@@ -29,6 +29,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -100,10 +101,9 @@ fun UmlautRow(onInsert: (String) -> Unit) {
 @Composable
 fun SectionHeader(text: String) {
     Text(
-        text.uppercase(),
-        style = MaterialTheme.typography.labelMedium,
+        text,
+        style = MaterialTheme.typography.labelLarge,
         fontWeight = FontWeight.Bold,
-        letterSpacing = 1.sp,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier
             .fillMaxWidth()
@@ -130,10 +130,9 @@ fun ArticleChip(gender: String, large: Boolean = false) {
 @Composable
 fun PosLabel(text: String) {
     Text(
-        text.uppercase(),
-        fontSize = 11.sp,
-        fontWeight = FontWeight.Bold,
-        letterSpacing = 0.6.sp,
+        text,
+        fontSize = 14.sp,
+        fontStyle = FontStyle.Italic,   // part of speech, set like a printed dictionary
         color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
 }
