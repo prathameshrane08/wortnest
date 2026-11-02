@@ -4,7 +4,8 @@
 
 A German learning toolkit in one place:
 
-- **Home**: a word of the day (the same for everyone, from the A1 and A2 lists) and what is waiting today: flashcards due, nouns to review, the next grammar topic.
+- **Walkthrough**: a short tour on first launch that shows each section with a small demo and asks your level (A1, A2 or B1), which sets the quizzes and can add your first 20 words. Replay it from the Tour button.
+- **Home**: a greeting, a word of the day (the same for everyone, from the A1 and A2 lists) and four progress tiles: cards due, nouns to review, grammar topics read and your level.
 - **Wörterbuch**: German ⇄ English dictionary (about 40,000 entries) with example sentences. Inflected forms like *ging* or *Häuser* find their base word. About 3,300 words carry their CEFR level (A1, A2, B1).
 - **Der Die Das**: instant article lookup (works for compound nouns), an article quiz by level (A1, A2, B1) with a mistakes round, and the ending rules that predict gender.
 - **Verben**: full conjugation tables for about 8,900 verbs, with irregular forms highlighted, plus a typing drill by level.

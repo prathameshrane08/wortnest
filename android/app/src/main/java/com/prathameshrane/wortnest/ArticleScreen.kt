@@ -41,7 +41,7 @@ import kotlinx.coroutines.delay
 fun ArticleScreen(vm: AppViewModel, repo: Repository) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         ScreenTitle("Der Die Das")
-        SearchField(vm.articleQuery, { vm.articleQuery = it }, "Which article? Kinderzimmer")
+        SearchField(vm.articleQuery, { vm.articleQuery = it }, "Type a noun, e.g. Kinderzimmer")
         UmlautRow { vm.articleQuery += it }
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
             if (vm.articleQuery.isNotBlank()) LookupResult(vm, repo, vm.articleQuery)
@@ -81,7 +81,7 @@ private val levels = listOf("A1", "A2", "B1", "All", "Missed")
 
 @Composable
 private fun QuizCard(vm: AppViewModel, repo: Repository) {
-    var level by rememberSaveable { mutableIntStateOf(0) }
+    var level by rememberSaveable { mutableIntStateOf(vm.level - 1) }
     var currentId by rememberSaveable { mutableStateOf<Int?>(null) }
     var chosen by rememberSaveable { mutableStateOf<String?>(null) }
     var streak by rememberSaveable { mutableIntStateOf(0) }
@@ -117,8 +117,6 @@ private fun QuizCard(vm: AppViewModel, repo: Repository) {
     }
 
     CardBox {
-        Text("ARTICLE QUIZ", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, letterSpacing = 1.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text("der, die oder das?", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold)
         SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
             levels.forEachIndexed { i, label ->
@@ -156,15 +154,14 @@ private fun QuizCard(vm: AppViewModel, repo: Repository) {
                         val isRight = chosen != null && g == current.gender
                         Text(
                             Gender.article(g)!!,
-                            color = c,
+                            color = if (isRight) Color.White else c,
                             fontSize = 22.sp,
                             fontWeight = FontWeight.ExtraBold,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .weight(1f)
-                                .alpha(if (chosen != null && !isRight) 0.4f else 1f)
-                                .background(c.copy(alpha = 0.15f), RoundedCornerShape(12.dp))
-                                .border(BorderStroke(3.dp, if (isRight) okColor() else Color.Transparent), RoundedCornerShape(12.dp))
+                                .alpha(if (chosen != null && !isRight) 0.35f else 1f)
+                                .background(if (isRight) c else c.copy(alpha = 0.12f), RoundedCornerShape(16.dp))
                                 .clickable(enabled = chosen == null) {
                                     chosen = g
                                     total++
@@ -195,7 +192,7 @@ private fun QuizCard(vm: AppViewModel, repo: Repository) {
             }
         }
 
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Stat("$streak", "Streak")
             Stat("${vm.bestStreak}", "Best")
             Stat(if (total == 0) "–" else "${(right * 100 + total / 2) / total}%", "Accuracy")
@@ -205,8 +202,11 @@ private fun QuizCard(vm: AppViewModel, repo: Repository) {
 }
 
 @Composable
-private fun Stat(value: String, label: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+private fun androidx.compose.foundation.layout.RowScope.Stat(value: String, label: String) {
+    Column(
+        Modifier.weight(1f).background(MaterialTheme.colorScheme.surfaceContainer, RoundedCornerShape(12.dp)).padding(vertical = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         Text(value, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
         Text(label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
@@ -221,13 +221,11 @@ private val ruleColumns = listOf(
 @Composable
 private fun RulesSection() {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text("RULES OF THUMB", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, letterSpacing = 1.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text("Endings that give the article away", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold)
         for ((g, items) in ruleColumns) {
             val c = genderColor(g)
             Column(
-                Modifier.fillMaxWidth().background(c.copy(alpha = 0.12f), RoundedCornerShape(12.dp)).padding(12.dp),
+                Modifier.fillMaxWidth().background(c.copy(alpha = 0.1f), RoundedCornerShape(16.dp)).padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(3.dp),
             ) {
                 Text(Gender.article(g)!!, color = c, fontWeight = FontWeight.Bold, fontSize = 17.sp)

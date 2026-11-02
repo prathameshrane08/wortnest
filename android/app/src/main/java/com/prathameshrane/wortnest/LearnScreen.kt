@@ -1,6 +1,7 @@
 package com.prathameshrane.wortnest
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,6 +29,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -79,8 +81,10 @@ fun LearnScreen(vm: AppViewModel, repo: Repository, nav: Nav) {
                     Column(
                         Modifier
                             .fillMaxWidth()
-                            .heightIn(min = 200.dp)
-                            .background(MaterialTheme.colorScheme.surfaceContainer, RoundedCornerShape(16.dp))
+                            .heightIn(min = 240.dp)
+                            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(24.dp))
+                            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(24.dp))
+                            .clip(RoundedCornerShape(24.dp))
                             .clickable { flip() }
                             .padding(20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -91,16 +95,16 @@ fun LearnScreen(vm: AppViewModel, repo: Repository, nav: Nav) {
                                 color = MaterialTheme.colorScheme.onSurfaceVariant)
                             if (!flipped && (card.isNew || card.isLearning)) {
                                 Text(
-                                    if (card.isNew) "NEW" else "LEARNING", fontSize = 10.sp, fontWeight = FontWeight.Bold,
-                                    color = genderColor(if (card.isNew) "m" else "f"),
+                                    if (card.isNew) "new" else "learning", fontSize = 12.sp, fontWeight = FontWeight.SemiBold,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                                     modifier = Modifier
-                                        .background(MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(4.dp))
+                                        .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(6.dp))
                                         .padding(horizontal = 6.dp, vertical = 1.dp),
                                 )
                             }
                         }
                         if (flipped) {
-                            Text(e.spoken, fontSize = 32.sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center,
+                            Text(e.spoken, fontSize = 36.sp, letterSpacing = (-1).sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center,
                                 color = if (e.isNoun && e.gender.isNotEmpty()) genderColor(e.gender) else MaterialTheme.colorScheme.onSurface)
                             if (e.isNoun && e.plural.isNotEmpty()) Text("die ${e.plural}", color = MaterialTheme.colorScheme.onSurfaceVariant)
                             Text(e.glosses.take(2).joinToString("; "), textAlign = TextAlign.Center)
@@ -111,7 +115,7 @@ fun LearnScreen(vm: AppViewModel, repo: Repository, nav: Nav) {
                                     style = MaterialTheme.typography.bodySmall)
                             }
                         } else {
-                            Text(e.word, fontSize = 32.sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
+                            Text(e.word, fontSize = 36.sp, letterSpacing = (-1).sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
                             Text("Tap to reveal", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
@@ -191,7 +195,7 @@ private fun AddLevelRow(vm: AppViewModel) {
 private fun Stat(n: Int, label: String, color: Color) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
-            Modifier.size(width = 84.dp, height = 36.dp).background(MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(7.dp)),
+            Modifier.size(width = 84.dp, height = 40.dp).background(MaterialTheme.colorScheme.surfaceContainer, RoundedCornerShape(12.dp)),
             contentAlignment = Alignment.Center,
         ) { Text("$n", fontWeight = FontWeight.Bold, color = color) }
         Text(label, fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)

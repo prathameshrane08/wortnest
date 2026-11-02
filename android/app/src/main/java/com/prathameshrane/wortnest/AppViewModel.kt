@@ -33,6 +33,12 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     var bestStreak by mutableIntStateOf(0)
         private set
     val topicsSeen = mutableStateListOf<String>()   // grammar topics opened at least once
+    /** The learner's level (1 A1, 2 A2, 3 B1), chosen in the walkthrough; the quizzes start there. */
+    var level by mutableIntStateOf(1)
+        private set
+    /** False until the first-launch walkthrough has been finished or skipped. */
+    var toured by mutableStateOf(true)
+        private set
 
     private val prefs = app.getSharedPreferences("wortnest", Context.MODE_PRIVATE)
     private var tts: TextToSpeech? = null
@@ -142,6 +148,16 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
             .apply()
     }
 
+    fun chooseLevel(l: Int) {
+        level = l
+        prefs.edit().putInt("level", l).apply()
+    }
+
+    fun finishTour() {
+        toured = true
+        prefs.edit().putBoolean("toured", true).apply()
+    }
+
     fun markTopicSeen(id: String) {
         if (id in topicsSeen) return
         topicsSeen.add(id)
@@ -165,6 +181,8 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         }
         prefs.getString("missed", null)?.split("\n")?.filter { it.isNotEmpty() }?.let { missedNouns.addAll(it) }
         bestStreak = prefs.getInt("best", 0)
+        level = prefs.getInt("level", 1)
+        toured = prefs.getBoolean("toured", false)
         prefs.getString("topicsSeen", null)?.split("\n")?.filter { it.isNotEmpty() }?.let { topicsSeen.addAll(it) }
     }
 

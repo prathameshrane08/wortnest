@@ -5,24 +5,32 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,29 +39,38 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-/** The app icon in small: a box holding der, die and das. */
+private val HeroText = Color.White
+private val HeroMuted = Color(0xFFCBD5E1)
+private val HeroLabel = Color(0xFFA5B4FC)
+private val HeroButton = Color.White.copy(alpha = 0.1f)
+
+/** The app icon in small (a box holding der, die and das), the name and the walkthrough button. */
 @Composable
-fun BrandTitle() {
+fun BrandTitle(onTour: () -> Unit) {
     val box = MaterialTheme.colorScheme.primary
     val bars = listOf(genderColor("m"), genderColor("f"), genderColor("n"))
     Row(
-        Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
+        Modifier.fillMaxWidth().padding(start = 16.dp, end = 12.dp, top = 12.dp, bottom = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(9.dp),
     ) {
-        Canvas(Modifier.size(30.dp)) {
+        Canvas(Modifier.size(28.dp)) {
             val u = size.width / 32f
             bars.forEachIndexed { i, c ->
                 drawRoundRect(c, Offset(9 * u, (5 + 7 * i) * u), Size(14 * u, 4.4f * u), CornerRadius(1.4f * u))
@@ -70,8 +87,38 @@ fun BrandTitle() {
                 append("Deutsch ")
                 withStyle(SpanStyle(color = box)) { append("Täglich") }
             },
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.ExtraBold,
+            fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.5).sp,
+            modifier = Modifier.weight(1f),
+        )
+        Row(
+            Modifier
+                .clip(RoundedCornerShape(50))
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .clickable(onClick = onTour)
+                .padding(horizontal = 12.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            Icon(Icons.AutoMirrored.Outlined.HelpOutline, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.size(16.dp))
+            Text("Tour", color = MaterialTheme.colorScheme.onPrimaryContainer, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+        }
+    }
+}
+
+/** "Guten Morgen" and how much is waiting, above the search box. */
+@Composable
+fun Greeting(vm: AppViewModel, repo: Repository) {
+    val h = LocalTime.now().hour
+    val n = vm.counts()
+    val todo = listOf(n.fresh + n.learning + n.review > 0, vm.missedNouns.isNotEmpty(), repo.grammar.any { it.id !in vm.topicsSeen }).count { it }
+    Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 14.dp, bottom = 12.dp)) {
+        Text(
+            (if (h < 11) "Guten Morgen" else if (h < 18) "Guten Tag" else "Guten Abend") + " 👋",
+            fontSize = 30.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.8).sp,
+        )
+        Text(
+            if (todo == 0) "All caught up for today" else "$todo thing${if (todo > 1) "s" else ""} to do today",
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -88,28 +135,42 @@ fun wordOfDay(repo: Repository): Entry? {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HomeContent(vm: AppViewModel, repo: Repository, nav: Nav, goTab: (Int) -> Unit, onTry: (String) -> Unit) {
-    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+fun HomeContent(vm: AppViewModel, repo: Repository, nav: Nav, goTab: (Int) -> Unit, openLevel: () -> Unit, onTry: (String) -> Unit) {
+    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         wordOfDay(repo)?.let { WordOfDayCard(vm, repo, it, nav) }
+
         val n = vm.counts()
         val due = n.fresh + n.learning + n.review
-        Tile("Flashcards", "$due", due == 0,
-            when { due > 0 -> "cards ready to study"; vm.saved.isNotEmpty() -> "nothing due, well done"; else -> "start with 20 A1 words" }) { goTab(4) }
-        Tile("Der, die oder das", "${vm.missedNouns.size}", vm.missedNouns.isEmpty(),
-            when { vm.missedNouns.isNotEmpty() -> "nouns you missed to review"; vm.bestStreak > 0 -> "best streak ${vm.bestStreak}"; else -> "guess the article" }) { goTab(1) }
+        val total = vm.saved.size
         val read = vm.topicsSeen.count { id -> repo.grammar.any { it.id == id } }
         val next = repo.grammar.firstOrNull { it.id !in vm.topicsSeen }
-        Tile("Grammatik", "$read/${repo.grammar.size}", read == 0, next?.let { "next: ${it.title}" } ?: "all topics read") { goTab(3) }
-        Text("Or look something up", fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 6.dp))
+        val levelWords = repo.levelWords[vm.level]
+        val inLevel = levelWords.count { vm.saved.containsKey(repo.entries[it].key) }
+        fun frac(a: Int, b: Int) = if (b == 0) 0f else (a.toFloat() / b).coerceIn(0f, 1f)
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Tile("$due", "Cards due", if (total == 0) "tap to start" else "${n.known} of $total known well",
+                frac(n.known, total), MaterialTheme.colorScheme.primary, Modifier.weight(1f)) { goTab(4) }
+            Tile("${vm.missedNouns.size}", "Nouns to review", "best streak ${vm.bestStreak}",
+                frac(vm.bestStreak, 50), genderColor("n"), Modifier.weight(1f)) { goTab(1) }
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Tile("$read/${repo.grammar.size}", "Grammar topics", next?.let { "next: ${it.title}" } ?: "all read",
+                frac(read, repo.grammar.size), Color(0xFFF59E0B), Modifier.weight(1f)) { goTab(3) }
+            Tile(LEVEL_NAMES[vm.level], "Your level", "$inLevel of ${levelWords.size} words saved",
+                frac(inLevel, levelWords.size), Color(0xFFEC4899), Modifier.weight(1f), openLevel)
+        }
+
+        Text("Or look something up", fontWeight = FontWeight.Bold, fontSize = 17.sp, modifier = Modifier.padding(top = 6.dp))
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             for (w in listOf("Haus", "gehen", "schön", "Zeitung", "Mädchen", "bringen", "Freund", "trotzdem")) {
                 Text(
                     w,
+                    fontWeight = FontWeight.Medium,
                     modifier = Modifier
                         .clip(RoundedCornerShape(50))
-                        .border(1.dp, MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(50))
+                        .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(50))
                         .clickable { onTry(w) }
-                        .padding(horizontal = 14.dp, vertical = 6.dp),
+                        .padding(horizontal = 14.dp, vertical = 7.dp),
                 )
             }
         }
@@ -119,75 +180,85 @@ fun HomeContent(vm: AppViewModel, repo: Repository, nav: Nav, goTab: (Int) -> Un
 @Composable
 private fun WordOfDayCard(vm: AppViewModel, repo: Repository, e: Entry, nav: Nav) {
     val gendered = e.isNoun && e.gender.isNotEmpty()
-    val c = if (gendered) genderColor(e.gender) else MaterialTheme.colorScheme.primary
-    val shape = RoundedCornerShape(16.dp)
-    Column(Modifier.fillMaxWidth().clip(shape).background(MaterialTheme.colorScheme.surfaceContainer)) {
-        Spacer(Modifier.fillMaxWidth().height(6.dp).background(c))
-        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("Wort des Tages", color = c, fontWeight = FontWeight.ExtraBold)
-                Text(
-                    LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, d. MMMM", Locale.GERMAN)),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp,
-                )
-            }
+    Column(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).background(heroColor()).padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text("Wort des Tages", color = HeroLabel, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+            Text(LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, d. MMMM", Locale.GERMAN)), color = HeroMuted, fontSize = 14.sp)
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 buildAnnotatedString {
-                    if (gendered) withStyle(SpanStyle(fontSize = 26.sp)) { append(Gender.article(e.gender) + " ") }
+                    if (gendered) withStyle(SpanStyle(fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = genderColorOnDark(e.gender))) {
+                        append(Gender.article(e.gender) + " ")
+                    }
                     append(e.word)
                 },
-                fontSize = 50.sp, lineHeight = 54.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-1).sp,
-                color = if (gendered) c else MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(top = 4.dp),
+                fontSize = 46.sp, lineHeight = 50.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-1.5).sp, color = HeroText,
+                modifier = Modifier.weight(1f).padding(top = 6.dp),
             )
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                PosLabel(e.posName)
-                LevelBadge(e.level)
-                if (gendered && e.plural.isNotEmpty()) Text("plural: die ${e.plural}", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
-            }
-            Text(e.glosses.take(2).joinToString("; "), fontSize = 18.sp, lineHeight = 25.sp)
-            repo.examples[e.key]?.firstOrNull { it.size == 2 }?.let { ex ->
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.Top, modifier = Modifier.padding(top = 4.dp)) {
-                    SpeakButton(vm, ex[0])
-                    Column(Modifier.weight(1f).padding(top = 4.dp)) {
-                        Text(ex[0], fontWeight = FontWeight.SemiBold)
-                        Text(ex[1], color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
-                    }
+            IconButton(
+                onClick = { vm.speak(e.spoken) },
+                colors = IconButtonDefaults.iconButtonColors(containerColor = HeroButton, contentColor = HeroText),
+                modifier = Modifier.size(48.dp),
+            ) { Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Pronounce") }
+        }
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text(e.posName, color = HeroMuted, fontStyle = FontStyle.Italic, fontSize = 14.sp)
+            if (e.level > 0) Text(
+                LEVEL_NAMES[e.level], color = HeroText, fontSize = 11.sp, fontWeight = FontWeight.Bold,
+                modifier = Modifier.background(HeroButton, RoundedCornerShape(6.dp)).padding(horizontal = 6.dp, vertical = 1.dp),
+            )
+            if (gendered && e.plural.isNotEmpty()) Text("plural: die ${e.plural}", color = HeroMuted, fontSize = 14.sp)
+        }
+        Text(e.glosses.take(2).joinToString("; "), fontSize = 17.sp, lineHeight = 24.sp, color = HeroMuted, modifier = Modifier.padding(top = 4.dp))
+        repo.examples[e.key]?.firstOrNull { it.size == 2 }?.let { ex ->
+            Box(Modifier.fillMaxWidth().padding(vertical = 8.dp).height(1.dp).background(Color.White.copy(alpha = 0.12f)))
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.Top) {
+                IconButton(
+                    onClick = { vm.speak(ex[0]) },
+                    colors = IconButtonDefaults.iconButtonColors(containerColor = HeroButton, contentColor = HeroText),
+                    modifier = Modifier.size(36.dp),
+                ) { Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Read the sentence aloud", modifier = Modifier.size(18.dp)) }
+                Column(Modifier.weight(1f)) {
+                    Text(ex[0], fontWeight = FontWeight.SemiBold, color = HeroText)
+                    Text(ex[1], color = HeroMuted, fontSize = 14.sp)
                 }
             }
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 4.dp)) {
-                SpeakButton(vm, e.spoken)
-                val on = vm.isSaved(e)
-                OutlinedButton(onClick = { vm.toggleSaved(e) }, contentPadding = PaddingValues(horizontal = 14.dp)) {
-                    Icon(if (on) Icons.Filled.Star else Icons.Outlined.StarOutline, contentDescription = null, modifier = Modifier.size(18.dp),
-                        tint = if (on) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface)
-                    Spacer(Modifier.width(6.dp))
-                    Text(if (on) "Saved" else "Add to flashcards", maxLines = 1)
-                }
-                OutlinedButton(onClick = { nav.push(Route.EntryR(e.id)) }, contentPadding = PaddingValues(horizontal = 14.dp)) { Text("Full entry", maxLines = 1) }
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 10.dp)) {
+            val on = vm.isSaved(e)
+            val colors = ButtonDefaults.buttonColors(containerColor = HeroButton, contentColor = HeroText)
+            Button(onClick = { vm.toggleSaved(e) }, colors = colors, shape = RoundedCornerShape(12.dp), contentPadding = PaddingValues(horizontal = 14.dp)) {
+                Icon(if (on) Icons.Filled.Star else Icons.Outlined.StarOutline, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(6.dp))
+                Text(if (on) "Saved" else "Add to flashcards", maxLines = 1)
+            }
+            Button(onClick = { nav.push(Route.EntryR(e.id)) }, colors = colors, shape = RoundedCornerShape(12.dp), contentPadding = PaddingValues(horizontal = 14.dp)) {
+                Text("Full entry", maxLines = 1)
             }
         }
     }
 }
 
 @Composable
-private fun Tile(title: String, number: String, zero: Boolean, line: String, onClick: () -> Unit) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(14.dp))
-            .background(MaterialTheme.colorScheme.surfaceContainer)
+private fun Tile(number: String, title: String, line: String, progress: Float, color: Color, modifier: Modifier, onClick: () -> Unit) {
+    Column(
+        modifier
+            .clip(RoundedCornerShape(16.dp))
+            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
             .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 14.dp),
-        verticalAlignment = Alignment.CenterVertically,
+            .padding(16.dp),
     ) {
-        Column(Modifier.weight(1f)) {
-            Text(title, fontWeight = FontWeight.Bold, fontSize = 17.sp)
-            Text(line, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp, maxLines = 2)
+        Text(number, fontSize = 26.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.6).sp)
+        Text(title, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(line, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Box(
+            Modifier.padding(top = 12.dp).fillMaxWidth().height(6.dp).clip(CircleShape).background(MaterialTheme.colorScheme.surfaceContainerHigh),
+        ) {
+            Box(Modifier.fillMaxHeight().fillMaxWidth(progress.coerceAtLeast(0.03f)).clip(CircleShape).background(color))
         }
-        Text(
-            number, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold,
-            color = if (zero) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
-        )
     }
 }

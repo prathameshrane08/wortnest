@@ -1,6 +1,7 @@
 package com.prathameshrane.wortnest
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,11 +25,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -43,6 +46,7 @@ fun ScreenTitle(text: String) {
         text,
         style = MaterialTheme.typography.headlineMedium,
         fontWeight = FontWeight.ExtraBold,
+        letterSpacing = (-0.5).sp,
         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
     )
 }
@@ -76,7 +80,12 @@ fun SearchField(value: String, onChange: (String) -> Unit, placeholder: String, 
             autoCorrectEnabled = false,
             imeAction = ImeAction.Search,
         ),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedBorderColor = Color.Transparent,
+        ),
         modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp),
     )
 }
@@ -90,7 +99,7 @@ fun UmlautRow(onInsert: (String) -> Unit) {
                 c,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(6.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(9.dp))
                     .clickable { onInsert(c) }
                     .padding(horizontal = 12.dp, vertical = 4.dp),
             )
@@ -103,12 +112,11 @@ fun SectionHeader(text: String) {
     Text(
         text,
         style = MaterialTheme.typography.labelLarge,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.SemiBold,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(start = 16.dp, end = 16.dp, top = 14.dp, bottom = 4.dp),
     )
 }
 
@@ -196,8 +204,9 @@ fun CardBox(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Column(
         modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceContainer, RoundedCornerShape(14.dp))
-            .padding(16.dp),
+            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
+            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(20.dp))
+            .padding(18.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) { content() }
 }

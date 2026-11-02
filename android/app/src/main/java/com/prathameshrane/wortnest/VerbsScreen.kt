@@ -179,13 +179,13 @@ private val endings = listOf("test", "est", "ten", "tet", "st", "et", "en", "te"
 
 @Composable
 private fun TenseTable(t: Conjugation.Table) {
-    val irregularColor = MaterialTheme.colorScheme.primary
+    val irr = irregularColor()
     CardBox {
         Text(t.title, fontWeight = FontWeight.Bold)
         for (row in t.rows) {
             Row {
                 Text(row.person, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.width(96.dp))
-                val color = if (row.irregular) irregularColor else Color.Unspecified
+                val color = if (row.irregular) irr else Color.Unspecified
                 Text(
                     buildAnnotatedString {
                         withStyle(SpanStyle(color = color, fontWeight = if (row.irregular) FontWeight.SemiBold else null)) {
@@ -209,9 +209,9 @@ private val tenseNames = listOf("pr" to "Präsens", "pt" to "Präteritum", "pf" 
 private val drillLevels = listOf(1 to "A1", 2 to "A2", 3 to "B1", 0 to "All")
 
 @Composable
-fun DrillScreen(repo: Repository, nav: Nav) {
+fun DrillScreen(vm: AppViewModel, repo: Repository, nav: Nav) {
     var tense by rememberSaveable { mutableStateOf("pr") }
-    var level by rememberSaveable { mutableIntStateOf(1) }
+    var level by rememberSaveable { mutableIntStateOf(vm.level) }
     var verb by rememberSaveable { mutableStateOf("") }
     var person by rememberSaveable { mutableIntStateOf(0) }
     var expected by rememberSaveable { mutableStateOf("") }

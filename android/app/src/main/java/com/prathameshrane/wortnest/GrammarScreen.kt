@@ -135,10 +135,10 @@ fun GrammarTopicScreen(vm: AppViewModel, repo: Repository, id: String, nav: Nav)
             t.blocks.forEach { b ->
                 when (b.type) {
                     "tip" -> Column(
-                        Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f), RoundedCornerShape(10.dp)).padding(12.dp),
+                        Modifier.fillMaxWidth().background(tipBackground(), RoundedCornerShape(14.dp)).padding(14.dp),
                         verticalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
-                        Text("Watch out", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                        Text("Watch out", fontWeight = FontWeight.Bold, color = tipTitle())
                         Text(rich(b.text))
                     }
                     "ex" -> CardBox {
@@ -203,3 +203,9 @@ private fun GrammarTable(b: GrammarBlock) {
         }
     }
 }
+
+@Composable
+private fun tipBackground() = if (androidx.compose.foundation.isSystemInDarkTheme()) Color(0xFF2A1F08) else Color(0xFFFFFBEB)
+
+@Composable
+private fun tipTitle() = if (androidx.compose.foundation.isSystemInDarkTheme()) Color(0xFFFCD34D) else Color(0xFFB45309)
