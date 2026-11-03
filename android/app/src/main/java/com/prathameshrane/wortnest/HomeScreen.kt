@@ -126,7 +126,8 @@ fun Greeting(vm: AppViewModel, repo: Repository) {
             fontSize = 30.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.8).sp,
         )
         Text(
-            if (todo == 0) "All caught up for today" else "$todo thing${if (todo > 1) "s" else ""} to do today",
+            (if (h < 11) "Good morning. " else if (h < 18) "Good afternoon. " else "Good evening. ") +
+                if (todo == 0) "All caught up for today" else "$todo thing${if (todo > 1) "s" else ""} to do today",
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
@@ -195,8 +196,8 @@ private fun WordOfDayCard(vm: AppViewModel, repo: Repository, e: Entry, nav: Nav
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("Wort des Tages", color = HeroLabel, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
-            Text(LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, d. MMMM", Locale.GERMAN)), color = HeroMuted, fontSize = 14.sp)
+            Text("Word of the day", color = HeroLabel, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+            Text(LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE d MMMM", Locale.ENGLISH)), color = HeroMuted, fontSize = 14.sp)
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f).padding(top = 6.dp)) {

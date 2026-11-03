@@ -67,7 +67,7 @@ fun VerbsScreen(vm: AppViewModel, repo: Repository, nav: Nav) {
         results = withContext(Dispatchers.Default) { repo.findVerbs(query) }
     }
     Column(Modifier.fillMaxSize()) {
-        ScreenTitle("Verben")
+        ScreenTitle("Verbs")
         SearchField(query, { vm.verbQuery = it }, "gehen, fing an, to bring")
         UmlautRow { vm.verbQuery += it }
         LazyColumn(Modifier.fillMaxSize()) {
@@ -128,16 +128,16 @@ fun VerbDetailScreen(vm: AppViewModel, repo: Repository, inf: String, nav: Nav) 
             }
             FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Conjugation.kindLabel(v)?.let { Badge(it, highlight = v.t != "weak") }
-                Badge("Perfekt with " + Conjugation.auxiliaries(v).joinToString(" or "))
+                Badge("Perfect tense with " + Conjugation.auxiliaries(v).joinToString(" or "))
                 Conjugation.separablePrefix(v, inf)?.let { Badge("Separable: $it-") }
             }
             entry?.let { Text(it.glosses.take(3).joinToString("; ")) }
 
             val parts = listOf(
-                "Infinitiv" to inf,
-                "Präsens er" to v.pr.getOrElse(2) { "" },
-                "Präteritum er" to v.pt.getOrElse(2) { "" },
-                "Partizip II" to (if (Conjugation.mainAux(v) == "sein") "ist " else "hat ") + v.pp,
+                "Infinitive" to inf,
+                "Present, er" to v.pr.getOrElse(2) { "" },
+                "Past, er" to v.pt.getOrElse(2) { "" },
+                "Past participle" to (if (Conjugation.mainAux(v) == "sein") "ist " else "hat ") + v.pp,
             )
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 for (pair in parts.chunked(2)) {
@@ -181,7 +181,10 @@ private val endings = listOf("test", "est", "ten", "tet", "st", "et", "en", "te"
 private fun TenseTable(t: Conjugation.Table) {
     val irr = irregularColor()
     CardBox {
-        Text(t.title, fontWeight = FontWeight.Bold)
+        Text(buildAnnotatedString {
+            append(t.title)
+            if (t.de.isNotEmpty()) withStyle(SpanStyle(color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Normal, fontSize = 13.sp)) { append("  " + t.de) }
+        }, fontWeight = FontWeight.Bold)
         for (row in t.rows) {
             Row {
                 Text(row.person, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.width(96.dp))
@@ -205,7 +208,7 @@ private fun TenseTable(t: Conjugation.Table) {
     }
 }
 
-private val tenseNames = listOf("pr" to "Präsens", "pt" to "Präteritum", "pf" to "Perfekt")
+private val tenseNames = listOf("pr" to "Present", "pt" to "Past", "pf" to "Perfect")
 
 @Composable
 fun DrillScreen(vm: AppViewModel, repo: Repository, nav: Nav) {
@@ -285,7 +288,7 @@ fun DrillScreen(vm: AppViewModel, repo: Repository, nav: Nav) {
                     if (checked == null) OutlinedButton(onClick = { next() }) { Text("Skip") }
                 }
                 when (checked) {
-                    true -> Text("Richtig! ${Conjugation.pronouns[person]} $expected", color = okColor(), fontWeight = FontWeight.SemiBold)
+                    true -> Text("Correct! ${Conjugation.pronouns[person]} $expected", color = okColor(), fontWeight = FontWeight.SemiBold)
                     false -> Text("Not quite. ${Conjugation.pronouns[person]} $expected", color = badColor(), fontWeight = FontWeight.SemiBold)
                     null -> {}
                 }

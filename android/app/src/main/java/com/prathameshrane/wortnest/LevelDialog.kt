@@ -43,7 +43,7 @@ private val LEVEL_TITLES = listOf("", "Beginner", "Elementary", "Intermediate")
 private class TestQ(val id: Int, val kind: String, val opts: List<Int>)
 
 /** Your level: take the twelve-question test to move up, or set the level by hand.
- *  onClose(true) means "go to Üben", after adding the new level's first words. */
+ *  onClose(true) means "go to Practice", after adding the new level's first words. */
 @Composable
 fun LevelDialog(vm: AppViewModel, repo: Repository, onClose: (goLearn: Boolean) -> Unit) {
     var view by remember { mutableStateOf("home") }

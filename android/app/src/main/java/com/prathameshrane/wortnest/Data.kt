@@ -349,7 +349,7 @@ object Conjugation {
     }
 
     data class Row(val person: String, val form: String, val irregular: Boolean)
-    data class Table(val title: String, val rows: List<Row>, val showEndings: Boolean)
+    data class Table(val title: String, val rows: List<Row>, val showEndings: Boolean, val de: String = "")   // de: the German name of the tense
 
     fun tables(v: Verb, inf: String): List<Table> {
         val sep = separablePrefix(v, inf)
@@ -363,24 +363,24 @@ object Conjugation {
         var k2 = if (v.k2.any { it.isNotEmpty() }) v.k2 else wuerde.map { "$it $inf" }
         if (sep != null) k2 = k2.map { f -> if (' ' !in f && f.startsWith(sep)) f.removePrefix(sep) + " " + sep else f }   // finge an, not anfinge
         val t = mutableListOf(
-            Table("Präsens", rows(v.pr, v.pr.zip(regPr) { a, b -> a.isNotEmpty() && a != b }), true),
-            Table("Präteritum", rows(v.pt, v.pt.zip(regPt) { a, b -> a.isNotEmpty() && a != b }), true),
-            Table("Perfekt", rows(aux.getValue("pr").map { "$it ${v.pp}" }), false),
-            Table("Plusquamperfekt", rows(aux.getValue("pt").map { "$it ${v.pp}" }), false),
-            Table("Futur I", rows(werdenPr.map { "$it $inf" }), false),
-            Table("Futur II", rows(werdenPr.map { "$it ${v.pp} $auxInf" }), false),
-            Table("Konjunktiv I", rows(v.k1), false),
-            Table("Konjunktiv II", rows(k2), false),
-            Table("Konjunktiv II Perfekt", rows(aux.getValue("k2").map { "$it ${v.pp}" }), false),
-            Table("würde + Infinitiv", rows(wuerde.map { "$it $inf" }), false),
+            Table("Present", rows(v.pr, v.pr.zip(regPr) { a, b -> a.isNotEmpty() && a != b }), true, "Präsens"),
+            Table("Simple past", rows(v.pt, v.pt.zip(regPt) { a, b -> a.isNotEmpty() && a != b }), true, "Präteritum"),
+            Table("Perfect", rows(aux.getValue("pr").map { "$it ${v.pp}" }), false, "Perfekt"),
+            Table("Past perfect", rows(aux.getValue("pt").map { "$it ${v.pp}" }), false, "Plusquamperfekt"),
+            Table("Future", rows(werdenPr.map { "$it $inf" }), false, "Futur I"),
+            Table("Future perfect", rows(werdenPr.map { "$it ${v.pp} $auxInf" }), false, "Futur II"),
+            Table("Reported speech", rows(v.k1), false, "Konjunktiv I"),
+            Table("Subjunctive", rows(k2), false, "Konjunktiv II"),
+            Table("Past subjunctive", rows(aux.getValue("k2").map { "$it ${v.pp}" }), false, "Konjunktiv II Perfekt"),
+            Table("Would", rows(wuerde.map { "$it $inf" }), false, "würde + Infinitiv"),
         )
         val du = v.im.firstOrNull().orEmpty()
         if (du.isNotEmpty() && du != "-") {
             val sie = v.pr.lastOrNull().orEmpty().split(" ", limit = 2)
             val sieForm = (listOf(sie[0], "Sie") + sie.drop(1)).joinToString(" ")
-            t.add(Table("Imperativ", rows(listOf("$du!", "${v.im.getOrElse(1) { "" }}!", "$sieForm!"), persons = listOf("du", "ihr", "Sie")), false))
+            t.add(Table("Commands", rows(listOf("$du!", "${v.im.getOrElse(1) { "" }}!", "$sieForm!"), persons = listOf("du", "ihr", "Sie")), false, "Imperativ"))
         }
-        t.add(Table("Partizipien", rows(listOf(v.p1, v.pp), persons = listOf("Partizip I", "Partizip II")), false))
+        t.add(Table("Participles", rows(listOf(v.p1, v.pp), persons = listOf("present", "past")), false, "Partizipien"))
         return t
     }
 

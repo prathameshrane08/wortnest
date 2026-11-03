@@ -89,9 +89,9 @@ fun TourDialog(vm: AppViewModel, repo: Repository, start: Int, onClose: (addedWo
             }
         },
         TourStep("Look up any word, both ways", "Type German or English. Forms like ging or Häuser find their base word, with the meaning, examples and pronunciation.") { SearchDemo(repo) },
-        TourStep("Blue, red, green", "Every noun shows its article in colour: blue for der, red for die, green for das. The Der Die Das tab quizzes you until the colours stick.") { ColoursDemo() },
-        TourStep("Every verb, every tense", "The Verben tab conjugates about 8,900 verbs. Highlighted forms break the regular pattern, so you know which ones to learn by heart.") { VerbDemo() },
-        TourStep("Practise four ways", "Üben has flashcards for your starred words, plus Choose, Write and Match quizzes, German to English or the other way. Swipe a flashcard right if you knew it.") { CardDemo() },
+        TourStep("Blue, red, green", "Every noun shows its article in colour: blue for der, red for die, green for das. The Articles tab quizzes you until the colours stick.") { ColoursDemo() },
+        TourStep("Every verb, every tense", "The Verbs tab conjugates about 8,900 verbs. Highlighted forms break the regular pattern, so you know which ones to learn by heart.") { VerbDemo() },
+        TourStep("Practise four ways", "Practice has flashcards for your starred words, plus Choose, Write and Match quizzes, German to English or the other way. Swipe a flashcard right if you knew it.") { CardDemo() },
     )
     val last = step == steps.lastIndex
     var sawLevel by remember { mutableStateOf(start == LEVEL_STEP) }

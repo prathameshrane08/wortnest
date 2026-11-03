@@ -323,7 +323,7 @@ section.view{display:flex;flex-direction:column;gap:22px}
 .dd-cards{padding-top:20px}
 .dd-cards .face .tap{margin-top:6px}
 
-/* ---------- Üben ---------- */
+/* ---------- Practice ---------- */
 .learn-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .lv-pill{flex:none;display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px 5px 6px;font-weight:600;font-size:.86rem;color:var(--ink)}
 .lv-pill .lv{margin:0}
@@ -480,11 +480,11 @@ footer button{display:block;margin-top:8px;border:0;background:none;padding:0;co
   <div class="wrap">
     <div class="brand"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 9v15a3 3 0 0 0 3 3h16a3 3 0 0 0 3-3V9" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round"/><rect x="9" y="5" width="14" height="4.4" rx="1.4" fill="var(--der)"/><rect x="9" y="12" width="14" height="4.4" rx="1.4" fill="var(--die)"/><rect x="9" y="19" width="14" height="4.4" rx="1.4" fill="var(--das)"/></svg><span>Deutsch <i>Täglich</i></span></div>
     <nav class="tabs" role="tablist" aria-label="Sections">
-      <button role="tab" id="tab-dict" data-view="dict" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 8h6"/></svg><span class="lbl">Wörterbuch</span></button>
-      <button role="tab" id="tab-dds" data-view="dds" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="12" r="3"/><circle cx="12" cy="12" r="3"/><circle cx="18" cy="12" r="3"/></svg><span class="lbl">Der Die Das</span></button>
-      <button role="tab" id="tab-verbs" data-view="verbs" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10M15 10v10"/></svg><span class="lbl">Verben</span></button>
-      <button role="tab" id="tab-grammar" data-view="grammar" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 3 5v14c4-.5 7 0 9 1.5 2-1.5 5-2 9-1.5V5c-4-.5-7 0-9 1.5z"/><path d="M12 6.5V20"/></svg><span class="lbl">Grammatik</span></button>
-      <button role="tab" id="tab-learn" data-view="learn" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg><span class="lbl">Üben</span></button>
+      <button role="tab" id="tab-dict" data-view="dict" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 8h6"/></svg><span class="lbl">Dictionary</span></button>
+      <button role="tab" id="tab-dds" data-view="dds" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="12" r="3"/><circle cx="12" cy="12" r="3"/><circle cx="18" cy="12" r="3"/></svg><span class="lbl">Articles</span></button>
+      <button role="tab" id="tab-verbs" data-view="verbs" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10M15 10v10"/></svg><span class="lbl">Verbs</span></button>
+      <button role="tab" id="tab-grammar" data-view="grammar" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 3 5v14c4-.5 7 0 9 1.5 2-1.5 5-2 9-1.5V5c-4-.5-7 0-9 1.5z"/><path d="M12 6.5V20"/></svg><span class="lbl">Grammar</span></button>
+      <button role="tab" id="tab-learn" data-view="learn" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg><span class="lbl">Practice</span></button>
     </nav>
     <div class="top-actions"><button type="button" class="theme-btn" id="theme-toggle" aria-label="Switch to dark mode"><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></button>
     <button type="button" class="tour-btn" id="tour-open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M9.5 9.3a2.6 2.6 0 0 1 5 .9c0 1.7-2.5 2.3-2.5 3.8"/><path d="M12 17.2h.01"/></svg>Tour</button></div>
@@ -513,7 +513,7 @@ footer button{display:block;margin-top:8px;border:0;background:none;padding:0;co
       <div id="dict-results"></div>
     </section>
 
-    <!-- Der Die Das -->
+    <!-- Articles: der, die, das -->
     <section class="view" id="view-dds" hidden>
       <div style="display:flex;flex-direction:column;gap:8px">
         <label class="search" for="dq">
@@ -526,12 +526,13 @@ footer button{display:block;margin-top:8px;border:0;background:none;padding:0;co
 
       <div class="card">
         <div class="card-head">
-          <h2>der, die oder das?</h2>
+          <h2>der, die or das?</h2>
           <div class="seg" id="dd-mode" role="group" aria-label="How to practise">
             <button type="button" data-m="quiz" aria-pressed="true">Quiz</button>
             <button type="button" data-m="cards" aria-pressed="false">Flashcards</button>
           </div>
         </div>
+        <p class="small muted dd-intro">Every German noun is der, die or das. Pick the right one for each word.</p>
         <div class="seg dd-src" id="dd-level" role="group" aria-label="Which nouns">
           <button type="button" data-lv="0" aria-pressed="true" id="dd-lv-name">A1 nouns</button>
           <button type="button" data-lv="3" aria-pressed="false">My mistakes</button>
@@ -584,9 +585,9 @@ footer button{display:block;margin-top:8px;border:0;background:none;padding:0;co
         <div class="card-head">
           <h2>Type the right form</h2>
           <div class="seg" id="drill-tense" role="group" aria-label="Tense">
-            <button type="button" data-t="pr" aria-pressed="true">Präsens</button>
-            <button type="button" data-t="pt" aria-pressed="false">Präteritum</button>
-            <button type="button" data-t="pf" aria-pressed="false">Perfekt</button>
+            <button type="button" data-t="pr" aria-pressed="true">Present</button>
+            <button type="button" data-t="pt" aria-pressed="false">Past</button>
+            <button type="button" data-t="pf" aria-pressed="false">Perfect</button>
           </div>
         </div>
         <div class="prompt" id="drill-prompt">…</div>
@@ -602,7 +603,7 @@ footer button{display:block;margin-top:8px;border:0;background:none;padding:0;co
     <!-- Grammar -->
     <section class="view" id="view-grammar" hidden>
       <div id="g-list">
-        <div class="view-head"><h2>Grammatik</h2>
+        <div class="view-head"><h2>Grammar</h2>
           <p class="muted">The topics German courses cover from A1 to B1, each with tables, examples and the mistakes learners make most.</p></div>
         <div id="g-topics"></div>
       </div>
@@ -611,7 +612,7 @@ footer button{display:block;margin-top:8px;border:0;background:none;padding:0;co
 
     <!-- Learn -->
     <section class="view" id="view-learn" hidden>
-      <div class="view-head learn-head"><div><h2>Üben</h2><p class="muted" id="learn-sub"></p></div>
+      <div class="view-head learn-head"><div><h2>Practice</h2><p class="muted" id="learn-sub"></p></div>
         <button type="button" class="lv-pill" id="learn-level"></button></div>
       <div class="modes" id="learn-mode" role="group" aria-label="How to practise">
         <button type="button" data-m="cards" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="14" height="14" rx="2.5"/><path d="M7 3h11.5A2.5 2.5 0 0 1 21 5.5V17"/></svg>Flashcards</button>
@@ -687,7 +688,7 @@ const ICON = {
   starOn:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>'
 };
 
-const DATA_VERSION = 3;   // bump when the JSON files change so browsers skip their cached copy
+const DATA_VERSION = 4;   // bump when the JSON files change so browsers skip their cached copy
 let ROWS = [], VERBS = {}, FORMS = {}, BYW = new Map(), GL = [], FIRST = [], LOW = [];
 let NOUNS = [];   // indices of quiz-worthy nouns, by frequency
 let LEVEL_NOUNS = [[], [], [], []], LEVEL_VERBS = [[], [], [], []], LEVEL_WORDS = [[], [], [], []];   // by level 1-3, most frequent first
@@ -791,9 +792,9 @@ function startHtml(){
   let wotd = "";
   if(r){
     const g = r[1] === "noun" ? r[2] : "", on = !!saved[keyOf(r)], ex = (EXAMPLES[keyOf(r)] || [])[0];
-    const date = new Date().toLocaleDateString("de-DE", {weekday:"long", day:"numeric", month:"long"});
+    const date = new Date().toLocaleDateString("en-GB", {weekday:"long", day:"numeric", month:"long"});
     wotd = `<article class="card wotd ${g ? "g-" + g : ""}">
-      <div class="wotd-top"><b>Wort des Tages</b><span>${esc(date)}</span></div>
+      <div class="wotd-top"><b>Word of the day</b><span>${esc(date)}</span></div>
       <div class="wotd-head"><div class="wotd-word">${g ? `<small>${ART[g]}</small>` : ""}${esc(r[0])}</div><button class="icon-btn" type="button" data-wsay="${esc((g ? ART[g] + " " : "") + r[0])}" aria-label="Pronounce">${ICON.speak}</button></div>
       <div class="meta"><span class="pos">${POSN[r[1]]}</span>${lvHtml(r)}${g && r[3] ? `<span>plural: <b>die ${esc(r[3])}</b></span>` : ""}</div>
       <p class="wotd-mean">${r[4].slice(0, 2).map(esc).join("; ")}</p>
@@ -815,7 +816,7 @@ function startHtml(){
     ${tile("level", LV[L], "Your level", L < 3 ? `${LV[L + 1]} test when you're ready` : `${inLevel} of ${lw.length} words saved`, pct(inLevel, lw.length), "#ec4899")}
   </div>`;
   const todo = (due ? 1 : 0) + (dd.miss.length ? 1 : 0) + (nextTopic ? 1 : 0), h = new Date().getHours();
-  $("#greet").innerHTML = `<h1>${h < 11 ? "Guten Morgen" : h < 18 ? "Guten Tag" : "Guten Abend"} 👋</h1><p>${todo ? `${todo} thing${todo > 1 ? "s" : ""} to do today` : "All caught up for today"}</p>`;
+  $("#greet").innerHTML = `<h1>${h < 11 ? "Guten Morgen" : h < 18 ? "Guten Tag" : "Guten Abend"} 👋</h1><p>${h < 11 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"}. ${todo ? `${todo} thing${todo > 1 ? "s" : ""} to do today` : "All caught up for today"}</p>`;
   const tries = ["Haus","gehen","schön","Zeitung","Mädchen","bringen","Freund","trotzdem"].filter(w => BYW.has(w.toLowerCase()));
   return `<div class="home">${wotd}${tiles}<div class="try"><h3>Or look something up</h3><div class="chips">${tries.map(w => `<button type="button" class="chip" data-try="${w}">${w}</button>`).join("")}</div></div></div>`;
 }
@@ -938,7 +939,7 @@ function ddAnswer(g){
   if(ok){ dd.right++; dd.streak++; if(dd.streak > dd.best){ dd.best = dd.streak; store.set("ddBest", dd.best); } dd.miss = dd.miss.filter(w => w !== r[0]); }
   else { dd.streak = 0; if(!dd.miss.includes(r[0])) dd.miss.push(r[0]); }
   store.set("ddMiss", dd.miss);
-  $("#dd-feedback").innerHTML = `<span class="${ok ? "ok" : "bad"}">${ok ? "Richtig!" : "Falsch."}</span> <b>${ART[r[2]]} ${esc(r[0])}</b>${r[3] ? `, die ${esc(r[3])}` : ""}.${rule ? " " + rule : ""}`;
+  $("#dd-feedback").innerHTML = `<span class="${ok ? "ok" : "bad"}">${ok ? "Correct!" : "Not quite."}</span> <b>${ART[r[2]]} ${esc(r[0])}</b>${r[3] ? `, die ${esc(r[3])}` : ""}.${rule ? " " + rule : ""}`;
   speak(ART[r[2]] + " " + r[0]);
   ddStats();
   setTimeout(() => { if(dd.done && dd.cur === ci && ok) ddNext(); }, 1100);
@@ -1043,6 +1044,8 @@ function endHtml(form, irregular){
   const html = core + (rest ? " " + esc(rest) : "");
   return irregular ? `<span class="irr">${html}</span>` : html;
 }
+// English name of a tense with the German term beside it, so the tables make sense before you know the jargon
+function term(en, de){ return `${en} <span class="muted small">${de}</span>`; }
 function tbl(title, forms, opt = {}){
   const rows = forms.map((f, k) => f ? `<tr><td class="pr">${opt.pron ? opt.pron[k] : PRON[k]}</td><td>${opt.plain ? esc(f) : endHtml(f, opt.irr && opt.irr[k])}</td></tr>` : "").join("");
   return `<div class="tbl"><h3>${title}</h3><table>${rows}</table></div>`;
@@ -1085,24 +1088,24 @@ function showVerb(inf){
     <div class="entry-head"><div class="word">${esc(inf)}</div>
       <div class="tools"><button class="icon-btn" type="button" id="v-speak" aria-label="Pronounce">${ICON.speak}</button>
       ${ri !== undefined ? `<button class="icon-btn ${saved[keyOf(ROWS[ri])] ? "on" : ""}" type="button" id="v-save" aria-label="Add to flashcards">${saved[keyOf(ROWS[ri])] ? ICON.starOn : ICON.star}</button>` : ""}</div></div>
-    <div class="meta">${kind ? `<span class="badge ${v.t === "weak" ? "" : "strong"}">${esc(kind)}</span>` : ""}<span class="badge">Perfekt with ${esc(auxes.join(" or "))}</span>${sep ? `<span class="badge">Separable: ${esc(sep)}-</span>` : ""}</div>
+    <div class="meta">${kind ? `<span class="badge ${v.t === "weak" ? "" : "strong"}">${esc(kind)}</span>` : ""}<span class="badge">Perfect tense with ${esc(auxes.join(" or "))}</span>${sep ? `<span class="badge">Separable: ${esc(sep)}-</span>` : ""}</div>
     ${gloss.length ? `<p style="margin:10px 0 0">${gloss.slice(0,3).map(esc).join("; ")}</p>` : ""}
-    <div class="parts"><div><span>Infinitiv</span><b>${esc(inf)}</b></div><div><span>Präsens er</span><b>${esc(v.pr[2])}</b></div><div><span>Präteritum er</span><b>${esc(v.pt[2])}</b></div><div><span>Partizip II</span><b>${esc(aux === "sein" ? "ist" : "hat")} ${esc(pp)}</b></div></div>
+    <div class="parts"><div><span>Infinitive</span><b>${esc(inf)}</b></div><div><span>Present, er</span><b>${esc(v.pr[2])}</b></div><div><span>Past, er</span><b>${esc(v.pt[2])}</b></div><div><span>Past participle</span><b>${esc(aux === "sein" ? "ist" : "hat")} ${esc(pp)}</b></div></div>
   </div>
   <div class="legend"><span><span class="irr">Orange</span> = differs from the regular pattern</span><span><b>Bold</b> = personal ending</span></div>
   <div class="tables">
-    ${tbl("Präsens", v.pr, {irr: irrPr})}
-    ${tbl("Präteritum", v.pt, {irr: irrPt})}
-    ${tbl("Perfekt", A.pr.map(a => a + " " + pp), {plain:1})}
-    ${tbl("Plusquamperfekt", A.pt.map(a => a + " " + pp), {plain:1})}
-    ${tbl("Futur I", W.pr.map(w => w + " " + inf), {plain:1})}
-    ${tbl("Futur II", W.pr.map(w => w + " " + pp + " " + infAux), {plain:1})}
-    ${tbl("Konjunktiv I", v.k1, {plain:1})}
-    ${tbl("Konjunktiv II", k2, {plain:1})}
-    ${tbl("Konjunktiv II Perfekt", A.k2.map(a => a + " " + pp), {plain:1})}
-    ${tbl("würde + Infinitiv", W.k2.map(w => w + " " + inf), {plain:1})}
-    ${v.im[0] && v.im[0] !== "-" ? tbl("Imperativ", [v.im[0] + "!", v.im[1] + "!", (v.pr[5] || "").replace(/^(\S+)/, "$1 Sie") + "!"], {plain:1, pron:["du","ihr","Sie"]}) : ""}
-    ${tbl("Partizipien", [v.p1, pp], {plain:1, pron:["Partizip I","Partizip II"]})}
+    ${tbl(term("Present", "Präsens"), v.pr, {irr: irrPr})}
+    ${tbl(term("Simple past", "Präteritum"), v.pt, {irr: irrPt})}
+    ${tbl(term("Perfect", "Perfekt"), A.pr.map(a => a + " " + pp), {plain:1})}
+    ${tbl(term("Past perfect", "Plusquamperfekt"), A.pt.map(a => a + " " + pp), {plain:1})}
+    ${tbl(term("Future", "Futur I"), W.pr.map(w => w + " " + inf), {plain:1})}
+    ${tbl(term("Future perfect", "Futur II"), W.pr.map(w => w + " " + pp + " " + infAux), {plain:1})}
+    ${tbl(term("Reported speech", "Konjunktiv I"), v.k1, {plain:1})}
+    ${tbl(term("Subjunctive", "Konjunktiv II"), k2, {plain:1})}
+    ${tbl(term("Past subjunctive", "Konjunktiv II Perfekt"), A.k2.map(a => a + " " + pp), {plain:1})}
+    ${tbl(term("Would", "würde + Infinitiv"), W.k2.map(w => w + " " + inf), {plain:1})}
+    ${v.im[0] && v.im[0] !== "-" ? tbl(term("Commands", "Imperativ"), [v.im[0] + "!", v.im[1] + "!", (v.pr[5] || "").replace(/^(\S+)/, "$1 Sie") + "!"], {plain:1, pron:["du","ihr","Sie"]}) : ""}
+    ${tbl(term("Participles", "Partizipien"), [v.p1, pp], {plain:1, pron:["present","past"]})}
   </div>`;
   $("#v-speak").onclick = () => speak(`${inf}, ${v.pt[2]}, ${pp}`);
   const vs = $("#v-save"); if(vs) vs.onclick = () => { toggleSave(ROWS[ri]); showVerb(inf); };
@@ -1128,7 +1131,7 @@ function drillNext(){
   else ans = v[drill.t][p];
   if(!ans) return drillNext();
   drill.cur = {inf, p, ans}; drill.answered = false;
-  const tn = {pr:"Präsens", pt:"Präteritum", pf:"Perfekt"}[drill.t];
+  const tn = {pr:"present", pt:"simple past", pf:"perfect"}[drill.t];
   $("#drill-prompt").innerHTML = `<b>${esc(inf)}</b> · ${tn} · <b>${PRON[p]}</b> <span class="muted small">${esc((ROWS[(BYW.get(inf.toLowerCase())||[])[0]]||[,,,,[""]])[4][0] || "")}</span>`;
   $("#drill-in").value = ""; $("#drill-fb").innerHTML = "";
 }
@@ -1138,7 +1141,7 @@ $("#drill-form").addEventListener("submit", e => {
   const given = $("#drill-in").value.trim().toLowerCase().replace(/\s+/g, " ");
   const ok = given === drill.cur.ans.toLowerCase();
   drill.answered = true;
-  $("#drill-fb").innerHTML = ok ? `<span class="ok">Richtig!</span> ${PRON[drill.cur.p]} ${esc(drill.cur.ans)}. Press Enter for the next one.` : `<span class="bad">Not quite.</span> ${PRON[drill.cur.p]} <b>${esc(drill.cur.ans)}</b>. Press Enter for the next one.`;
+  $("#drill-fb").innerHTML = ok ? `<span class="ok">Correct!</span> ${PRON[drill.cur.p]} ${esc(drill.cur.ans)}. Press Enter for the next one.` : `<span class="bad">Not quite.</span> ${PRON[drill.cur.p]} <b>${esc(drill.cur.ans)}</b>. Press Enter for the next one.`;
 });
 $("#drill-skip").onclick = drillNext;
 $("#drill-tense").addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; drill.t = b.dataset.t; $("#drill-tense").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); drillNext(); });
@@ -1223,7 +1226,7 @@ function addLevelHtml(){
 }
 function findRow(k){ const [w, p] = k.split("|"); return (BYW.get(w.toLowerCase()) || []).find(i => ROWS[i][0] === w && ROWS[i][1] === p); }
 
-/* Üben has four ways to practise, like Quizlet: flashcards (spaced repetition on your saved words),
+/* Practice has four ways to practise, like Quizlet: flashcards (spaced repetition on your saved words),
    choose from four, write the answer, and a timed matching game. The last three use your level's
    words or your saved words, German to English or the other way round. */
 const qz = {mode: store.get("mode", "cards"), dir: store.get("dir", "de"), src: store.get("src", "level"), round: null};
@@ -1392,7 +1395,7 @@ function renderQuiz(){
       ${R.answered ? "" : `<button type="button" class="link-btn" id="q-dunno">I don't know</button>`}`;
   }
   const full = `<b class="${g ? "w-" + g : ""}">${esc(deWord(r))}</b> · ${esc(r[4].slice(0, 2).map(x => x.replace(/\s*\([^)]*\)/g, "")).join("; "))}`;
-  const fb = !R.answered ? "" : R.pick === i ? `<span class="ok">Richtig!</span> ${full}${R.note ? `<div class="small muted">${esc(R.note)}</div>` : ""}` : `<span class="bad">${R.note ? esc(R.note) : "Not quite."}</span> ${full}`;
+  const fb = !R.answered ? "" : R.pick === i ? `<span class="ok">Correct!</span> ${full}${R.note ? `<div class="small muted">${esc(R.note)}</div>` : ""}` : `<span class="bad">${R.note ? esc(R.note) : "Not quite."}</span> ${full}`;
   area.innerHTML = `<div class="qwrap">${qProgress(R)}<div class="card qcard">${prompt}</div>${body}<div class="feedback q-fb">${fb}</div>
     ${R.answered && R.kind === "mc" ? `<div class="btn-row center"><button type="button" class="btn" id="q-next">Next</button></div>` : ""}</div>`;
   const inp = $("#q-in");
@@ -1624,12 +1627,12 @@ const TOUR = [
      ${Object.keys(saved).length ? "" : `<label class="check"><input type="checkbox" id="tour-add" ${tour.add ? "checked" : ""}> Add my first 20 words to the flashcards</label>`}`},
   {title: "Look up any word, both ways", text: "Type German or English. Forms like ging or Häuser find their base word, with the meaning, examples and pronunciation.",
    demo: () => `<div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span id="tour-typed"></span></div><div id="tour-hit"></div>`, play: playSearch},
-  {title: "Blue, red, green", text: "Every noun shows its article in colour: blue for der, red for die, green for das. The Der Die Das tab quizzes you until the colours stick.",
+  {title: "Blue, red, green", text: "Every noun shows its article in colour: blue for der, red for die, green for das. The Articles tab quizzes you until the colours stick.",
    demo: () => `<div class="demo-nouns"><div class="w-m"><span class="art m">der</span>Tisch</div><div class="w-f"><span class="art f">die</span>Lampe</div><div class="w-n"><span class="art n">das</span>Buch</div></div>
      <div class="demo-quiz" aria-hidden="true"><span style="background:var(--der)">der</span><span style="background:var(--die)">die</span><span style="background:var(--das)">das</span></div>`},
-  {title: "Every verb, every tense", text: "The Verben tab conjugates about 8,900 verbs. Highlighted forms break the regular pattern, so you know which ones to learn by heart.",
+  {title: "Every verb, every tense", text: "The Verbs tab conjugates about 8,900 verbs. Highlighted forms break the regular pattern, so you know which ones to learn by heart.",
    demo: () => `<div class="tbl"><h3>fahren · Präsens</h3><table><tr><td class="pr">ich</td><td>fahr<span class="end">e</span></td></tr><tr><td class="pr">du</td><td><span class="irr">fähr<span class="end">st</span></span></td></tr><tr><td class="pr">er/sie/es</td><td><span class="irr">fähr<span class="end">t</span></span></td></tr><tr><td class="pr">wir</td><td>fahr<span class="end">en</span></td></tr></table></div>`},
-  {title: "Practise four ways", text: "Üben has flashcards for your starred words, plus Choose, Write and Match quizzes, German to English or the other way. Swipe a flashcard right if you knew it.",
+  {title: "Practise four ways", text: "Practice has flashcards for your starred words, plus Choose, Write and Match quizzes, German to English or the other way. Swipe a flashcard right if you knew it.",
    demo: () => `<div class="demo-card"><span class="w-n">das Haus</span><div class="small muted" style="font-family:var(--body);font-weight:400">house, home</div></div>
      <div class="demo-grades" aria-hidden="true"><span>Again</span><span>Hard</span><span class="hit">Good</span><span>Easy</span></div>`},
 ];

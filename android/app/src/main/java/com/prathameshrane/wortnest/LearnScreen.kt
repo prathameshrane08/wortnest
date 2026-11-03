@@ -61,7 +61,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 
-/* Üben has four ways to practise, like Quizlet: flashcards (spaced repetition on your saved words),
+/* Practice has four ways to practise, like Quizlet: flashcards (spaced repetition on your saved words),
    choose from four, write the answer, and a timed matching game. The last three use your level's
    words or your saved words, German to English or the other way round. */
 
@@ -86,7 +86,7 @@ fun LearnScreen(vm: AppViewModel, repo: Repository, nav: Nav, openLevel: () -> U
 
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         Row(Modifier.fillMaxWidth().padding(end = 16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.weight(1f)) { ScreenTitle("Üben") }
+            Box(Modifier.weight(1f)) { ScreenTitle("Practice") }
             Row(
                 Modifier.clip(RoundedCornerShape(50)).border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(50))
                     .clickable(onClick = openLevel).padding(start = 6.dp, end = 12.dp, top = 5.dp, bottom = 5.dp),
@@ -377,7 +377,7 @@ private fun QuizRound(vm: AppViewModel, repo: Repository, kind: String, dir: Str
     if (answered) {
         val ok = round.pick == e.id
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(if (ok) "Richtig!" else round.note.ifEmpty { "Not quite." }, fontWeight = FontWeight.Bold, color = if (ok) okColor() else badColor(), textAlign = TextAlign.Center)
+            Text(if (ok) "Correct!" else round.note.ifEmpty { "Not quite." }, fontWeight = FontWeight.Bold, color = if (ok) okColor() else badColor(), textAlign = TextAlign.Center)
             Text(e.spoken, fontWeight = FontWeight.Bold, color = wordColor(e))
             Text(e.glosses.take(2).joinToString("; ") { it.replace(Regex("\\s*\\([^)]*\\)"), "") }, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
             if (ok && round.note.isNotEmpty()) Text(round.note, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

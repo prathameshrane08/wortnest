@@ -43,7 +43,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     /** False until the first-launch walkthrough has been finished or skipped. */
     var toured by mutableStateOf(true)
         private set
-    /** How Üben practises: cards, mc (choose), type (write) or match; de (German first) or en; level or saved words. */
+    /** How Practice works: cards, mc (choose), type (write) or match; de (German first) or en; level or saved words. */
     var practiceMode by mutableStateOf("cards")
         private set
     var practiceDir by mutableStateOf("de")

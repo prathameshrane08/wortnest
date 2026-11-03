@@ -42,7 +42,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun ArticleScreen(vm: AppViewModel, repo: Repository) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-        ScreenTitle("Der Die Das")
+        ScreenTitle("Articles")
         SearchField(vm.articleQuery, { vm.articleQuery = it }, "Type a noun, e.g. Kinderzimmer")
         UmlautRow { vm.articleQuery += it }
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
@@ -117,7 +117,8 @@ private fun QuizCard(vm: AppViewModel, repo: Repository) {
     }
 
     CardBox {
-        Text("der, die oder das?", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold)
+        Text("der, die or das?", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold)
+        Text("Every German noun is der, die or das. Pick the right one for each word.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Segments(listOf("Quiz", "Flashcards"), if (cards) 1 else 0) { cards = it == 1; next() }
         Segments(listOf("${levelRange(vm.level)} nouns", "My mistakes"), if (missedOnly) 1 else 0) { missedOnly = it == 1; next() }
 
@@ -179,7 +180,7 @@ private fun QuizCard(vm: AppViewModel, repo: Repository) {
                 } else {
                     val ok = picked == current.gender
                     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text(if (ok) "Richtig!" else "Falsch.", fontWeight = FontWeight.Bold, color = if (ok) okColor() else badColor())
+                        Text(if (ok) "Correct!" else "Not quite.", fontWeight = FontWeight.Bold, color = if (ok) okColor() else badColor())
                         Text(current.spoken + if (current.plural.isNotEmpty()) ", die ${current.plural}" else "", fontWeight = FontWeight.Medium)
                         Gender.rule(current.word, current.gender)?.let {
                             Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)

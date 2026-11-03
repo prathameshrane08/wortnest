@@ -71,11 +71,11 @@ sealed interface Route {
 class Nav(val push: (Route) -> Unit, val pop: () -> Unit)
 
 val TABS = listOf(
-    "Wörterbuch" to Icons.Outlined.Book,
-    "Der Die Das" to Icons.Outlined.GridView,
-    "Verben" to Icons.Outlined.TableChart,
-    "Grammatik" to Icons.AutoMirrored.Outlined.MenuBook,
-    "Üben" to Icons.Outlined.StarOutline,
+    "Dictionary" to Icons.Outlined.Book,
+    "Articles" to Icons.Outlined.GridView,
+    "Verbs" to Icons.Outlined.TableChart,
+    "Grammar" to Icons.AutoMirrored.Outlined.MenuBook,
+    "Practice" to Icons.Outlined.StarOutline,
 )
 
 @Composable

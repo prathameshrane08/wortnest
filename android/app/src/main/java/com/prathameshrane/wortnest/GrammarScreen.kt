@@ -93,7 +93,7 @@ fun rich(s: String): AnnotatedString = buildAnnotatedString {
 @Composable
 fun GrammarScreen(repo: Repository, nav: Nav) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-        ScreenTitle("Grammatik")
+        ScreenTitle("Grammar")
         Text(
             "The topics German courses cover from A1 to B1, each with tables, examples and the mistakes learners make most.",
             color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 16.dp),
