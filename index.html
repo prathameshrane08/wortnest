@@ -193,6 +193,9 @@ section.view{display:flex;flex-direction:column;gap:22px}
 /* ---------- home ---------- */
 .greet h1{font-size:1.9rem}
 .greet p{margin:4px 0 0;color:var(--muted)}
+.todo{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.todo .chip{display:inline-flex;align-items:center;gap:8px;max-width:100%;color:var(--ink);text-align:left}
+.todo .chip i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--dot)}
 .home{display:flex;flex-direction:column;gap:22px}
 .wotd{--c:var(--hero-text);background:var(--hero);color:var(--hero-text);border:0;border-radius:24px;padding:22px;box-shadow:0 10px 30px rgba(15,23,42,.18)}
 .wotd.g-m{--c:var(--der-hero)} .wotd.g-f{--c:var(--die-hero)} .wotd.g-n{--c:var(--das-hero)}
@@ -815,14 +818,26 @@ function startHtml(){
     ${tile("grammar", `${read}/${GRAMMAR.length || 26}`, "Grammar topics", nextTopic ? `next: ${esc(nextTopic.title)}` : "all read", pct(read, GRAMMAR.length || 26), "#f59e0b")}
     ${tile("level", LV[L], "Your level", L < 3 ? `${LV[L + 1]} test when you're ready` : `${inLevel} of ${lw.length} words saved`, pct(inLevel, lw.length), "#ec4899")}
   </div>`;
-  const todo = (due ? 1 : 0) + (dd.miss.length ? 1 : 0) + (nextTopic ? 1 : 0), h = new Date().getHours();
-  $("#greet").innerHTML = `<h1>${h < 11 ? "Guten Morgen" : h < 18 ? "Guten Tag" : "Guten Abend"} 👋</h1><p>${h < 11 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"}. ${todo ? `${todo} thing${todo > 1 ? "s" : ""} to do today` : "All caught up for today"}</p>`;
+  // Say what is waiting, not just how many things: each one opens the place to do it.
+  const plural = (k, w) => `${k} ${w}${k === 1 ? "" : "s"}`;
+  const todo = [
+    due && `<button type="button" class="chip" data-go="learn"><i style="--dot:var(--accent)"></i>${plural(due, "flashcard")} to practise</button>`,
+    dd.miss.length && `<button type="button" class="chip" data-go="dds"><i style="--dot:var(--das)"></i>${plural(dd.miss.length, "noun")} you got wrong</button>`,
+    nextTopic && `<button type="button" class="chip" data-topic="${nextTopic.id}"><i style="--dot:#f59e0b"></i>Grammar: ${esc(nextTopic.title)}</button>`,
+  ].filter(Boolean), h = new Date().getHours();
+  $("#greet").innerHTML = `<h1>${h < 11 ? "Guten Morgen" : h < 18 ? "Guten Tag" : "Guten Abend"} 👋</h1><p>${h < 11 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"}. ${todo.length ? "For today:" : "All caught up for today."}</p>${todo.length ? `<div class="todo">${todo.join("")}</div>` : ""}`;
   const tries = ["Haus","gehen","schön","Zeitung","Mädchen","bringen","Freund","trotzdem"].filter(w => BYW.has(w.toLowerCase()));
   return `<div class="home">${wotd}${tiles}<div class="try"><h3>Or look something up</h3><div class="chips">${tries.map(w => `<button type="button" class="chip" data-try="${w}">${w}</button>`).join("")}</div></div></div>`;
 }
 function refreshHome(){ if(!$("#q").value.trim() && ROWS.length) $("#dict-results").innerHTML = startHtml(); }
 let qT; $("#q").addEventListener("input", () => { clearTimeout(qT); qT = setTimeout(runSearch, 120); });
 $("#q-clear").onclick = () => { $("#q").value = ""; runSearch(); $("#q").focus(); };
+$("#greet").addEventListener("click", e => {
+  const b = e.target.closest("[data-go], [data-topic]");
+  if(!b) return;
+  if(b.dataset.topic){ show("grammar"); showTopic(b.dataset.topic); }
+  else show(b.dataset.go);
+});
 $("#dict-results").addEventListener("click", e => {
   const b = e.target.closest(".row, [data-go], [data-try], [data-wsay], [data-wsave], [data-wopen]");
   if(!b) return;

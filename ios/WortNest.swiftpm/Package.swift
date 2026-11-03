@@ -13,10 +13,10 @@ let package = Package(
             name: "DE Täglich",   // the label under the home-screen icon; the full name is Deutsch Täglich
             targets: ["AppModule"],
             bundleIdentifier: "com.prathameshrane.wortnest",
-            displayVersion: "1.4",
-            bundleVersion: "5",
+            displayVersion: "1.10",
+            bundleVersion: "11",
             appIcon: .placeholder(icon: .box),
-            accentColor: .presetColor(.orange),
+            accentColor: .presetColor(.indigo),
             supportedDeviceFamilies: [
                 .pad,
                 .phone

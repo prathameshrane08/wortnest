@@ -15,6 +15,8 @@ struct Entry: Identifiable, Hashable {
     let level: Int          // 1 = A1, 2 = A2, 3 = B1 (Goethe-Institut word lists), 0 = not on a list
 
     var key: String { word + "|" + pos }
+    /// "das Haus" for nouns, the word alone otherwise; what gets read aloud.
+    var spoken: String { [article, word].compactMap { $0 }.joined(separator: " ") }
     var isNoun: Bool { pos == "noun" }
     var article: String? { isNoun ? Gender.article(gender) : nil }
     var posName: String { Entry.posNames[pos] ?? pos }
@@ -45,13 +47,24 @@ enum Gender {
         ["m": "der", "f": "die", "n": "das", "p": "die"][g]
     }
 
+    /// der blue, die rose, das green: the classroom convention.
     static func color(_ g: String) -> Color {
         switch g {
-        case "m": return .blue
-        case "f": return .red
-        case "n": return .green
-        case "p": return .purple
-        default: return .primary
+        case "m": return .adaptive(0x2563EB, 0x60A5FA)
+        case "f": return .adaptive(0xE11D48, 0xFB7185)
+        case "n": return .adaptive(0x059669, 0x34D399)
+        case "p": return .adaptive(0x7C3AED, 0xA78BFA)
+        default: return Palette.text
+        }
+    }
+
+    /// The same colours on the dark word-of-the-day card, in both themes.
+    static func colorOnDark(_ g: String) -> Color {
+        switch g {
+        case "m": return Color(hex: 0x60A5FA)
+        case "f": return Color(hex: 0xFB7185)
+        case "n": return Color(hex: 0x34D399)
+        default: return .white
         }
     }
 
@@ -90,6 +103,20 @@ final class Store: ObservableObject {
     @Published private(set) var loadError: String?
     @Published private(set) var saved: [String: Card] = [:]
     @Published private(set) var missedNouns: [String] = []
+    @Published private(set) var bestStreak = 0
+    @Published private(set) var topicsSeen: [String] = []   // grammar topics opened at least once
+    /// The learner's level (1 A1, 2 A2, 3 B1), chosen in the walkthrough or earned with the level test.
+    /// The word of the day, quizzes and flashcards use this level's words and the ones below it.
+    @Published private(set) var level = 1
+    /// False until the first-launch walkthrough has been finished or skipped.
+    @Published private(set) var toured = true
+    /// How Practice works: cards, mc (choose), type (write) or match; de (German first) or en; level or saved words.
+    @Published private(set) var practiceMode = "cards"
+    @Published private(set) var practiceDir = "de"
+    @Published private(set) var practiceSrc = "level"
+    @Published private(set) var matchBest = 0.0
+    /// The open tab, so the home screen's tiles can switch to another section.
+    @Published var tab = 0
 
     private(set) var entries: [Entry] = []
     private(set) var verbs: [String: Verb] = [:]
@@ -114,6 +141,14 @@ final class Store: ObservableObject {
             saved = s
         }
         missedNouns = defaults.stringArray(forKey: "missedNouns") ?? []
+        bestStreak = defaults.integer(forKey: "bestStreak")
+        topicsSeen = defaults.stringArray(forKey: "topicsSeen") ?? []
+        level = max(1, min(3, defaults.integer(forKey: "level")))
+        toured = defaults.bool(forKey: "toured")
+        practiceMode = defaults.string(forKey: "practiceMode") ?? "cards"
+        practiceDir = defaults.string(forKey: "practiceDir") ?? "de"
+        practiceSrc = defaults.string(forKey: "practiceSrc") ?? "level"
+        matchBest = defaults.double(forKey: "matchBest")
     }
 
     func load() async {
@@ -438,10 +473,45 @@ final class Store: ObservableObject {
         if let data = try? JSONEncoder().encode(saved) { defaults.set(data, forKey: "saved") }
     }
 
-    func recordQuiz(_ word: String, correct: Bool) {
+    func recordQuiz(_ word: String, correct: Bool, streak: Int = 0) {
         if correct { missedNouns.removeAll { $0 == word } } else if !missedNouns.contains(word) { missedNouns.append(word) }
         defaults.set(missedNouns, forKey: "missedNouns")
+        if streak > bestStreak { bestStreak = streak; defaults.set(streak, forKey: "bestStreak") }
     }
+
+    // MARK: Level, walkthrough and practice settings
+
+    func chooseLevel(_ l: Int) {
+        level = l
+        defaults.set(l, forKey: "level")
+    }
+
+    func finishTour() {
+        toured = true
+        defaults.set(true, forKey: "toured")
+    }
+
+    func setPractice(mode: String? = nil, dir: String? = nil, src: String? = nil) {
+        if let mode { practiceMode = mode; defaults.set(mode, forKey: "practiceMode") }
+        if let dir { practiceDir = dir; defaults.set(dir, forKey: "practiceDir") }
+        if let src { practiceSrc = src; defaults.set(src, forKey: "practiceSrc") }
+    }
+
+    /// Stores a Match time; true when it beats the best one.
+    func recordMatch(_ seconds: Double) -> Bool {
+        if matchBest > 0 && seconds >= matchBest { return false }
+        matchBest = (seconds * 10).rounded() / 10
+        defaults.set(matchBest, forKey: "matchBest")
+        return true
+    }
+
+    func markTopicSeen(_ id: String) {
+        guard !topicsSeen.contains(id) else { return }
+        topicsSeen.append(id)
+        defaults.set(topicsSeen, forKey: "topicsSeen")
+    }
+
+    var hasNewCards: Bool { saved.values.contains(where: \.isNew) }
 }
 
 // MARK: - Conjugation
@@ -499,6 +569,7 @@ enum Conjugation {
 
     struct Table: Identifiable {
         let title: String
+        var de = ""             // the German name of the tense
         let rows: [(person: String, form: String, irregular: Bool)]
         let showEndings: Bool
         var id: String { title }
@@ -519,23 +590,23 @@ enum Conjugation {
             k2 = k2.map { f in !f.contains(" ") && f.hasPrefix(sep) ? String(f.dropFirst(sep.count)) + " " + sep : f }
         }
         var t: [Table] = [
-            Table(title: "Präsens", rows: rows(v.pr, irregular: zip(v.pr, reg.pr).map { !$0.isEmpty && $0 != $1 }), showEndings: true),
-            Table(title: "Präteritum", rows: rows(v.pt, irregular: zip(v.pt, reg.pt).map { !$0.isEmpty && $0 != $1 }), showEndings: true),
-            Table(title: "Perfekt", rows: rows(a["pr"]!.map { "\($0) \(v.pp)" }), showEndings: false),
-            Table(title: "Plusquamperfekt", rows: rows(a["pt"]!.map { "\($0) \(v.pp)" }), showEndings: false),
-            Table(title: "Futur I", rows: rows(w["pr"]!.map { "\($0) \(inf)" }), showEndings: false),
-            Table(title: "Futur II", rows: rows(w["pr"]!.map { "\($0) \(v.pp) \(auxInf)" }), showEndings: false),
-            Table(title: "Konjunktiv I", rows: rows(v.k1), showEndings: false),
-            Table(title: "Konjunktiv II", rows: rows(k2), showEndings: false),
-            Table(title: "Konjunktiv II Perfekt", rows: rows(a["k2"]!.map { "\($0) \(v.pp)" }), showEndings: false),
-            Table(title: "würde + Infinitiv", rows: rows(w["k2"]!.map { "\($0) \(inf)" }), showEndings: false)
+            Table(title: "Present", de: "Präsens", rows: rows(v.pr, irregular: zip(v.pr, reg.pr).map { !$0.isEmpty && $0 != $1 }), showEndings: true),
+            Table(title: "Simple past", de: "Präteritum", rows: rows(v.pt, irregular: zip(v.pt, reg.pt).map { !$0.isEmpty && $0 != $1 }), showEndings: true),
+            Table(title: "Perfect", de: "Perfekt", rows: rows(a["pr"]!.map { "\($0) \(v.pp)" }), showEndings: false),
+            Table(title: "Past perfect", de: "Plusquamperfekt", rows: rows(a["pt"]!.map { "\($0) \(v.pp)" }), showEndings: false),
+            Table(title: "Future", de: "Futur I", rows: rows(w["pr"]!.map { "\($0) \(inf)" }), showEndings: false),
+            Table(title: "Future perfect", de: "Futur II", rows: rows(w["pr"]!.map { "\($0) \(v.pp) \(auxInf)" }), showEndings: false),
+            Table(title: "Reported speech", de: "Konjunktiv I", rows: rows(v.k1), showEndings: false),
+            Table(title: "Subjunctive", de: "Konjunktiv II", rows: rows(k2), showEndings: false),
+            Table(title: "Past subjunctive", de: "Konjunktiv II Perfekt", rows: rows(a["k2"]!.map { "\($0) \(v.pp)" }), showEndings: false),
+            Table(title: "Would", de: "würde + Infinitiv", rows: rows(w["k2"]!.map { "\($0) \(inf)" }), showEndings: false)
         ]
         if let du = v.im.first, !du.isEmpty, du != "-" {
             let sie = (v.pr.last ?? "").split(separator: " ", maxSplits: 1).map(String.init)
             let sieForm = sie.isEmpty ? "" : ([sie[0], "Sie"] + sie.dropFirst()).joined(separator: " ")
-            t.append(Table(title: "Imperativ", rows: rows([du + "!", (v.im.count > 1 ? v.im[1] : "") + "!", sieForm + "!"], persons: ["du", "ihr", "Sie"]), showEndings: false))
+            t.append(Table(title: "Commands", de: "Imperativ", rows: rows([du + "!", (v.im.count > 1 ? v.im[1] : "") + "!", sieForm + "!"], persons: ["du", "ihr", "Sie"]), showEndings: false))
         }
-        t.append(Table(title: "Partizipien", rows: rows([v.p1, v.pp], persons: ["Partizip I", "Partizip II"]), showEndings: false))
+        t.append(Table(title: "Participles", de: "Partizipien", rows: rows([v.p1, v.pp], persons: ["present", "past"]), showEndings: false))
         return t
     }
 

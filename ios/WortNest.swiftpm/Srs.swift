@@ -95,15 +95,4 @@ enum Srs {
         n.due = now + Double(n.ivl) * day
         return n
     }
-
-    static func label(_ c: Card, grade: Int, now: Date = Date()) -> String {
-        let m = next(c, grade: grade, now: now).due.timeIntervalSince(now) / 60
-        if m < 60 { return "\(max(1, Int(m.rounded()))) min" }
-        if m < 1440 { return "\(Int((m / 60).rounded())) h" }
-        let d = Int((m / 1440).rounded())
-        if d < 31 { return d == 1 ? "1 day" : "\(d) days" }
-        if d < 365 { return "\(Int((Double(d) / 30).rounded())) mo" }
-        let y = (Double(d) / 365 * 10).rounded() / 10
-        return y == y.rounded() ? "\(Int(y)) yr" : "\(y) yr"
-    }
 }

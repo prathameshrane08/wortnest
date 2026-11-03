@@ -84,7 +84,7 @@ struct GrammarView: View {
             List {
                 Section {
                     Text("The topics German courses cover from A1 to B1, each with tables, examples and the mistakes learners make most.")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Palette.muted)
                 }
                 ForEach(1...3, id: \.self) { level in
                     Section {
@@ -92,7 +92,7 @@ struct GrammarView: View {
                             NavigationLink(value: t) {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(t.title).font(.body.weight(.semibold))
-                                    Text(t.summary).font(.subheadline).foregroundStyle(.secondary)
+                                    Text(t.summary).font(.subheadline).foregroundStyle(Palette.muted)
                                 }
                                 .padding(.vertical, 2)
                             }
@@ -105,7 +105,8 @@ struct GrammarView: View {
                     }
                 }
             }
-            .navigationTitle("Grammatik")
+            .navigationTitle("Grammar")
+            .listStyle(.plain)
             .appDestinations()
             .onAppear {
                 if path.isEmpty, let id = DebugLaunch.string("demoTopic"), let t = store.grammar.first(where: { $0.id == id }) { path.append(t) }
@@ -123,13 +124,13 @@ struct GrammarTopicView: View {
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 6) {
                     LevelBadge(level: topic.level)
-                    Text(topic.de.uppercased()).font(.caption.weight(.bold)).foregroundStyle(.secondary)
+                    Text(topic.de).font(.subheadline.weight(.semibold)).foregroundStyle(Palette.muted)
                 }
                 Text(topic.title).font(.title.weight(.heavy))
                 ForEach(Array(topic.blocks.enumerated()), id: \.offset) { _, b in block(b) }
                 if let verbs = topic.verbs?.filter({ store.verbs[$0] != nil }), !verbs.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("PRACTISE IN THE CONJUGATOR").font(.caption.weight(.bold)).foregroundStyle(.secondary)
+                        Text("Practise these verbs").font(.subheadline.weight(.semibold)).foregroundStyle(Palette.muted)
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
                                 ForEach(verbs, id: \.self) { v in
@@ -144,18 +145,19 @@ struct GrammarTopicView: View {
             .padding()
         }
         .inlineTitle()
+        .onAppear { store.markTopicSeen(topic.id) }
     }
 
     @ViewBuilder private func block(_ b: GrammarBlock) -> some View {
         switch b.t {
         case "tip":
             VStack(alignment: .leading, spacing: 4) {
-                Text("WATCH OUT").font(.caption.weight(.bold)).foregroundStyle(.orange)
+                Text("Watch out").font(.subheadline.weight(.bold)).foregroundStyle(Palette.irregular)
                 richText(b.text ?? "")
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(12)
-            .background(.orange.opacity(0.1), in: RoundedRectangle(cornerRadius: 10))
+            .background(Palette.irregular.opacity(0.1), in: RoundedRectangle(cornerRadius: 12))
         case "ex":
             VStack(alignment: .leading, spacing: 10) {
                 ForEach(Array((b.examples ?? []).enumerated()), id: \.offset) { _, e in
@@ -164,7 +166,7 @@ struct GrammarTopicView: View {
                             SpeakButton(text: e[0].replacingOccurrences(of: "**", with: ""))
                             VStack(alignment: .leading, spacing: 2) {
                                 richText(e[0]).fontWeight(.semibold)
-                                richText(e[1]).font(.subheadline).foregroundStyle(.secondary)
+                                richText(e[1]).font(.subheadline).foregroundStyle(Palette.muted)
                             }
                         }
                     }
@@ -177,7 +179,7 @@ struct GrammarTopicView: View {
                 Grid(alignment: .leading, horizontalSpacing: 14, verticalSpacing: 8) {
                     GridRow {
                         ForEach(Array((b.head ?? []).enumerated()), id: \.offset) { _, h in
-                            richText(h).font(.caption.weight(.bold)).foregroundStyle(.secondary)
+                            richText(h).font(.caption.weight(.bold)).foregroundStyle(Palette.muted)
                         }
                     }
                     Divider()
@@ -186,7 +188,7 @@ struct GrammarTopicView: View {
                             ForEach(Array(row.enumerated()), id: \.offset) { k, cell in
                                 richText(cell)
                                     .font(k == 0 ? .subheadline : .body)
-                                    .foregroundStyle(k == 0 ? .secondary : .primary)
+                                    .foregroundStyle(k == 0 ? Palette.muted : Palette.text)
                                     .fixedSize()
                             }
                         }
@@ -194,7 +196,7 @@ struct GrammarTopicView: View {
                 }
                 .padding(12)
             }
-            .background(.background.secondary, in: RoundedRectangle(cornerRadius: 12))
+            .outlined(radius: 16)
         default:
             richText(b.text ?? "").lineSpacing(3)
         }

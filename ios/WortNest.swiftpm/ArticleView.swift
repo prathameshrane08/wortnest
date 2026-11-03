@@ -14,15 +14,15 @@ struct ArticleView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Der Die Das")
+            .background(Palette.background)
+            .navigationTitle("Articles")
         }
     }
 
     @ViewBuilder private var lookupSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            TextField("Which article? Type a noun: Kinderzimmer", text: $lookup)
-                .textFieldStyle(.roundedBorder)
-                .germanInput()
+            SearchBox(text: $lookup, prompt: "Type a noun, e.g. Kinderzimmer")
+            UmlautRow { lookup += $0 }
             if !lookup.trimmingCharacters(in: .whitespaces).isEmpty {
                 if let hit = store.nounLookup(lookup) {
                     let e = hit.entry
@@ -42,7 +42,7 @@ struct ArticleView: View {
                         } else if !e.plural.isEmpty {
                             Text("plural: **die \(e.plural)**").font(.subheadline)
                         }
-                        if let g = e.glosses.first { Text(g).font(.subheadline).foregroundStyle(.secondary) }
+                        if let g = e.glosses.first { Text(g).font(.subheadline).foregroundStyle(Palette.muted) }
                         if let rule = Gender.rule(for: shown, gender: e.gender) {
                             Text(rule).font(.footnote)
                         }
@@ -50,7 +50,7 @@ struct ArticleView: View {
                     .card()
                 } else {
                     Text("No noun found for “\(lookup)”. Nouns are listed in the singular: try Haus, not Häuser.")
-                        .font(.subheadline).foregroundStyle(.secondary).card()
+                        .font(.subheadline).foregroundStyle(Palette.muted).card()
                 }
             }
         }
@@ -59,99 +59,140 @@ struct ArticleView: View {
 
 struct QuizCard: View {
     @EnvironmentObject var store: Store
-    @AppStorage("ddBest") private var best = 0
-    @State private var level = 0
+    @State private var cards = false        // flashcards instead of the three buttons
+    @State private var missedOnly = false
+    @State private var flipped = false
+    @State private var known = 0
     @State private var current: Entry?
     @State private var chosen: String?
     @State private var streak = 0
     @State private var right = 0
     @State private var total = 0
 
-    private let levels = ["A1", "A2", "B1", "All", "Mistakes"]
-
     private var pool: [Entry] {
-        switch level {
-        case 4: return store.missedNouns.compactMap { w in store.entries(for: w).first { $0.isNoun } }
-        case 3: return store.quizNouns.prefix(6000).map { store.entries[$0] }
-        default: return store.levelNouns[level + 1].map { store.entries[$0] }
-        }
+        missedOnly
+            ? store.missedNouns.compactMap { w in store.entries(for: w).first { $0.isNoun } }
+            : upTo(store.levelNouns, store.level).map { store.entries[$0] }
     }
 
     var body: some View {
-        VStack(spacing: 18) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("ARTICLE QUIZ").font(.caption.weight(.bold)).kerning(1).foregroundStyle(.secondary)
-                Text("der, die oder das?").font(.title2.weight(.heavy))
-                Picker("Level", selection: $level) {
-                    ForEach(levels.indices, id: \.self) { Text(levels[$0]).tag($0) }
-                }
-                .pickerStyle(.segmented)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(alignment: .leading, spacing: 14) {
+            Text("der, die or das?").font(.title2.weight(.heavy))
+            Text("Every German noun is der, die or das. Pick the right one for each word.")
+                .font(.subheadline).foregroundStyle(Palette.muted)
+            Segments(labels: ["Quiz", "Flashcards"], selected: cards ? 1 : 0) { cards = $0 == 1; next() }
+            Segments(labels: ["\(levelRange(store.level)) nouns", "My mistakes"], selected: missedOnly ? 1 : 0) { missedOnly = $0 == 1; next() }
 
-            if let e = current {
-                VStack(spacing: 6) {
+            if cards {
+                nounCards
+            } else if let e = current {
+                VStack(spacing: 12) {
                     Text(e.word)
-                        .font(.system(size: 44, weight: .heavy))
-                        .foregroundStyle(chosen == nil ? .primary : Gender.color(e.gender))
-                        .minimumScaleFactor(0.4)
-                        .lineLimit(1)
-                    Text(e.glosses.first ?? "").font(.subheadline).foregroundStyle(.secondary).multilineTextAlignment(.center)
+                        .font(.system(size: 40, weight: .heavy))
+                        .foregroundStyle(chosen == nil ? Palette.text : Gender.color(e.gender))
+                        .lineLimit(1).minimumScaleFactor(0.4)
+                    Text(e.glosses.first ?? "").font(.subheadline).foregroundStyle(Palette.muted).multilineTextAlignment(.center)
+                    ArticleButtons(answer: e.gender, chosen: chosen, pick: answer)
+                    feedback(for: e).frame(minHeight: 44)
                 }
-                HStack(spacing: 10) {
-                    ForEach(["m", "f", "n"], id: \.self) { g in
-                        Button { answer(g) } label: {
-                            Text(Gender.article(g)!)
-                                .font(.title2.weight(.heavy))
-                                .frame(maxWidth: .infinity, minHeight: 56)
-                        }
-                        .buttonStyle(.plain)
-                        .foregroundStyle(Gender.color(g))
-                        .background(Gender.color(g).opacity(0.15), in: RoundedRectangle(cornerRadius: 12))
-                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(chosen != nil && g == e.gender ? Color.green : .clear, lineWidth: 3))
-                        .opacity(chosen != nil && g != e.gender ? 0.4 : 1)
-                    }
-                }
-                feedback(for: e).frame(minHeight: 44)
-                if chosen != nil {
-                    Button("Next word", action: next).buttonStyle(.borderedProminent)
-                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
             } else {
-                ContentUnavailableView("All clear", systemImage: "checkmark.circle", description: Text("No mistakes left to review. Pick another level."))
+                allClear
             }
 
-            HStack(spacing: 28) {
+            HStack(spacing: 8) {
                 stat("\(streak)", "Streak")
-                stat("\(best)", "Best")
+                stat("\(store.bestStreak)", "Best")
                 stat(total == 0 ? "–" : "\(Int((Double(right) / Double(total) * 100).rounded()))%", "Accuracy")
                 stat("\(store.missedNouns.count)", "To review")
             }
         }
-        .card()
+        .padding(16)
+        .outlined(radius: 24)
         .onAppear { if current == nil { next() } }
-        .onChange(of: level) { next() }
+        .onChange(of: store.level) { next() }
+    }
+
+    private var allClear: some View {
+        VStack(spacing: 6) {
+            Text("All clear").font(.title3.weight(.bold))
+            Text("No mistakes left to review. Switch back to your level's nouns.").font(.subheadline).foregroundStyle(Palette.muted)
+        }
+        .frame(maxWidth: .infinity).padding(.vertical, 20)
+        .multilineTextAlignment(.center)
+    }
+
+    /// Flashcard mode: see the noun, think of its article, flip, then say (or swipe) whether you knew it.
+    @ViewBuilder private var nounCards: some View {
+        if let e = current {
+            VStack(spacing: 12) {
+                SwipeCard(leftLabel: "Not yet", rightLabel: "Knew it", onTap: flip, onSwipe: knew) {
+                    if flipped {
+                        Text("noun").font(.footnote).foregroundStyle(Palette.muted)
+                        Text(e.article ?? "").font(.title2.weight(.bold)).foregroundStyle(Gender.color(e.gender))
+                        Text(e.word).font(.system(size: 38, weight: .heavy)).foregroundStyle(Gender.color(e.gender))
+                            .lineLimit(1).minimumScaleFactor(0.4)
+                        if !e.plural.isEmpty { Text("die \(e.plural)").foregroundStyle(Palette.muted) }
+                        Text(e.glosses.first ?? "")
+                        if let rule = Gender.rule(for: e.word, gender: e.gender) { Text(rule).font(.footnote).foregroundStyle(Palette.muted) }
+                    } else {
+                        Text("der, die or das?").font(.footnote).foregroundStyle(Palette.muted)
+                        Text(e.word).font(.system(size: 38, weight: .heavy)).foregroundStyle(Palette.text)
+                            .lineLimit(1).minimumScaleFactor(0.4)
+                        Text(e.glosses.first ?? "").foregroundStyle(Palette.muted)
+                        Text("Tap to see the article").font(.footnote).foregroundStyle(Palette.muted)
+                    }
+                }
+                .id(e.id)
+                HStack(spacing: 10) {
+                    Button { knew(false) } label: { Text("Not yet").frame(maxWidth: .infinity) }
+                        .buttonStyle(SecondaryButton(color: Palette.bad))
+                    Button { knew(true) } label: { Text("Knew it").frame(maxWidth: .infinity) }
+                        .buttonStyle(PrimaryButton())
+                }
+                Text("Swipe right if you knew it, left if not · \(known) known · \(store.missedNouns.count) to review")
+                    .font(.footnote).foregroundStyle(Palette.muted).multilineTextAlignment(.center)
+            }
+        } else {
+            allClear
+        }
+    }
+
+    private func flip() {
+        flipped.toggle()
+        if flipped, let e = current { Speaker.shared.say(e.spoken) }
+    }
+
+    private func knew(_ ok: Bool) {
+        guard let e = current else { return }
+        store.recordQuiz(e.word, correct: ok)
+        if ok { known += 1 }
+        next()
     }
 
     @ViewBuilder private func feedback(for e: Entry) -> some View {
         if let chosen {
             let ok = chosen == e.gender
-            let art = Gender.article(e.gender) ?? ""
             VStack(spacing: 4) {
-                Text(ok ? "Richtig!" : "Falsch.").font(.headline).foregroundStyle(ok ? .green : .red)
-                Text("**\(art) \(e.word)**" + (e.plural.isEmpty ? "" : ", die \(e.plural)")).font(.subheadline)
-                if let rule = Gender.rule(for: e.word, gender: e.gender) { Text(rule).font(.footnote).foregroundStyle(.secondary) }
+                Text(ok ? "Correct!" : "Not quite.").font(.headline).foregroundStyle(ok ? Palette.ok : Palette.bad)
+                Text("**\(e.spoken)**" + (e.plural.isEmpty ? "" : ", die \(e.plural)")).font(.subheadline)
+                if let rule = Gender.rule(for: e.word, gender: e.gender) { Text(rule).font(.footnote).foregroundStyle(Palette.muted) }
+                if !ok { Button("Next word", action: next).buttonStyle(PrimaryButton()).padding(.top, 6) }
             }
             .multilineTextAlignment(.center)
         } else {
-            Text("Tap the article you think is right.").font(.footnote).foregroundStyle(.secondary)
+            Text("Tap the article you think is right.").font(.footnote).foregroundStyle(Palette.muted)
         }
     }
 
     private func stat(_ value: String, _ label: String) -> some View {
         VStack(spacing: 2) {
             Text(value).font(.title3.weight(.bold)).monospacedDigit()
-            Text(label.uppercased()).font(.caption2).foregroundStyle(.secondary)
+            Text(label).font(.caption2).foregroundStyle(Palette.muted).lineLimit(1).minimumScaleFactor(0.7)
         }
+        .frame(maxWidth: .infinity).padding(.vertical, 10)
+        .background(Palette.surface, in: RoundedRectangle(cornerRadius: 12))
     }
 
     private func answer(_ g: String) {
@@ -159,13 +200,9 @@ struct QuizCard: View {
         chosen = g
         total += 1
         let ok = g == e.gender
-        if ok {
-            right += 1; streak += 1; best = max(best, streak)
-        } else {
-            streak = 0
-        }
-        store.recordQuiz(e.word, correct: ok)
-        Speaker.shared.say("\(Gender.article(e.gender) ?? "") \(e.word)")
+        if ok { right += 1; streak += 1 } else { streak = 0 }
+        store.recordQuiz(e.word, correct: ok, streak: streak)
+        Speaker.shared.say(e.spoken)
         if ok {
             Task {
                 try? await Task.sleep(for: .milliseconds(1100))
@@ -177,6 +214,7 @@ struct QuizCard: View {
     private func next() {
         let p = pool
         chosen = nil
+        flipped = false
         guard !p.isEmpty else { current = nil; return }
         var pick = p.randomElement()
         if p.count > 1 { while pick?.id == current?.id { pick = p.randomElement() } }
@@ -193,14 +231,13 @@ struct RulesSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("RULES OF THUMB").font(.caption.weight(.bold)).kerning(1).foregroundStyle(.secondary)
             Text("Endings that give the article away").font(.title3.weight(.heavy))
             ViewThatFits(in: .horizontal) {
                 HStack(alignment: .top, spacing: 10) { ForEach(columns, id: \.0) { column($0.0, $0.1) } }
                 VStack(spacing: 10) { ForEach(columns, id: \.0) { column($0.0, $0.1) } }
             }
             Text("Compound nouns take the article of their last part: das Kind + das Zimmer = **das** Kinderzimmer.")
-                .font(.footnote).foregroundStyle(.secondary)
+                .font(.footnote).foregroundStyle(Palette.muted)
         }
     }
 

@@ -23,7 +23,7 @@ struct POSLabel: View {
         Text(text.uppercased())
             .font(.caption2.weight(.bold))
             .kerning(0.6)
-            .foregroundStyle(.secondary)
+            .foregroundStyle(Palette.muted)
     }
 }
 
@@ -40,14 +40,14 @@ struct EntryRow: View {
                         .font(.body.weight(.semibold))
                         .foregroundStyle(entry.isNoun && !entry.gender.isEmpty ? Gender.color(entry.gender) : .primary)
                     if entry.isNoun, !entry.plural.isEmpty {
-                        Text("pl. \(entry.plural)").font(.caption).foregroundStyle(.secondary)
+                        Text("pl. \(entry.plural)").font(.caption).foregroundStyle(Palette.muted)
                     }
                     if !entry.isNoun { POSLabel(text: entry.posName) }
                     LevelBadge(level: entry.level)
                 }
                 Text(entry.glosses.prefix(3).joined(separator: "; "))
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Palette.muted)
                     .lineLimit(2)
             }
             .padding(.vertical, 2)
@@ -75,7 +75,7 @@ struct SaveButton: View {
             Image(systemName: on ? "star.fill" : "star")
         }
         .buttonStyle(.bordered)
-        .tint(on ? .orange : .secondary)
+        .tint(on ? Palette.accent : Palette.muted)
         .accessibilityLabel(on ? "Remove from flashcards" : "Add to flashcards")
     }
 }
@@ -122,7 +122,7 @@ extension View {
         self
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(.background.secondary, in: RoundedRectangle(cornerRadius: 14))
+            .outlined(radius: 16, fill: Palette.surface)
     }
 }
 

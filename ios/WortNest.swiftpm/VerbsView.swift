@@ -14,7 +14,7 @@ struct VerbsView: View {
                 if query.trimmingCharacters(in: .whitespaces).isEmpty {
                     Section {
                         NavigationLink { DrillView() } label: {
-                            Label("Conjugation drill", systemImage: "keyboard")
+                            Label("Type the right form", systemImage: "keyboard")
                         }
                     }
                     Section("Common verbs") {
@@ -26,7 +26,8 @@ struct VerbsView: View {
                     ForEach(results, id: \.self) { verbRow($0) }
                 }
             }
-            .navigationTitle("Verben")
+            .navigationTitle("Verbs")
+            .listStyle(.plain)
             .pinnedSearch(text: $query, prompt: "gehen, fing an, to bring")
             .germanInput()
             .task(id: query) {
@@ -43,7 +44,7 @@ struct VerbsView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(inf).font(.body.weight(.semibold))
                 if let e = store.verbEntry(inf) {
-                    Text(e.glosses.prefix(2).joined(separator: "; ")).font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
+                    Text(e.glosses.prefix(2).joined(separator: "; ")).font(.subheadline).foregroundStyle(Palette.muted).lineLimit(1)
                 }
             }
         }
@@ -61,9 +62,9 @@ struct VerbDetailView: View {
                     header(v)
                     principalParts(v)
                     HStack(spacing: 16) {
-                        Text("Orange").foregroundStyle(.orange).bold() + Text(" = differs from the regular pattern")
+                        Text("Orange").foregroundColor(Palette.irregular).bold() + Text(" = differs from the regular pattern")
                     }
-                    .font(.footnote).foregroundStyle(.secondary)
+                    .font(.footnote).foregroundStyle(Palette.muted)
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 230), spacing: 12)], spacing: 12) {
                         ForEach(Conjugation.tables(v, infinitive)) { TenseTable(table: $0) }
                     }
@@ -87,7 +88,7 @@ struct VerbDetailView: View {
             }
             HStack(spacing: 6) {
                 if let kind = Conjugation.kindLabel(v) { badge(kind, highlight: v.t != "weak") }
-                badge("Perfekt with " + Conjugation.auxiliaries(v).joined(separator: " or "))
+                badge("Perfect tense with " + Conjugation.auxiliaries(v).joined(separator: " or "))
                 if let sep = Conjugation.separablePrefix(v, infinitive) { badge("Separable: \(sep)-") }
             }
             if let e = store.verbEntry(infinitive) {
@@ -100,29 +101,28 @@ struct VerbDetailView: View {
         Text(text)
             .font(.caption.weight(.bold))
             .padding(.horizontal, 8).padding(.vertical, 3)
-            .foregroundStyle(highlight ? Color.orange : .secondary)
-            .background((highlight ? Color.orange : Color.secondary).opacity(0.15), in: RoundedRectangle(cornerRadius: 5))
+            .foregroundStyle(highlight ? Palette.irregular : Palette.muted)
+            .background(highlight ? Palette.irregular.opacity(0.15) : Palette.surfaceHigh, in: RoundedRectangle(cornerRadius: 6))
     }
 
     private func principalParts(_ v: Verb) -> some View {
         let parts = [
-            ("Infinitiv", infinitive),
-            ("Präsens er", v.pr[2]),
-            ("Präteritum er", v.pt[2]),
-            ("Partizip II", (Conjugation.mainAux(v) == "sein" ? "ist " : "hat ") + v.pp)
+            ("Infinitive", infinitive),
+            ("Present, er", v.pr[2]),
+            ("Past, er", v.pt[2]),
+            ("Past participle", (Conjugation.mainAux(v) == "sein" ? "ist " : "hat ") + v.pp)
         ]
-        return LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 1)], spacing: 1) {
+        return LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 8)], spacing: 8) {
             ForEach(parts, id: \.0) { label, value in
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(label.uppercased()).font(.caption2.weight(.bold)).foregroundStyle(.secondary)
+                    Text(label).font(.caption).foregroundStyle(Palette.muted)
                     Text(value).font(.headline)
                 }
                 .padding(10)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(.background.secondary)
+                .background(Palette.surface, in: RoundedRectangle(cornerRadius: 12))
             }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
 
@@ -131,11 +131,12 @@ struct TenseTable: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(table.title).font(.subheadline.weight(.bold))
+            (Text(table.title).font(.subheadline.weight(.bold))
+                + Text(table.de.isEmpty ? "" : "  " + table.de).font(.footnote).foregroundColor(Palette.muted))
             Grid(alignment: .leading, horizontalSpacing: 10, verticalSpacing: 3) {
                 ForEach(Array(table.rows.enumerated()), id: \.offset) { _, row in
                     GridRow {
-                        Text(row.person).foregroundStyle(.secondary).font(.subheadline)
+                        Text(row.person).foregroundStyle(Palette.muted).font(.subheadline)
                         formText(row.form, irregular: row.irregular)
                     }
                 }
@@ -143,12 +144,12 @@ struct TenseTable: View {
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.background.secondary, in: RoundedRectangle(cornerRadius: 12))
+        .outlined(radius: 16)
     }
 
     /// Bolds the personal ending of the conjugated word; irregular forms turn orange.
     private func formText(_ form: String, irregular: Bool) -> Text {
-        let color: Color = irregular ? .orange : .primary
+        let color: Color = irregular ? Palette.irregular : Palette.text
         guard table.showEndings else { return Text(form).foregroundColor(color) }
         let parts = form.split(separator: " ", maxSplits: 1).map(String.init)
         let word = parts[0]
@@ -166,7 +167,6 @@ struct TenseTable: View {
 struct DrillView: View {
     @EnvironmentObject var store: Store
     @State private var tense = "pr"
-    @State private var level = 1
     @State private var verb = ""
     @State private var person = 0
     @State private var answerText = ""
@@ -179,14 +179,9 @@ struct DrillView: View {
     var body: some View {
         Form {
             Picker("Tense", selection: $tense) {
-                Text("Präsens").tag("pr")
-                Text("Präteritum").tag("pt")
-                Text("Perfekt").tag("pf")
-            }
-            .pickerStyle(.segmented)
-            Picker("Level", selection: $level) {
-                ForEach(1...3, id: \.self) { Text(Level.names[$0]).tag($0) }
-                Text("All").tag(0)
+                Text("Present").tag("pr")
+                Text("Past").tag("pt")
+                Text("Perfect").tag("pf")
             }
             .pickerStyle(.segmented)
 
@@ -194,7 +189,7 @@ struct DrillView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(verb).font(.title2.weight(.heavy))
                     if let e = store.verbEntry(verb) {
-                        Text(e.glosses.first ?? "").font(.subheadline).foregroundStyle(.secondary)
+                        Text(e.glosses.first ?? "").font(.subheadline).foregroundStyle(Palette.muted)
                     }
                 }
                 HStack {
@@ -206,7 +201,7 @@ struct DrillView: View {
                         .font(.title3)
                 }
             } header: {
-                Text(["pr": "Präsens", "pt": "Präteritum", "pf": "Perfekt"][tense] ?? "")
+                Text((["pr": "Present", "pt": "Simple past", "pf": "Perfect"][tense] ?? "") + " · \(levelRange(store.level)) verbs")
             } footer: {
                 Text(total == 0 ? "Type the form and press return." : "\(right) of \(total) right this session")
             }
@@ -214,7 +209,7 @@ struct DrillView: View {
             if let checked {
                 Section {
                     Label {
-                        Text(checked ? "Richtig!" : "Not quite. ") + Text("\(Conjugation.pronouns[person]) **\(expected)**")
+                        Text(checked ? "Correct! " : "Not quite. ") + Text("\(Conjugation.pronouns[person]) **\(expected)**")
                     } icon: {
                         Image(systemName: checked ? "checkmark.circle.fill" : "xmark.circle.fill")
                             .foregroundStyle(checked ? .green : .red)
@@ -228,14 +223,14 @@ struct DrillView: View {
                 }
             }
         }
-        .navigationTitle("Drill")
+        .navigationTitle("Type the right form")
         .onAppear { if verb.isEmpty { next() } }
         .onChange(of: tense) { next() }
-        .onChange(of: level) { next() }
     }
 
     private func next() {
-        let pool = level > 0 ? store.levelVerbs[level] : Array(store.verbList.prefix(300))
+        var pool = upTo(store.levelVerbs, store.level)
+        if pool.isEmpty { pool = Array(store.verbList.prefix(300)) }
         for _ in 0..<20 {
             guard let inf = pool.randomElement(), let v = store.verbs[inf] else { continue }
             let p = Int.random(in: 0..<6)

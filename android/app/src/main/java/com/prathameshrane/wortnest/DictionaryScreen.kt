@@ -44,7 +44,7 @@ fun DictionaryScreen(vm: AppViewModel, repo: Repository, nav: Nav, goTab: (Int) 
 
     Column(Modifier.fillMaxSize()) {
         BrandTitle(vm.dark, vm::toggleDark) { openTour(0) }
-        if (query.isBlank()) Greeting(vm, repo)
+        if (query.isBlank()) Greeting(vm, repo, goTab) { nav.push(Route.TopicR(it)) }
         SearchField(query, { vm.dictQuery = it }, "Haus, ging, to run…")
         UmlautRow { vm.dictQuery += it }
         LazyColumn(Modifier.fillMaxSize()) {

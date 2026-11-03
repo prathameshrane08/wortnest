@@ -114,22 +114,51 @@ fun BrandTitle(dark: Boolean, onToggleDark: () -> Unit, onTour: () -> Unit) {
     }
 }
 
-/** "Guten Morgen" and how much is waiting, above the search box. */
+/** "Guten Morgen", its English, and what is waiting today; each item opens the place to do it. */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun Greeting(vm: AppViewModel, repo: Repository) {
+fun Greeting(vm: AppViewModel, repo: Repository, goTab: (Int) -> Unit, openTopic: (String) -> Unit) {
     val h = LocalTime.now().hour
     val n = vm.counts()
-    val todo = listOf(n.fresh + n.learning + n.review > 0, vm.missedNouns.isNotEmpty(), repo.grammar.any { it.id !in vm.topicsSeen }).count { it }
+    val due = n.fresh + n.learning + n.review
+    val missed = vm.missedNouns.size
+    val nextTopic = repo.grammar.firstOrNull { it.id !in vm.topicsSeen }
+    fun plural(k: Int, w: String) = "$k $w" + if (k == 1) "" else "s"
     Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 14.dp, bottom = 12.dp)) {
         Text(
             (if (h < 11) "Guten Morgen" else if (h < 18) "Guten Tag" else "Guten Abend") + " 👋",
             fontSize = 30.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.8).sp,
         )
+        val any = due > 0 || missed > 0 || nextTopic != null
         Text(
             (if (h < 11) "Good morning. " else if (h < 18) "Good afternoon. " else "Good evening. ") +
-                if (todo == 0) "All caught up for today" else "$todo thing${if (todo > 1) "s" else ""} to do today",
+                if (any) "For today:" else "All caught up for today.",
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        if (any) FlowRow(
+            Modifier.padding(top = 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            if (due > 0) TodoChip("${plural(due, "flashcard")} to practise", MaterialTheme.colorScheme.primary) { goTab(4) }
+            if (missed > 0) TodoChip("${plural(missed, "noun")} you got wrong", genderColor("n")) { goTab(1) }
+            nextTopic?.let { t -> TodoChip("Grammar: ${t.title}", Color(0xFFF59E0B)) { openTopic(t.id) } }
+        }
+    }
+}
+
+@Composable
+private fun TodoChip(label: String, dot: Color, onClick: () -> Unit) {
+    Row(
+        Modifier
+            .clip(RoundedCornerShape(50))
+            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(50))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 12.dp, vertical = 7.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Box(Modifier.size(8.dp).clip(CircleShape).background(dot))
+        Text(label, fontSize = 14.sp, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
 
