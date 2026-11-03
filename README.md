@@ -11,7 +11,7 @@ A German learning toolkit in one place:
 - **Articles**: instant article lookup (works for compound nouns), an article quiz or swipeable flashcards for your level, a mistakes round, and the ending rules that predict gender.
 - **Verbs**: full conjugation tables for about 8,900 verbs, with irregular forms highlighted, plus a typing drill for your level.
 - **Grammar**: 26 grammar topics from A1 to B1 (cases, word order, Perfekt, adjective endings, relative clauses, passive, Konjunktiv II …) with tables, spoken examples and common mistakes.
-- **Practice**: four ways to practise. Flashcards use spaced repetition on your starred words: rate each card Again, Hard, Good or Easy, or swipe right or left (20 new words a day). Choose (multiple choice), Write (type the answer) and Match (a timed pairing game) use your level's words or your saved words, German to English or English to German.
+- **Practice**: four ways to practice. Flashcards use spaced repetition on your starred words: rate each card Again, Hard, Good or Easy, or swipe right or left (20 new words a day). Choose (multiple choice), Write (type the answer) and Match (a timed pairing game) use your level's words or your saved words, German to English or English to German.
 
 ## Web app
 

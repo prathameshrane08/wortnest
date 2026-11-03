@@ -90,7 +90,7 @@ fun LevelDialog(vm: AppViewModel, repo: Repository, onClose: (goLearn: Boolean) 
                             OutlinedButton(onClick = { onClose(false) }) { Text("Done") }
                         } else {
                             Text("Not quite yet", fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
-                            Text("You need $TEST_PASS right to move up. Keep practising and try again whenever you like.",
+                            Text("You need $TEST_PASS right to move up. Keep practicing and try again whenever you like.",
                                 color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
                             Button(onClick = { start() }) { Text("Try again") }
                             OutlinedButton(onClick = { onClose(false) }) { Text("Close") }
@@ -181,7 +181,7 @@ private fun LevelHome(vm: AppViewModel, onStart: () -> Unit) {
             Button(onClick = onStart, modifier = Modifier.padding(top = 4.dp)) { Text("Take the ${LEVEL_NAMES[l + 1]} test") }
         }
     } else {
-        Text("B1 is the highest level here. Keep practising with the quizzes and the grammar topics.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text("B1 is the highest level here. Keep practicing with the quizzes and the grammar topics.", color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
     Text("Or choose your level yourself", fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
     for (k in 1..3) {

@@ -91,7 +91,7 @@ struct DictionaryView: View {
                 .foregroundStyle(Palette.muted)
             if any {
                 FlowLayout(spacing: 8) {
-                    if due > 0 { todoChip("\(plural(due, "flashcard")) to practise", Palette.accent) { store.tab = 4 } }
+                    if due > 0 { todoChip("\(plural(due, "flashcard")) to practice", Palette.accent) { store.tab = 4 } }
                     if missed > 0 { todoChip("\(plural(missed, "noun")) you got wrong", Gender.color("n")) { store.tab = 1 } }
                     if let t = nextTopic { todoChip("Grammar: \(t.title)", Palette.amber) { path.append(t) } }
                 }

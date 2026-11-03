@@ -158,7 +158,7 @@ fun GrammarTopicScreen(vm: AppViewModel, repo: Repository, id: String, nav: Nav)
             }
             val verbs = t.verbs.filter { it in repo.verbs }
             if (verbs.isNotEmpty()) {
-                Text("Practise in the conjugator", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Practice in the conjugator", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     verbs.forEach { v -> FilledTonalButton(onClick = { nav.push(Route.VerbR(v)) }) { Text(v) } }
                 }

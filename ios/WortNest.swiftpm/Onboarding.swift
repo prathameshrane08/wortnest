@@ -74,7 +74,7 @@ struct LevelView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Palette.accentSoft, in: RoundedRectangle(cornerRadius: 16))
         } else {
-            Text("B1 is the highest level here. Keep practising with the quizzes and the grammar topics.").foregroundStyle(Palette.muted)
+            Text("B1 is the highest level here. Keep practicing with the quizzes and the grammar topics.").foregroundStyle(Palette.muted)
         }
         Text("Or choose your level yourself").font(.subheadline.weight(.semibold)).foregroundStyle(Palette.muted)
         ForEach(1...3, id: \.self) { k in
@@ -150,7 +150,7 @@ struct LevelView: View {
                 Button("Done") { onClose(false) }.buttonStyle(SecondaryButton())
             } else {
                 Text("Not quite yet").font(.title2.weight(.heavy))
-                Text("You need \(testPass) right to move up. Keep practising and try again whenever you like.").foregroundStyle(Palette.muted)
+                Text("You need \(testPass) right to move up. Keep practicing and try again whenever you like.").foregroundStyle(Palette.muted)
                 Button("Try again", action: start).buttonStyle(PrimaryButton())
                 Button("Close") { onClose(false) }.buttonStyle(SecondaryButton())
             }
@@ -204,7 +204,7 @@ struct TourView: View {
         ("Look up any word, both ways", "Type German or English. Forms like ging or Häuser find their base word, with the meaning, examples and pronunciation."),
         ("Blue, red, green", "Every noun shows its article in colour: blue for der, red for die, green for das. The Articles tab quizzes you until the colours stick."),
         ("Every verb, every tense", "The Verbs tab conjugates about 8,900 verbs. Highlighted forms break the regular pattern, so you know which ones to learn by heart."),
-        ("Practise four ways", "Practice has flashcards for your starred words, plus Choose, Write and Match quizzes, German to English or the other way. Swipe a flashcard right if you knew it."),
+        ("Practice four ways", "Practice has flashcards for your starred words, plus Choose, Write and Match quizzes, German to English or the other way. Swipe a flashcard right if you knew it."),
     ]
 
     var body: some View {

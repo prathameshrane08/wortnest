@@ -530,7 +530,7 @@ footer button{display:block;margin-top:8px;border:0;background:none;padding:0;co
       <div class="card">
         <div class="card-head">
           <h2>der, die or das?</h2>
-          <div class="seg" id="dd-mode" role="group" aria-label="How to practise">
+          <div class="seg" id="dd-mode" role="group" aria-label="How to practice">
             <button type="button" data-m="quiz" aria-pressed="true">Quiz</button>
             <button type="button" data-m="cards" aria-pressed="false">Flashcards</button>
           </div>
@@ -617,7 +617,7 @@ footer button{display:block;margin-top:8px;border:0;background:none;padding:0;co
     <section class="view" id="view-learn" hidden>
       <div class="view-head learn-head"><div><h2>Practice</h2><p class="muted" id="learn-sub"></p></div>
         <button type="button" class="lv-pill" id="learn-level"></button></div>
-      <div class="modes" id="learn-mode" role="group" aria-label="How to practise">
+      <div class="modes" id="learn-mode" role="group" aria-label="How to practice">
         <button type="button" data-m="cards" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="14" height="14" rx="2.5"/><path d="M7 3h11.5A2.5 2.5 0 0 1 21 5.5V17"/></svg>Flashcards</button>
         <button type="button" data-m="mc" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="5" rx="2"/><rect x="3" y="10" width="18" height="5" rx="2"/><path d="M3 19.5h18"/></svg>Choose</button>
         <button type="button" data-m="type" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M14.5 4.5l3 3L8 17H5v-3z"/></svg>Write</button>
@@ -666,7 +666,7 @@ const ART = {m:"der", f:"die", n:"das", p:"die"};
 const LV = ["", "A1", "A2", "B1"];   // dict.json rows carry the level as a 7th value when the word is on a Goethe-Institut list
 const lvOf = r => r[6] || 0;
 const lvHtml = r => lvOf(r) ? `<span class="lv l${lvOf(r)}" title="Goethe-Institut word list">${LV[lvOf(r)]}</span>` : "";
-// Your level counts down as well as up: an A2 learner practises A1 and A2 words.
+// Your level counts down as well as up: an A2 learner practices A1 and A2 words.
 const myLevel = () => store.get("level", 1);
 const upTo = (A, L) => A.slice(1, L + 1).flat();
 const lvRange = L => L > 1 ? "A1–" + LV[L] : "A1";
@@ -691,7 +691,7 @@ const ICON = {
   starOn:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>'
 };
 
-const DATA_VERSION = 4;   // bump when the JSON files change so browsers skip their cached copy
+const DATA_VERSION = 5;   // bump when the JSON files change so browsers skip their cached copy
 let ROWS = [], VERBS = {}, FORMS = {}, BYW = new Map(), GL = [], FIRST = [], LOW = [];
 let NOUNS = [];   // indices of quiz-worthy nouns, by frequency
 let LEVEL_NOUNS = [[], [], [], []], LEVEL_VERBS = [[], [], [], []], LEVEL_WORDS = [[], [], [], []];   // by level 1-3, most frequent first
@@ -821,7 +821,7 @@ function startHtml(){
   // Say what is waiting, not just how many things: each one opens the place to do it.
   const plural = (k, w) => `${k} ${w}${k === 1 ? "" : "s"}`;
   const todo = [
-    due && `<button type="button" class="chip" data-go="learn"><i style="--dot:var(--accent)"></i>${plural(due, "flashcard")} to practise</button>`,
+    due && `<button type="button" class="chip" data-go="learn"><i style="--dot:var(--accent)"></i>${plural(due, "flashcard")} to practice</button>`,
     dd.miss.length && `<button type="button" class="chip" data-go="dds"><i style="--dot:var(--das)"></i>${plural(dd.miss.length, "noun")} you got wrong</button>`,
     nextTopic && `<button type="button" class="chip" data-topic="${nextTopic.id}"><i style="--dot:#f59e0b"></i>Grammar: ${esc(nextTopic.title)}</button>`,
   ].filter(Boolean), h = new Date().getHours();
@@ -1241,7 +1241,7 @@ function addLevelHtml(){
 }
 function findRow(k){ const [w, p] = k.split("|"); return (BYW.get(w.toLowerCase()) || []).find(i => ROWS[i][0] === w && ROWS[i][1] === p); }
 
-/* Practice has four ways to practise, like Quizlet: flashcards (spaced repetition on your saved words),
+/* Practice has four ways to practice, like Quizlet: flashcards (spaced repetition on your saved words),
    choose from four, write the answer, and a timed matching game. The last three use your level's
    words or your saved words, German to English or the other way round. */
 const qz = {mode: store.get("mode", "cards"), dir: store.get("dir", "de"), src: store.get("src", "level"), round: null};
@@ -1389,7 +1389,7 @@ function renderQuiz(){
   if(!qz.round || qz.round.kind !== qz.mode || (qz.round.dir && qz.round.dir !== qz.dir)) newRound();
   const R = qz.round;
   if(R.kind === "match") return renderMatch();
-  if(!R.items.length){ area.innerHTML = `<div class="card empty"><b style="color:var(--fg)">No words to practise</b><span>Star a few words in the dictionary first.</span></div>`; return; }
+  if(!R.items.length){ area.innerHTML = `<div class="card empty"><b style="color:var(--fg)">No words to practice</b><span>Star a few words in the dictionary first.</span></div>`; return; }
   if(R.n >= R.items.length) return renderResult();
   const i = R.items[R.n], r = ROWS[i], de = R.dir === "de", g = r[1] === "noun" ? r[2] : "";
   const prompt = de
@@ -1523,7 +1523,7 @@ function showTopic(id){
   $("#g-topic").innerHTML = `<button type="button" class="btn ghost back" id="g-back">‹ All topics</button>
     <div class="card g-card"><div class="eyebrow"><span class="lv l${t.level}">${LV[t.level]}</span> ${esc(t.de)}</div><h2>${esc(t.title)}</h2>
     ${t.blocks.map(block).join("")}
-    ${t.verbs ? `<div class="g-verbs"><div class="eyebrow">Practise in the conjugator</div><div class="chips">${t.verbs.filter(v => VERBS[v]).map(v => `<button type="button" class="chip" data-verb="${esc(v)}">${esc(v)}</button>`).join("")}</div></div>` : ""}</div>
+    ${t.verbs ? `<div class="g-verbs"><div class="eyebrow">Practice in the conjugator</div><div class="chips">${t.verbs.filter(v => VERBS[v]).map(v => `<button type="button" class="chip" data-verb="${esc(v)}">${esc(v)}</button>`).join("")}</div></div>` : ""}</div>
     <div class="g-nav">${prev ? `<button type="button" class="btn ghost" data-topic="${prev.id}">‹ ${esc(prev.title)}</button>` : "<span></span>"}${next ? `<button type="button" class="btn ghost" data-topic="${next.id}">${esc(next.title)} ›</button>` : ""}</div>`;
   $("#g-list").hidden = true; $("#g-topic").hidden = false; store.set("topic", id); window.scrollTo(0, 0);
   const seen = store.get("topicsSeen", []); if(!seen.includes(id)) store.set("topicsSeen", seen.concat(id));
@@ -1566,7 +1566,7 @@ function renderLevel(){
   if(lt.view === "home"){
     body.innerHTML = `<div class="lvl-now"><span class="lv l${L}">${LV[L]}</span><div><h2 id="lvl-title">You're at ${LV[L]}</h2><p>The word of the day, quizzes and flashcards use ${lvRange(L)} words.</p></div></div>
       ${L < 3 ? `<div class="lvl-test"><h3>Ready for ${LV[L + 1]}?</h3><p>${TEST_N} quick questions on ${LV[L + 1]} words. Get ${TEST_PASS} right to move up.</p><button type="button" class="btn" id="lt-start">Take the ${LV[L + 1]} test</button></div>`
-              : `<p class="muted" style="margin:0">B1 is the highest level here. Keep practising with the quizzes and the grammar topics.</p>`}
+              : `<p class="muted" style="margin:0">B1 is the highest level here. Keep practicing with the quizzes and the grammar topics.</p>`}
       <div class="lvl-pick"><h3>Or choose your level yourself</h3><div class="levels">${[[1, "Beginner"], [2, "Elementary"], [3, "Intermediate"]].map(([k, a]) =>
         `<button type="button" data-set="${k}" aria-pressed="${k === L}"><span class="lv l${k}">${LV[k]}</span><b>${a}</b><span>${k === 1 ? "A1 words" : "A1 to " + LV[k] + " words"}</span></button>`).join("")}</div></div>`;
     return;
@@ -1576,7 +1576,7 @@ function renderLevel(){
     body.innerHTML = `<div class="result"><div class="score"><b>${lt.right}</b> / ${TEST_N}</div>
       ${pass ? `<h2 id="lvl-title">Welcome to ${LV[lt.L]}! 🎉</h2><p>The word of the day, quizzes and flashcards now include ${LV[lt.L]} words.</p>
         <div class="btn-row center"><button type="button" class="btn" id="lt-add">Add 20 ${LV[lt.L]} words to flashcards</button><button type="button" class="btn ghost" id="lvl-done">Done</button></div>`
-      : `<h2 id="lvl-title">Not quite yet</h2><p>You need ${TEST_PASS} right to move up. Keep practising and try again whenever you like.</p>
+      : `<h2 id="lvl-title">Not quite yet</h2><p>You need ${TEST_PASS} right to move up. Keep practicing and try again whenever you like.</p>
         <div class="btn-row center"><button type="button" class="btn" id="lt-start">Try again</button><button type="button" class="btn ghost" id="lvl-done">Close</button></div>`}</div>`;
     return;
   }
@@ -1647,7 +1647,7 @@ const TOUR = [
      <div class="demo-quiz" aria-hidden="true"><span style="background:var(--der)">der</span><span style="background:var(--die)">die</span><span style="background:var(--das)">das</span></div>`},
   {title: "Every verb, every tense", text: "The Verbs tab conjugates about 8,900 verbs. Highlighted forms break the regular pattern, so you know which ones to learn by heart.",
    demo: () => `<div class="tbl"><h3>fahren · Präsens</h3><table><tr><td class="pr">ich</td><td>fahr<span class="end">e</span></td></tr><tr><td class="pr">du</td><td><span class="irr">fähr<span class="end">st</span></span></td></tr><tr><td class="pr">er/sie/es</td><td><span class="irr">fähr<span class="end">t</span></span></td></tr><tr><td class="pr">wir</td><td>fahr<span class="end">en</span></td></tr></table></div>`},
-  {title: "Practise four ways", text: "Practice has flashcards for your starred words, plus Choose, Write and Match quizzes, German to English or the other way. Swipe a flashcard right if you knew it.",
+  {title: "Practice four ways", text: "Practice has flashcards for your starred words, plus Choose, Write and Match quizzes, German to English or the other way. Swipe a flashcard right if you knew it.",
    demo: () => `<div class="demo-card"><span class="w-n">das Haus</span><div class="small muted" style="font-family:var(--body);font-weight:400">house, home</div></div>
      <div class="demo-grades" aria-hidden="true"><span>Again</span><span>Hard</span><span class="hit">Good</span><span>Easy</span></div>`},
 ];

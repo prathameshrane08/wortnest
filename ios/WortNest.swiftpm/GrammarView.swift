@@ -130,7 +130,7 @@ struct GrammarTopicView: View {
                 ForEach(Array(topic.blocks.enumerated()), id: \.offset) { _, b in block(b) }
                 if let verbs = topic.verbs?.filter({ store.verbs[$0] != nil }), !verbs.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Practise these verbs").font(.subheadline.weight(.semibold)).foregroundStyle(Palette.muted)
+                        Text("Practice these verbs").font(.subheadline.weight(.semibold)).foregroundStyle(Palette.muted)
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
                                 ForEach(verbs, id: \.self) { v in

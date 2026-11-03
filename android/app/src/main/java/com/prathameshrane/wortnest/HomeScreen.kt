@@ -139,7 +139,7 @@ fun Greeting(vm: AppViewModel, repo: Repository, goTab: (Int) -> Unit, openTopic
             Modifier.padding(top = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            if (due > 0) TodoChip("${plural(due, "flashcard")} to practise", MaterialTheme.colorScheme.primary) { goTab(4) }
+            if (due > 0) TodoChip("${plural(due, "flashcard")} to practice", MaterialTheme.colorScheme.primary) { goTab(4) }
             if (missed > 0) TodoChip("${plural(missed, "noun")} you got wrong", genderColor("n")) { goTab(1) }
             nextTopic?.let { t -> TodoChip("Grammar: ${t.title}", Color(0xFFF59E0B)) { openTopic(t.id) } }
         }

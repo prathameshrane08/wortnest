@@ -1,6 +1,6 @@
 import SwiftUI
 
-/* Practice has four ways to practise, like Quizlet: flashcards (spaced repetition on your saved words),
+/* Practice has four ways to practice, like Quizlet: flashcards (spaced repetition on your saved words),
    choose from four, write the answer, and a timed matching game. The last three use your level's
    words or your saved words, German to English or the other way round. */
 
@@ -39,7 +39,7 @@ struct LearnView: View {
                             if $0 == 0 || canSaved { store.setPractice(src: $0 == 1 ? "saved" : "level") }
                         }
                         if !canSaved {
-                            Text("Save at least 4 words to practise only those.").font(.footnote).foregroundStyle(Palette.muted)
+                            Text("Save at least 4 words to practice only those.").font(.footnote).foregroundStyle(Palette.muted)
                         }
                     }
                     switch mode {
@@ -288,7 +288,7 @@ private struct QuizRound: View {
                 Color.clear.frame(height: 1).onAppear(perform: newRound)
             } else if items.isEmpty {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("No words to practise").font(.headline)
+                    Text("No words to practice").font(.headline)
                     Text("Star a few words in the dictionary first.").foregroundStyle(Palette.muted)
                 }
                 .card()

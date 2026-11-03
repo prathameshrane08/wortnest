@@ -48,7 +48,7 @@ import kotlin.math.sign
 
 // ---------- levels ----------
 
-/** Every list from A1 up to the level, so an A2 learner also practises the A1 words. */
+/** Every list from A1 up to the level, so an A2 learner also practices the A1 words. */
 fun <T> upTo(lists: List<List<T>>, level: Int): List<T> = (1..level.coerceIn(1, 3)).flatMap { lists[it] }
 
 fun levelRange(level: Int) = if (level > 1) "A1–${LEVEL_NAMES[level]}" else "A1"

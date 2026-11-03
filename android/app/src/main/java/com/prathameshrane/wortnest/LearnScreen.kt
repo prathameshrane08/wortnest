@@ -61,7 +61,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 
-/* Practice has four ways to practise, like Quizlet: flashcards (spaced repetition on your saved words),
+/* Practice has four ways to practice, like Quizlet: flashcards (spaced repetition on your saved words),
    choose from four, write the answer, and a timed matching game. The last three use your level's
    words or your saved words, German to English or the other way round. */
 
@@ -112,7 +112,7 @@ fun LearnScreen(vm: AppViewModel, repo: Repository, nav: Nav, openLevel: () -> U
                 Segments(listOf("${levelRange(vm.level)} words", "My saved words"), if (src == "saved") 1 else 0) {
                     if (it == 0 || canSaved) vm.setPractice(src = if (it == 1) "saved" else "level")
                 }
-                if (!canSaved) Text("Save at least 4 words to practise only those.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                if (!canSaved) Text("Save at least 4 words to practice only those.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             when (mode) {
                 "cards" -> Flashcards(vm, repo)
@@ -306,7 +306,7 @@ private fun QuizRound(vm: AppViewModel, repo: Repository, kind: String, dir: Str
         Round(pool, pickUnique(repo, pool, 10))
     }
     if (round.items.isEmpty()) {
-        CardBox { Text("No words to practise", fontWeight = FontWeight.Bold); Text("Star a few words in the dictionary first.") }
+        CardBox { Text("No words to practice", fontWeight = FontWeight.Bold); Text("Star a few words in the dictionary first.") }
         return
     }
     if (round.n >= round.items.size) { RoundResult(vm, repo, round) { roundId++ }; return }

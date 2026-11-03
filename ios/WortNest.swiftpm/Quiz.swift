@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Levels
 
-/// Every list from A1 up to the level, so an A2 learner also practises the A1 words.
+/// Every list from A1 up to the level, so an A2 learner also practices the A1 words.
 func upTo<T>(_ lists: [[T]], _ level: Int) -> [T] {
     (1...max(1, min(3, level))).flatMap { lists[$0] }
 }
